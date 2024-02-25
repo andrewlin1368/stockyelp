@@ -34,17 +34,20 @@ model profiles {
 }
 
 model stocks {
-  stock_id    Int        @id @default(autoincrement())
-  fullname    String     @db.VarChar(25)
-  shortname   String     @db.VarChar(10)
-  description String     @db.VarChar(255)
-  price       Int
-  upvotes     Int        @default(0)
-  downvotes   Int        @default(0)
-  comments    comments[]
-  downvote    downvote[]
-  profiles    profiles[]
-  upvote      upvote[]
+  stock_id     Int        @id @default(autoincrement())
+  fullname     String     @db.VarChar(50)
+  symbol       String     @db.VarChar(10)
+  description  String     @db.VarChar(255)
+  price        Decimal    @db.Decimal
+  upvotes      Int        @default(0)
+  downvotes    Int        @default(0)
+  week_low     Decimal    @db.Decimal
+  week_high    Decimal    @db.Decimal
+  current_data DateTime   @db.Timestamp(6)
+  comments     comments[]
+  downvote     downvote[]
+  profiles     profiles[]
+  upvote       upvote[]
 }
 
 model upvote {
@@ -60,7 +63,7 @@ model users {
   username  String     @unique @db.VarChar(18)
   firstname String     @db.VarChar(25)
   lastname  String     @db.VarChar(25)
-  password  String     @db.VarChar(50)
+  password  String     @db.VarChar(500)
   isadmin   Boolean
   comments  comments[]
   downvote  downvote[]
