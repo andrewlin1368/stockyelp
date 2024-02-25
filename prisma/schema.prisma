@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model comments {
+  comment_id Int      @id @default(autoincrement())
+  user_id    Int
+  stock_id   Int
+  message    String   @db.VarChar(500)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  stocks     stocks   @relation(fields: [stock_id], references: [stock_id], onDelete: NoAction, onUpdate: NoAction)
+  users      users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model downvote {
+  vote_id  Int    @id @default(autoincrement())
+  user_id  Int
+  stock_id Int
+  stocks   stocks @relation(fields: [stock_id], references: [stock_id], onDelete: NoAction, onUpdate: NoAction)
+  users    users  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model profiles {
+  profile_id Int    @id @default(autoincrement())
+  user_id    Int
+  stock_id   Int
+  stocks     stocks @relation(fields: [stock_id], references: [stock_id], onDelete: NoAction, onUpdate: NoAction)
+  users      users  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model stocks {
+  stock_id    Int        @id @default(autoincrement())
+  fullname    String     @db.VarChar(25)
+  shortname   String     @db.VarChar(10)
+  description String     @db.VarChar(255)
+  price       Int
+  upvotes     Int        @default(0)
+  downvotes   Int        @default(0)
+  comments    comments[]
+  downvote    downvote[]
+  profiles    profiles[]
+  upvote      upvote[]
+}
+
+model upvote {
+  vote_id  Int    @id @default(autoincrement())
+  user_id  Int
+  stock_id Int
+  stocks   stocks @relation(fields: [stock_id], references: [stock_id], onDelete: NoAction, onUpdate: NoAction)
+  users    users  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  user_id   Int        @id @default(autoincrement())
+  username  String     @unique @db.VarChar(18)
+  firstname String     @db.VarChar(25)
+  lastname  String     @db.VarChar(25)
+  password  String     @db.VarChar(50)
+  isadmin   Boolean
+  comments  comments[]
+  downvote  downvote[]
+  profiles  profiles[]
+  upvote    upvote[]
+}
