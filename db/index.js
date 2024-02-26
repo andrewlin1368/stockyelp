@@ -42,6 +42,26 @@ const getStock = async (stock_id) => {
   return { ...stock, comments };
 };
 
+//remove comment - Will not delete but instead updated isdeleted to true and front end will display "Comment has been deleted." profile.comment slice and stocks slice will be updated
+const removeComment = async ({ comment_id, user_id }) => {
+  let comment = await prisma.comments.findFirst({ where: { comment_id } });
+  if (comment.user_id !== user_id) return { error: "Not original creator" };
+  if (comment.isdeleted) return { error: "Comment has already been removed" };
+  comment = await prisma.comments.update({
+    where: { comment_id },
+    data: { isdeleted: true },
+  });
+  return comment;
+};
+
+//add a comment - will return single comment to update stocks slice and update profile.comment slice to keep time ordering
+const createComment = async ({ stock_id, user_id, message }) => {
+  const comment = await prisma.comments.create({
+    data: { stock_id, user_id, message },
+  });
+  return comment;
+};
+
 //user can upvote a stock - check if user already downvote if so remove it, stock slice should update stock data
 const upvote = async ({ stock_id, user_id }) => {
   const isUpvote = await prisma.upvote.findFirst({
@@ -161,7 +181,7 @@ const login = async ({ username, password }) => {
   });
   const comments = await prisma.comments.findMany({
     where: { user_id: user.user_id },
-    orderBy: [{ stock_id: "asc" }, { created_at: "desc" }],
+    orderBy: { created_at: "desc" },
   });
   delete user.password;
   const token = jwt.sign({ user_id: user.user_id }, process.env.JWT);
@@ -179,4 +199,6 @@ module.exports = {
   unfollow,
   upvote,
   downvote,
+  removeComment,
+  createComment,
 };
