@@ -64,7 +64,7 @@ model users {
   firstname String     @db.VarChar(25)
   lastname  String     @db.VarChar(25)
   password  String     @db.VarChar(500)
-  isadmin   Boolean
+  isadmin   Boolean    @default(false)
   comments  comments[]
   downvote  downvote[]
   profiles  profiles[]
