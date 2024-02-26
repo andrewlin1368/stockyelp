@@ -48,5 +48,6 @@ alter table stocks add week_low numeric not null;
 alter table stocks add week_high numeric not null;
 alter table stocks alter column price type numeric;
 alter table stocks add current_data timestamp not null;
+alter table users alter column isAdmin set default false;
 
 
