@@ -50,5 +50,6 @@ alter table stocks alter column price type numeric;
 alter table stocks add current_data timestamp not null;
 alter table users alter column isAdmin set default false;
 alter table comments add isdeleted boolean default false not null;
+alter table comments add username varchar(50) not null;
 
 
