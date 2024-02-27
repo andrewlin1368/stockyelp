@@ -110,6 +110,7 @@ const profile = () => {
       user_id: 1,
       stock_id: i * 2 + 1,
       message: `Decent stock...`,
+      username: "andrew123",
     });
   }
   for (let i = 0; i < 3; i++) {
@@ -118,6 +119,7 @@ const profile = () => {
       user_id: 2,
       stock_id: i * 3 + 1,
       message: `Apes strong together`,
+      username: "andrew1234",
     });
   }
   return { profiles, comments };
