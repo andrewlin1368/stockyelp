@@ -42,6 +42,63 @@ const getStock = async (stock_id) => {
   return { ...stock, comments };
 };
 
+//add a new stock (ADMIN ONLY)
+const addStock = async ({
+  user_id,
+  fullname,
+  symbol,
+  description,
+  price,
+  week_low,
+  week_high,
+}) => {
+  const user = await prisma.users.findFirst({ where: { user_id } });
+  if (!user || !user.isadmin) return { error: "Invalid credentials" };
+  const current_data = new Date();
+  const checkStock = await prisma.stocks.findFirst({
+    where: { OR: [{ fullname }, { symbol }] },
+  });
+  if (checkStock) return { error: "Stock already exist" };
+  const stock = await prisma.stocks.create({
+    data: {
+      fullname,
+      symbol,
+      description,
+      week_high: week_high || 0,
+      week_low: week_low || 0,
+      price: price || 0,
+      current_data: current_data.toISOString(),
+    },
+  });
+  return { ...stock, comments: [] };
+};
+
+//edit an existing stock (ADMIN ONLY)
+const editStock = async ({
+  user_id,
+  stock_id,
+  description,
+  price,
+  week_low,
+  week_high,
+}) => {
+  const user = await prisma.users.findFirst({ where: { user_id } });
+  if (!user || !user.isadmin) return { error: "Invalid credentials" };
+  const current_data = new Date();
+  let stock = await prisma.stocks.findFirst({ where: { stock_id } });
+  stock = await prisma.stocks.update({
+    where: { stock_id },
+    data: {
+      description,
+      price: price || stock.price,
+      week_high: week_high || stock.week_high,
+      week_low: week_low || stock.week_low,
+      current_data: current_data,
+    },
+  });
+  return stock;
+};
+
 //remove comment - Will not delete but instead updated isdeleted to true and front end will display "Comment has been deleted." profile.comment slice and stocks slice will be updated
 const removeComment = async ({ comment_id, user_id }) => {
   let comment = await prisma.comments.findFirst({ where: { comment_id } });
@@ -58,6 +115,18 @@ const removeComment = async ({ comment_id, user_id }) => {
 const createComment = async ({ stock_id, user_id, message }) => {
   const comment = await prisma.comments.create({
     data: { stock_id, user_id, message },
+  });
+  return comment;
+};
+
+//edit a comment
+const editComment = async ({ comment_id, user_id, message }) => {
+  let comment = await prisma.comments.findFirst({ where: { comment_id } });
+  if (comment.user_id !== user_id) return { error: "Not original creator" };
+  if (comment.isdeleted) return { error: "Comment has already been removed" };
+  comment = await prisma.comments.update({
+    where: { comment_id },
+    data: { message },
   });
   return comment;
 };
@@ -188,6 +257,8 @@ const login = async ({ username, password }) => {
   return { user, following, comments, token };
 };
 
+//edit user info
+
 module.exports = {
   prisma,
   getAllStocks,
@@ -201,4 +272,7 @@ module.exports = {
   downvote,
   removeComment,
   createComment,
+  editComment,
+  addStock,
+  editStock,
 };
