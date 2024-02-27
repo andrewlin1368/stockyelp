@@ -1,14 +1,17 @@
 const express = require("express");
 const userRouter = express.Router();
 const { verifyToken } = require("../middleware/token.js");
-const { getProfile, register, login } = require("../../db/index.js");
+const {
+  getProfile,
+  register,
+  login,
+  updateUser,
+} = require("../../db/index.js");
 
-//get user profile (user info, stocks followed, comments) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE
-userRouter.get("/profile", verifyToken, async (req, res, next) => {
+//get user profile (user info, stocks followed) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE/ USER WILL USE THIS TO SEE OTHER USERS
+userRouter.get("/profile", async (req, res, next) => {
   try {
-    return !req.user
-      ? res.status(400).send({ error: "Not logged in." })
-      : res.send({ profile: await getProfile(req.user.user_id) });
+    res.send({ profile: await getProfile(req.body.user_id) });
   } catch (error) {
     next(error);
   }
@@ -44,6 +47,27 @@ userRouter.post("/register", async (req, res, next) => {
     return data.error
       ? res.status(400).send({ error: data.error })
       : res.send({ profile: data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//update user info
+userRouter.put("/", verifyToken, async (req, res, next) => {
+  try {
+    if (!req.user)
+      return res.status(400).send({ error: "Invalid credentials" });
+    const { firstname, lastname, password } = req.body;
+    if (!firstname || !lastname || !firstname.length || !lastname.length)
+      return res.status(400).send({ error: "All fields are required" });
+    res.send(
+      await updateUser({
+        user_id: req.user.user_id,
+        firstname,
+        lastname,
+        password,
+      })
+    );
   } catch (error) {
     next(error);
   }

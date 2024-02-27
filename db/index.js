@@ -113,8 +113,9 @@ const removeComment = async ({ comment_id, user_id }) => {
 
 //add a comment - will return single comment to update stocks slice and update profile.comment slice to keep time ordering
 const createComment = async ({ stock_id, user_id, message }) => {
+  const user = await prisma.users.findFirst({ where: { user_id } });
   const comment = await prisma.comments.create({
-    data: { stock_id, user_id, message },
+    data: { stock_id, user_id, message, username: user.username },
   });
   return comment;
 };
@@ -205,17 +206,17 @@ const unfollow = async ({ stock_id, user_id }) => {
   return notFollowing;
 };
 
-//get user profile (user data, stocks following, all comments made) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE
+//get user profile (user data, stocks following) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE WILL INSTEAD BY USED BY USERS TO SEE OTHER USERS
 const getProfile = async (user_id) => {
   const user = await prisma.users.findFirst({ where: { user_id } });
   if (!user) return { error: "Invalid credentials" };
   const following = await prisma.profiles.findMany({ where: { user_id } });
-  const comments = await prisma.comments.findMany({
-    where: { user_id },
-    orderBy: [{ stock_id: "asc" }, { created_at: "desc" }],
-  });
+  // const comments = await prisma.comments.findMany({
+  //   where: { user_id },
+  //   orderBy: [{ stock_id: "asc" }, { created_at: "desc" }],
+  // });
   delete user.password;
-  return { user, following, comments };
+  return { user, following };
 };
 
 //register a user
@@ -258,6 +259,21 @@ const login = async ({ username, password }) => {
 };
 
 //edit user info
+const updateUser = async ({ user_id, firstname, lastname, password }) => {
+  if (password && !password.length) return { error: "Enter a secure password" };
+  const data = { firstname, lastname };
+  if (password && password.length) {
+    const salt = await bcrypt.genSalt(8);
+    const hashPass = await bcrypt.hash(password, salt);
+    data.password = hashPass;
+  }
+  const user = await prisma.users.update({
+    where: { user_id },
+    data: data,
+  });
+  delete user.password;
+  return user;
+};
 
 module.exports = {
   prisma,
@@ -275,4 +291,5 @@ module.exports = {
   editComment,
   addStock,
   editStock,
+  updateUser,
 };
