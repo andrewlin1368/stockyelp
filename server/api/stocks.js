@@ -14,7 +14,6 @@ const {
   editStock,
 } = require("../../db/index.js");
 const { verifyToken } = require("../middleware/token.js");
-const { send } = require("process");
 
 //gets all the stocks and its comments
 stockRouter.get("/", async (req, res, next) => {
