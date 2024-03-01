@@ -9,7 +9,7 @@ const {
 } = require("../../db/index.js");
 
 //get user profile (user info, stocks followed) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE/ USER WILL USE THIS TO SEE OTHER USERS
-userRouter.get("/profile", async (req, res, next) => {
+userRouter.post("/profile", async (req, res, next) => {
   try {
     res.send({ profile: await getProfile(req.body.user_id) });
   } catch (error) {
