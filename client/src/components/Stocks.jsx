@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Modal, Col, Container, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./stocks.css";
+import { useGetProfileMutation } from "../api/userApi";
 
 export default function Stocks() {
   const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
   const [stock, setStock] = useState(null);
+  const [user_id, setUser_Id] = useState(-1);
   const { stocks } = useSelector((state) => state.stocks);
-  console.log(stocks);
+  const { profile, token } = useSelector((state) => state.user);
+  const [prof] = useGetProfileMutation();
+  //   console.log(stocks);
   const handleClose = () => {
     setShow(false);
     setStock(null);
@@ -19,20 +24,77 @@ export default function Stocks() {
     setShow(true);
     setStock(stocks[Number(e.target.id) - 1]);
   };
+  const handleClose2 = () => setShow2(false);
+  const handleShow2 = () => setShow2(true);
 
+  useEffect(() => {
+    const getProf = () => {
+      prof({ user_id });
+    };
+    if (user_id > -1) getProf();
+  }, [user_id]);
+  const getProfile = (e) => {
+    setUser_Id(Number(e.target.id));
+    handleShow2();
+  };
+
+  console.log(profile);
   return (
     <>
-      {stock && (
-        <Modal
-          show={show}
-          onHide={handleClose}
-          size="xl"
-          contentClassName="modal-height"
-        >
+      {profile && (
+        <Modal show={show2} onHide={handleClose2} size="s" centered>
           <Modal.Header closeButton>
             <Modal.Title>
-              {stock.fullname} - {stock.symbol} <i class="bi bi-suit-heart"></i>
-              <i class="bi bi-suit-heart-fill"></i>
+              <h1 class="display-6">@{profile.user.username} is watching...</h1>
+            </Modal.Title>
+          </Modal.Header>
+          <Container>
+            <Row>
+              <Col xs={18} md={12}>
+                {!profile.following.length ? (
+                  <p className="lead mt-4 mb-4">
+                    This user is not following any stocks...
+                  </p>
+                ) : (
+                  <div className="table-wrapper-scroll-y my-custom-scrollbar2">
+                    <table className="table table-bordered table-striped mb-0">
+                      {profile.following.map((stock) => {
+                        return (
+                          <React.Fragment key={stock.stock_id}>
+                            <div className="card-body p-4">
+                              <div className="d-flex flex-start">
+                                <div>
+                                  <p className="lead mb-0">
+                                    <strong>
+                                      {stocks[stock.stock_id].symbol}
+                                    </strong>
+                                    - {stocks[stock.stock_id].fullname}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <hr className="my-0" />
+                          </React.Fragment>
+                        );
+                      })}
+                    </table>
+                  </div>
+                )}
+              </Col>
+            </Row>
+          </Container>
+        </Modal>
+      )}
+      {stock && (
+        <Modal show={show} onHide={handleClose} size="xl">
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <h1 class="display-6">
+                <strong>{stock.symbol}</strong>- {stock.fullname}{" "}
+                <i className="bi bi-suit-heart"></i>
+                <i className="bi bi-suit-heart-fill"></i>
+              </h1>
             </Modal.Title>
           </Modal.Header>
           <Container>
@@ -53,9 +115,11 @@ export default function Stocks() {
                   <hr />
                   <div className="lead">
                     <i className="bi bi-hand-thumbs-up">{stock.upvotes}</i>
-                    <i class="bi bi-hand-thumbs-up-fill">{stock.upvotes}</i>
+                    <i className="bi bi-hand-thumbs-up-fill">{stock.upvotes}</i>
                     <i className="bi bi-hand-thumbs-down">{stock.downvotes}</i>
-                    <i class="bi bi-hand-thumbs-down-fill">{stock.downvotes}</i>
+                    <i className="bi bi-hand-thumbs-down-fill">
+                      {stock.downvotes}
+                    </i>
                   </div>
                 </Modal.Body>
               </Col>
@@ -76,24 +140,33 @@ export default function Stocks() {
                     </h1>
                   )) || (
                     <div className="table-wrapper-scroll-y my-custom-scrollbar">
-                      <table class="table table-bordered table-striped mb-0">
+                      <table className="table table-bordered table-striped mb-0">
                         {stock.comments.map((comment) => {
                           return (
-                            <div key={comment.comment_id}>
+                            <React.Fragment key={comment.comment_id}>
                               <div className="card-body p-4">
                                 <div className="d-flex flex-start">
                                   <div>
                                     <p className="lead mb-0">
-                                      <strong>{comment.username}</strong>{" "}
+                                      <strong
+                                        className="text-primary"
+                                        id={comment.user_id}
+                                        onClick={(e) => {
+                                          getProfile(e);
+                                        }}
+                                      >
+                                        @{comment.username}
+                                      </strong>{" "}
                                       <small>
                                         {comment.created_at.split("T")[0]}
                                       </small>
                                     </p>
+
                                     {(!comment.isdeleted && (
                                       <p className="mb-0 lead">
                                         {comment.message}{" "}
-                                        <i class="bi bi-pencil"></i>{" "}
-                                        <i class="bi bi-trash"></i>
+                                        <i className="bi bi-pencil"></i>{" "}
+                                        <i className="bi bi-trash"></i>
                                       </p>
                                     )) || (
                                       <p className="mb-0 lead">
@@ -105,7 +178,7 @@ export default function Stocks() {
                               </div>
 
                               <hr className="my-0" />
-                            </div>
+                            </React.Fragment>
                           );
                         })}
                       </table>
