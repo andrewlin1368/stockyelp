@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const { description, profile } = require("./data");
 const { prisma } = require("./index.js");
-const { clear } = require("console");
 const stockPath = path.join(__dirname, "stocks.csv");
 const bcrypt = require("bcrypt");
 
