@@ -260,7 +260,6 @@ const login = async ({ username, password }) => {
 
 //edit user info
 const updateUser = async ({ user_id, firstname, lastname, password }) => {
-  if (password && !password.length) return { error: "Enter a secure password" };
   const data = { firstname, lastname };
   if (password && password.length) {
     const salt = await bcrypt.genSalt(8);
