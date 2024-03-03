@@ -9,7 +9,33 @@ export const userApi = api.injectEndpoints({
         body: { user_id },
       }),
     }),
+    login: builder.mutation({
+      query: ({ username, password }) => ({
+        url: "/users/login",
+        method: "POST",
+        body: { username, password },
+      }),
+    }),
+    register: builder.mutation({
+      query: ({ username, firstname, lastname, password }) => ({
+        url: "/users/register",
+        method: "POST",
+        body: { username, firstname, lastname, password },
+      }),
+    }),
+    update: builder.mutation({
+      query: (body) => ({
+        url: "/users",
+        method: "PUT",
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useGetProfileMutation } = userApi;
+export const {
+  useGetProfileMutation,
+  useLoginMutation,
+  useRegisterMutation,
+  useUpdateMutation,
+} = userApi;
