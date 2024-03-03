@@ -12,3 +12,17 @@
   height: 300px;
   overflow: auto;
 }
+
+.stockscards {
+  width: 15%;
+  margin-right: auto;
+  margin-bottom: 5px;
+}
+
+.cardParent {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  justify-content: space-between;
+}
