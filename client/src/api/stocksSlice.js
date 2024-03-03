@@ -10,6 +10,10 @@ const updateStock = (state, { payload }) => {
   });
 };
 
+const updateComments = (state, { payload }) => {
+  
+};
+
 const stocksSlice = createSlice({
   name: "stocksSlice",
   initialState: {
@@ -26,6 +30,18 @@ const stocksSlice = createSlice({
     builder.addMatcher(
       stocksApi.endpoints.downvote.matchFulfilled,
       updateStock
+    );
+    builder.addMatcher(
+      stocksApi.endpoints.addcomment.matchFulfilled,
+      updateComments
+    );
+    builder.addMatcher(
+      stocksApi.endpoints.editcomment.matchFulfilled,
+      updateComments
+    );
+    builder.addMatcher(
+      stocksApi.endpoints.removecomment.matchFulfilled,
+      updateComments
     );
   },
 });

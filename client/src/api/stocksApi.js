@@ -33,6 +33,27 @@ export const stocksApi = api.injectEndpoints({
         body: { stock_id },
       }),
     }),
+    editcomment: builder.mutation({
+      query: ({ comment_id, message }) => ({
+        url: "stocks/editcomment",
+        method: "PUT",
+        body: { comment_id, message },
+      }),
+    }),
+    addcomment: builder.mutation({
+      query: ({ comment_id, message }) => ({
+        url: "stocks/addcomment",
+        method: "POST",
+        body: { comment_id, message },
+      }),
+    }),
+    removecomment: builder.mutation({
+      query: (comment_id) => ({
+        url: "stocks/removecomment",
+        method: "PUT",
+        body: { comment_id },
+      }),
+    }),
   }),
 });
 
@@ -42,4 +63,7 @@ export const {
   useUnfollowMutation,
   useUpvoteMutation,
   useDownvoteMutation,
+  useEditcommentMutation,
+  useAddcommentMutation,
+  useRemovecommentMutation,
 } = stocksApi;

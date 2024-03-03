@@ -23,6 +23,8 @@ const setUser = (state, { payload }) => {
   );
 };
 
+const updateComments = (state, { payload }) => {};
+
 const setError = (state, { payload }) => {
   state.error = payload.data.error;
 };
@@ -119,6 +121,18 @@ const userSlice = createSlice({
         );
         window.sessionStorage.setItem("USER", JSON.stringify(data));
       }
+    );
+    builder.addMatcher(
+      stocksApi.endpoints.addcomment.matchFulfilled,
+      updateComments
+    );
+    builder.addMatcher(
+      stocksApi.endpoints.editcomment.matchFulfilled,
+      updateComments
+    );
+    builder.addMatcher(
+      stocksApi.endpoints.removecomment.matchFulfilled,
+      updateComments
     );
   },
 });
