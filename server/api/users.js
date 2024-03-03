@@ -60,6 +60,10 @@ userRouter.put("/", verifyToken, async (req, res, next) => {
     const { firstname, lastname, password } = req.body;
     if (!firstname || !lastname || !firstname.length || !lastname.length)
       return res.status(400).send({ error: "All fields are required" });
+    if (password && password.length < 8)
+      return res
+        .status(400)
+        .send({ error: "Password must be atleast 8 characters" });
     res.send(
       await updateUser({
         user_id: req.user.user_id,
