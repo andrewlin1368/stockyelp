@@ -79,6 +79,9 @@ const userSlice = createSlice({
       (state, { payload }) => {
         state.user = payload;
         state.error = null;
+        const data = JSON.parse(window.sessionStorage.getItem("USER"));
+        data.user = payload;
+        window.sessionStorage.setItem("USER", JSON.stringify(data));
       }
     );
     builder.addMatcher(userApi.endpoints.update.matchRejected, setError);
