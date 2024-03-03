@@ -1,0 +1,12 @@
+.not_user {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.comments {
+  width: 75%;
+}
+
+.following {
+  width: 25%;
+}
