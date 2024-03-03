@@ -180,7 +180,6 @@ export default function Stocks() {
           <Modal.Header closeButton>
             <Modal.Title>
               <h1 className="display-6">
-                <strong>{stock.symbol}</strong>- {stock.fullname}{" "}
                 {(extra_following[stock.stock_id] && (
                   <i
                     className="bi bi-star-fill"
@@ -193,7 +192,28 @@ export default function Stocks() {
                     id={stock.stock_id}
                     onClick={(e) => follow(e)}
                   ></i>
-                )}
+                )}{" "}
+                <strong>{stock.symbol}</strong>- {stock.fullname}{" "}
+                {/* <div className="lead"> */}
+                <i
+                  className="bi bi-hand-thumbs-up"
+                  onClick={(e) => upvoter(e)}
+                  id={stock.stock_id}
+                >
+                  {" "}
+                  {stock.upvotes}
+                </i>{" "}
+                {/* </div> */}
+                {/* <div className="lead"> */}
+                <i
+                  className="bi bi-hand-thumbs-down"
+                  onClick={(e) => downvoter(e)}
+                  id={stock.stock_id}
+                >
+                  {" "}
+                  {stock.downvotes}
+                </i>
+                {/* </div> */}
               </h1>
             </Modal.Title>
           </Modal.Header>
@@ -219,26 +239,6 @@ export default function Stocks() {
                     </p>
                   </div>
                   <hr />
-                  <div className="lead">
-                    <i
-                      className="bi bi-arrow-up-circle"
-                      onClick={(e) => upvoter(e)}
-                      id={stock.stock_id}
-                    >
-                      {" "}
-                      {stock.upvotes}
-                    </i>
-                  </div>
-                  <div className="lead">
-                    <i
-                      className="bi bi-arrow-down-circle"
-                      onClick={(e) => downvoter(e)}
-                      id={stock.stock_id}
-                    >
-                      {" "}
-                      {stock.downvotes}
-                    </i>
-                  </div>
                 </Modal.Body>
               </Col>
               <Col xs={12} md={8}>
@@ -334,6 +334,7 @@ export default function Stocks() {
           style={{ width: "70%", margin: "auto" }}
         />
       </>
+
       <div className="cardParent">
         {displayStocks.map((stock) => {
           return (
@@ -341,23 +342,14 @@ export default function Stocks() {
               className="card stockscards"
               key={stock.stock_id}
               id={stock.stock_id}
-              onClick={(e) => handleShow(e)}
             >
-              <div
-                className="card-body"
-                id={stock.stock_id}
-                onClick={(e) => handleShow(e)}
-              >
-                <p
-                  className="lead"
-                  id={stock.stock_id}
-                  onClick={(e) => handleShow(e)}
-                >
+              <div className="card-body" id={stock.stock_id}>
+                <p className="lead mb-0 text-primary" id={stock.stock_id}>
                   <strong id={stock.stock_id} onClick={(e) => handleShow(e)}>
                     {stock.symbol}
                   </strong>{" "}
-                  ${stock.price}{" "}
                 </p>
+                <p className="lead mb-0">${stock.price}</p>
               </div>
             </div>
           );
