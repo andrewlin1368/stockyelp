@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Navbarcomponent() {
-  const { token } = useSelector((state) => state.user);
+  const { token, user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const logout = () => {
@@ -34,6 +34,11 @@ function Navbarcomponent() {
             {token && (
               <Nav.Link href="/profile">
                 Profile <i className="bi bi-person-circle"></i>
+              </Nav.Link>
+            )}
+            {token && user.isadmin && (
+              <Nav.Link href="/admin">
+                Admin <i className="bi bi-shield-lock"></i>
               </Nav.Link>
             )}
             {token && (
