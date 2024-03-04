@@ -23,7 +23,14 @@ const setUser = (state, { payload }) => {
   );
 };
 
-const updateComments = (state, { payload }) => {};
+const updateComments = (state, { payload }) => {
+  state.comments = state.comments.map((comment) =>
+    comment.comment_id === payload.comment_id ? payload : comment
+  );
+  const data = JSON.parse(window.sessionStorage.getItem("USER"));
+  data.comments = state.comments;
+  window.sessionStorage.setItem("USER", JSON.stringify(data));
+};
 
 const setError = (state, { payload }) => {
   state.error = payload.data.error;
@@ -124,7 +131,14 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       stocksApi.endpoints.addcomment.matchFulfilled,
-      updateComments
+      (state, { payload }) => {
+        const comments = Object.assign([], state.comments);
+        comments.unshift(payload);
+        state.comments = comments;
+        const data = JSON.parse(window.sessionStorage.getItem("USER"));
+        data.comments = comments;
+        window.sessionStorage.setItem("USER", JSON.stringify(data));
+      }
     );
     builder.addMatcher(
       stocksApi.endpoints.editcomment.matchFulfilled,

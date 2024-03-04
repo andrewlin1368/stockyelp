@@ -11,7 +11,13 @@ const updateStock = (state, { payload }) => {
 };
 
 const updateComments = (state, { payload }) => {
-  
+  const stocks = Object.assign([], state.stocks);
+  stocks[payload.stock_id - 1].comments = stocks[payload.stock_id-1].comments.map(
+    (comment) => {
+      return comment.comment_id === payload.comment_id ? payload : comment;
+    }
+  );
+  state.stocks = stocks;
 };
 
 const stocksSlice = createSlice({
@@ -33,7 +39,11 @@ const stocksSlice = createSlice({
     );
     builder.addMatcher(
       stocksApi.endpoints.addcomment.matchFulfilled,
-      updateComments
+      (state, { payload }) => {
+        const stocks = Object.assign([], state.stocks);
+        stocks[payload.stock_id - 1].comments.unshift(payload);
+        state.stocks = stocks;
+      }
     );
     builder.addMatcher(
       stocksApi.endpoints.editcomment.matchFulfilled,

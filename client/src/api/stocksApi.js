@@ -41,10 +41,10 @@ export const stocksApi = api.injectEndpoints({
       }),
     }),
     addcomment: builder.mutation({
-      query: ({ comment_id, message }) => ({
+      query: ({ stock_id, message }) => ({
         url: "stocks/addcomment",
         method: "POST",
-        body: { comment_id, message },
+        body: { stock_id, message },
       }),
     }),
     removecomment: builder.mutation({
