@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { Modal, Col, Container, Row, Form, Button } from "react-bootstrap";
+import {
+  Modal,
+  Col,
+  Container,
+  Row,
+  Form,
+  Button,
+  Carousel,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./stocks.css";
@@ -20,6 +28,11 @@ import { removeProfile } from "../api/userSlice.js";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import uber from "../assets/uber.png";
+import nvidia from "../assets/nvidia.png";
+import amd from "../assets/amd.png";
+import spotify from "../assets/spotify.png";
+import groupon from "../assets/groupon.png";
 
 export default function Stocks() {
   const [removingComment] = useRemovecommentMutation();
@@ -515,7 +528,26 @@ export default function Stocks() {
         </div>
 
         <div className="rightside">
-          <div className="topright"> </div>
+          <div className="topright mt-0 " style={{ margin: "auto" }}>
+            <Carousel>
+              <Carousel.Item interval={4000}>
+                <img src={uber} alt="UBER" height="300px" />
+              </Carousel.Item>
+              <Carousel.Item interval={4000}>
+                <img src={nvidia} alt="NVIDIA" height="300px" />
+              </Carousel.Item>
+              <Carousel.Item interval={4000}>
+                <img src={amd} alt="AMD" height="300px" />
+              </Carousel.Item>
+              <Carousel.Item interval={4000}>
+                <img src={spotify} alt="SPOTIFY" height="300px" />
+              </Carousel.Item>
+              <Carousel.Item interval={4000}>
+                <img src={groupon} alt="GROUPON" height="300px" />
+              </Carousel.Item>
+            </Carousel>
+          </div>
+          <hr className="hr" />
           <div className="cardParent">
             {displayStocks.map((stock) => {
               return (

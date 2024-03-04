@@ -18,14 +18,16 @@
 }
 
 .cardParent {
-  height: 30px;
   display: flex;
   flex-wrap: wrap;
 }
 
 .rightside {
   width: 80%;
-  display: grid;
+}
+.topright {
+  display: flex;
+  justify-content: center;
 }
 
 .topParent {
