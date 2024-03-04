@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { Modal, Col, Container, Row, Form } from "react-bootstrap";
+import { Modal, Col, Container, Row, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./stocks.css";
@@ -11,6 +11,9 @@ import {
   useUnfollowMutation,
   useUpvoteMutation,
   useDownvoteMutation,
+  useEditcommentMutation,
+  useAddcommentMutation,
+  useRemovecommentMutation,
 } from "../api/stocksApi";
 import { useDispatch } from "react-redux";
 import { removeProfile } from "../api/userSlice.js";
@@ -19,6 +22,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Stocks() {
+  const [removingComment] = useRemovecommentMutation();
+  const [addingComment] = useAddcommentMutation();
+  const [editingComment] = useEditcommentMutation();
   const dispatch = useDispatch();
   const [followStock] = useFollowMutation();
   const [unfollowStock] = useUnfollowMutation();
@@ -30,11 +36,93 @@ export default function Stocks() {
   const [user_id, setUser_Id] = useState(-1);
   const [displayStocks, setDisplayStocks] = useState([]);
   const { stocks } = useSelector((state) => state.stocks);
+  const [edit, setEdit] = useState(false);
+  const [editMessage, setEditMessage] = useState({
+    message: null,
+    comment_id: null,
+  });
+  const updateCommentMessage = (e) => {
+    setEditMessage({ ...editMessage, message: e.target.value });
+  };
+  const handleEditClose = async () => {
+    if (!editMessage.message.length) {
+      toast.error("Comment cannot be empty!", {
+        position: "top-right",
+      });
+      setEditMessage({ message: null, comment_id: null });
+      setEdit(false);
+    }
+    const result = await editingComment(editMessage);
+    if (!result.error) {
+      const updateStock = {
+        ...stock,
+        comments: stock.comments.map((comment) =>
+          comment.comment_id === result.data.comment_id ? result.data : comment
+        ),
+      };
+      setStock(updateStock);
+      setEditMessage({ message: null, comment_id: null });
+    }
+    setEdit(false);
+  };
+  const handleEditShow = (e) => {
+    setEdit(true);
+  };
+  const editComment = (e) => {
+    const data = {
+      message: e.target.dataset.message,
+      comment_id: Number(e.target.id),
+    };
+    setEditMessage(data);
+    handleEditShow();
+  };
   const { profile, token, user, extra_following, following } = useSelector(
     (state) => state.user
   );
+  const [newMessage, setNewMessage] = useState("Add a comment...");
+  const updateAddMessage = (e) => {
+    setNewMessage(e.target.value);
+  };
+  const addComment = async (e) => {
+    e.preventDefault();
+    if (newMessage === "Add a comment..." || !newMessage.length) {
+      setNewMessage("Add a comment...");
+      return;
+    }
+    if (newMessage.length > 499) {
+      toast.error("Comment is too long!", {
+        position: "top-right",
+      });
+      return;
+    }
+    const result = await addingComment({
+      stock_id: Number(e.target.id),
+      message: newMessage,
+    });
+    if (!result.error) {
+      const comments = Object.assign([], stock.comments);
+      comments.unshift(result.data);
+      const updateStock = {
+        ...stock,
+        comments,
+      };
+      setStock(updateStock);
+      setNewMessage("Add a comment...");
+    }
+  };
+  const removeComment = async (e) => {
+    const result = await removingComment(Number(e.target.id));
+    if (!result.error) {
+      const updateStock = {
+        ...stock,
+        comments: stock.comments.map((comment) =>
+          comment.comment_id === result.data.comment_id ? result.data : comment
+        ),
+      };
+      setStock(updateStock);
+    }
+  };
   const [prof] = useGetProfileMutation();
-  //   console.log(stocks);
   const handleClose = () => {
     setShow(false);
     setStock(null);
@@ -119,15 +207,34 @@ export default function Stocks() {
     const newDisplayStocks = stocks.filter((displayStock) => {
       return displayStock.symbol.includes(e.target.value.toUpperCase());
     });
-    // console.log(newDisplayStocks);
     setDisplayStocks(newDisplayStocks);
   };
-  // console.log(extra_following, token);
-  //   console.log(profile);
-  // console.log(extra_following, following);
-  // console.log(stock);
   return (
     <>
+      {edit && (
+        <Modal show={edit} onHide={handleEditClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <h1 className="display-6">Edit Comment</h1>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="form-group mt-1 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={editMessage.message}
+                onChange={(e) => updateCommentMessage(e)}
+              />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleEditClose}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
       {profile && (
         <Modal show={show2} onHide={handleClose2} size="s" centered>
           <Modal.Header closeButton>
@@ -181,39 +288,48 @@ export default function Stocks() {
             <Modal.Title>
               <h1 className="display-6">
                 {(extra_following[stock.stock_id] && (
-                  <i
-                    className="bi bi-star-fill"
-                    id={stock.stock_id}
-                    onClick={(e) => unfollow(e)}
-                  ></i>
+                  <Link style={{ color: "#FFDF00" }}>
+                    <i
+                      className="bi bi-star-fill"
+                      title="unfollow"
+                      id={stock.stock_id}
+                      onClick={(e) => unfollow(e)}
+                    ></i>
+                  </Link>
                 )) || (
-                  <i
-                    className="bi bi-star"
-                    id={stock.stock_id}
-                    onClick={(e) => follow(e)}
-                  ></i>
+                  <Link style={{ color: "#FFDF00" }}>
+                    <i
+                      className="bi bi-star"
+                      title="follow"
+                      id={stock.stock_id}
+                      onClick={(e) => follow(e)}
+                    ></i>
+                  </Link>
                 )}{" "}
-                <strong>{stock.symbol}</strong>- {stock.fullname}{" "}
-                {/* <div className="lead"> */}
-                <i
-                  className="bi bi-hand-thumbs-up"
-                  onClick={(e) => upvoter(e)}
-                  id={stock.stock_id}
-                >
-                  {" "}
-                  {stock.upvotes}
-                </i>{" "}
-                {/* </div> */}
-                {/* <div className="lead"> */}
-                <i
-                  className="bi bi-hand-thumbs-down"
-                  onClick={(e) => downvoter(e)}
-                  id={stock.stock_id}
-                >
-                  {" "}
-                  {stock.downvotes}
-                </i>
-                {/* </div> */}
+                <strong>{stock.symbol.split(" ").join("")}</strong> -{" "}
+                {stock.fullname}{" "}
+                <Link style={{ textDecoration: "none", color: "gray" }}>
+                  <i
+                    className="bi bi-caret-up"
+                    title="upvote"
+                    onClick={(e) => upvoter(e)}
+                    id={stock.stock_id}
+                  >
+                    {" "}
+                  </i>
+                </Link>{" "}
+                {stock.upvotes}{" "}
+                <Link style={{ textDecoration: "none", color: "gray" }}>
+                  <i
+                    className="bi bi-caret-down"
+                    title="downvote"
+                    onClick={(e) => downvoter(e)}
+                    id={stock.stock_id}
+                  >
+                    {" "}
+                  </i>
+                </Link>{" "}
+                {stock.downvotes}
               </h1>
             </Modal.Title>
           </Modal.Header>
@@ -244,12 +360,14 @@ export default function Stocks() {
               <Col xs={12} md={8}>
                 {(token && (
                   <div className="form-outline mb-4 mt-4">
-                    <input
-                      type="text"
-                      id="addComment"
-                      className="form-control"
-                      placeholder="Add a comment..."
-                    />
+                    <form id={stock.stock_id} onSubmit={(e) => addComment(e)}>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder={newMessage}
+                        onChange={(e) => updateAddMessage(e)}
+                      />
+                    </form>
                   </div>
                 )) || (
                   <>
@@ -277,16 +395,21 @@ export default function Stocks() {
                                 <div className="d-flex flex-start">
                                   <div>
                                     <p className="lead mb-0">
-                                      <strong
-                                        className="text-primary lead"
-                                        id={comment.user_id}
-                                        onClick={(e) => {
-                                          getProfile(e);
-                                        }}
-                                      >
-                                        @{comment.username}
-                                      </strong>{" "}
+                                      <Link style={{ textDecoration: "none" }}>
+                                        <strong
+                                          className="text-primary lead"
+                                          title="view user"
+                                          id={comment.user_id}
+                                          onClick={(e) => {
+                                            getProfile(e);
+                                          }}
+                                        >
+                                          @{comment.username}
+                                        </strong>
+                                      </Link>{" "}
                                       <small>
+                                        {" "}
+                                        <i className="bi bi-clock-history"></i>{" "}
                                         {comment.created_at.split("T")[0]}
                                       </small>
                                     </p>
@@ -297,8 +420,27 @@ export default function Stocks() {
                                         {token &&
                                           comment.user_id === user.user_id && (
                                             <>
-                                              <i className="bi bi-pencil"></i>{" "}
-                                              <i className="bi bi-trash"></i>
+                                              <Link style={{ color: "gray" }}>
+                                                <i
+                                                  className="bi bi-pencil"
+                                                  title="edit"
+                                                  id={comment.comment_id}
+                                                  data-message={comment.message}
+                                                  onClick={(e) =>
+                                                    editComment(e)
+                                                  }
+                                                ></i>
+                                              </Link>{" "}
+                                              <Link style={{ color: "gray" }}>
+                                                <i
+                                                  className="bi bi-trash"
+                                                  id={comment.comment_id}
+                                                  onClick={(e) =>
+                                                    removeComment(e)
+                                                  }
+                                                  title="delete"
+                                                ></i>
+                                              </Link>
                                             </>
                                           )}
                                       </p>
@@ -324,36 +466,81 @@ export default function Stocks() {
         </Modal>
       )}
       <>
-        <Form.Control
-          className="mt-2"
-          type="text"
-          id="stockSearch"
-          aria-describedby="passwordHelpBlock"
-          placeholder="Search for a stock..."
-          onChange={(e) => updateSearch(e)}
+        <div
+          className="input-group mb-3 mt-2"
           style={{ width: "70%", margin: "auto" }}
-        />
+        >
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="basic-addon1">
+              <i className="bi bi-search"></i>
+            </span>
+          </div>
+          <input
+            type="text"
+            className="form-control"
+            aria-label="Username"
+            aria-describedby="basic-addon1"
+            onChange={(e) => updateSearch(e)}
+          />
+        </div>
       </>
-
-      <div className="cardParent">
-        {displayStocks.map((stock) => {
-          return (
-            <div
-              className="card stockscards"
-              key={stock.stock_id}
-              id={stock.stock_id}
-            >
-              <div className="card-body" id={stock.stock_id}>
-                <p className="lead mb-0 text-primary" id={stock.stock_id}>
-                  <strong id={stock.stock_id} onClick={(e) => handleShow(e)}>
-                    {stock.symbol}
-                  </strong>{" "}
-                </p>
-                <p className="lead mb-0">${stock.price}</p>
+      <div className="topParent">
+        <div className="stockgraphs">
+          <div className="container">
+            <div className="row">
+              <div className="panel panel-default">
+                <table className="table table-fixed">
+                  <tbody>
+                    {stocks.length ? (
+                      stocks.map((stock) => {
+                        return (
+                          <tr key={stock.stock_id}>
+                            <td className="col-xs-12 lead">
+                              <span style={{ fontWeight: "bold" }}>
+                                {stock.symbol.split(" ").join("")}
+                              </span>{" "}
+                              ${stock.price}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <div className="loader"></div>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
+
+        <div className="rightside">
+          <div className="topright"> </div>
+          <div className="cardParent">
+            {displayStocks.map((stock) => {
+              return (
+                <div
+                  className="stockscards lead"
+                  key={stock.stock_id}
+                  id={stock.stock_id}
+                >
+                  <Link style={{ textDecoration: "none" }}>
+                    <strong
+                      title="Click to see more details"
+                      id={stock.stock_id}
+                      onClick={(e) => handleShow(e)}
+                    >
+                      {stock.symbol.split(" ").join("")}
+                    </strong>
+                  </Link>
+                  {"\u00A0"}
+                  {"|"}
+                  {"\u00A0"}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <ToastContainer></ToastContainer>
     </>

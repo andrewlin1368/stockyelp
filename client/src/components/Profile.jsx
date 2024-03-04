@@ -110,7 +110,7 @@ export default function Profile() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={(e) => handleSave(e)}>
-            Save Changes
+            Confirm
           </Button>
         </Modal.Footer>
       </Modal>
@@ -189,7 +189,7 @@ export default function Profile() {
             ) : (
               <div className="table-wrapper-scroll-y my-custom-scrollbar mb-4">
                 <table className="table table-bordered table-striped mb-0">
-                  {stocks.length &&
+                  {stocks.length ? (
                     following.map((stock) => {
                       return (
                         <React.Fragment key={stock.stock_id}>
@@ -198,8 +198,10 @@ export default function Profile() {
                               <div>
                                 <p className="lead mb-0">
                                   <strong>
-                                    {stocks[stock.stock_id - 1].symbol}
-                                  </strong>
+                                    {stocks[stock.stock_id - 1].symbol
+                                      .split(" ")
+                                      .join("")}
+                                  </strong>{" "}
                                   - {stocks[stock.stock_id - 1].fullname}
                                 </p>
                               </div>
@@ -209,7 +211,10 @@ export default function Profile() {
                           <hr className="my-0" />
                         </React.Fragment>
                       );
-                    })}
+                    })
+                  ) : (
+                    <div className="loader"></div>
+                  )}
                 </table>
               </div>
             )}
@@ -229,7 +234,7 @@ export default function Profile() {
             ) : (
               <div className="table-wrapper-scroll-y my-custom-scrollbar mb-4">
                 <table className="table table-bordered table-striped mb-0">
-                  {stocks.length &&
+                  {stocks.length ? (
                     comments.map((comment) => {
                       return (
                         <React.Fragment key={comment.comment_id}>
@@ -237,12 +242,15 @@ export default function Profile() {
                             <div className="d-flex flex-start">
                               <div>
                                 <p className="lead mb-0">
-                                  Stock:{" "}
+                                  {/* Stock:{" "} */}
                                   <strong>
-                                    {stocks[comment.stock_id - 1].symbol}
+                                    {stocks[comment.stock_id - 1].symbol
+                                      .split(" ")
+                                      .join("")}
                                   </strong>{" "}
                                   <small>
-                                    Created at:{" "}
+                                    {" "}
+                                    <i className="bi bi-clock-history"></i>{" "}
                                     {comment.created_at.split("T")[0]}
                                   </small>
                                 </p>
@@ -260,7 +268,10 @@ export default function Profile() {
                           <hr className="my-0" />
                         </React.Fragment>
                       );
-                    })}
+                    })
+                  ) : (
+                    <div className="loader"></div>
+                  )}
                 </table>
               </div>
             )}
