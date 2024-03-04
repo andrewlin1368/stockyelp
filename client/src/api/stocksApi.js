@@ -54,6 +54,20 @@ export const stocksApi = api.injectEndpoints({
         body: { comment_id },
       }),
     }),
+    addstock: builder.mutation({
+      query: ({
+        fullname,
+        symbol,
+        description,
+        price,
+        week_high,
+        week_low,
+      }) => ({
+        url: "stocks",
+        method: "POST",
+        body: { fullname, symbol, description, price, week_high, week_low },
+      }),
+    }),
   }),
 });
 
@@ -66,4 +80,5 @@ export const {
   useEditcommentMutation,
   useAddcommentMutation,
   useRemovecommentMutation,
+  useAddstockMutation,
 } = stocksApi;
