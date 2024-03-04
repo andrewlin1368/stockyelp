@@ -5,6 +5,7 @@ import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import Profile from "./components/Profile.jsx";
 import Navbarcomponent from "./components/Navbar.jsx";
+import Admin from "./components/Admin.jsx";
 
 function App() {
   const { isLoading } = useGetAllStocksQuery();
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/register" element={<Register></Register>}></Route>
         <Route path="/profile" element={<Profile></Profile>}></Route>
+        <Route path="/admin" element={<Admin></Admin>}></Route>
       </Routes>
     </BrowserRouter>
   );
