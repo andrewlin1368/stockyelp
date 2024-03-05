@@ -358,13 +358,15 @@ export default function Stocks() {
                       {stock.current_data.split("T")[0]}
                     </p>
                     <p>
-                      <strong>Price:</strong> ${stock.price}
+                      <strong>Price:</strong> ${Number(stock.price).toFixed(2)}
                     </p>
                     <p>
-                      <strong>52 Week Low:</strong> ${stock.week_low}
+                      <strong>52 Week Low:</strong> $
+                      {Number(stock.week_low).toFixed(2)}
                     </p>
                     <p>
-                      <strong>52 Week High:</strong> ${stock.week_high}
+                      <strong>52 Week High:</strong> $
+                      {Number(stock.week_high).toFixed(2)}
                     </p>
                   </div>
                   <hr />
@@ -512,7 +514,7 @@ export default function Stocks() {
                               <span style={{ fontWeight: "bold" }}>
                                 {stock.symbol.split(" ").join("")}
                               </span>{" "}
-                              ${stock.price}
+                              ${Number(stock.price).toFixed(2)}
                             </td>
                           </tr>
                         );

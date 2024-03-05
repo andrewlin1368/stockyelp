@@ -363,7 +363,7 @@ export default function Admin() {
                   className="form-control"
                   name="price"
                   placeholder="Current Price"
-                  defaultValue={stock.price}
+                  defaultValue={Number(stock.price).toFixed(2)}
                   onChange={(e) => editForm(e)}
                 />
               </div>
@@ -378,7 +378,7 @@ export default function Admin() {
                   className="form-control"
                   name="week_low"
                   placeholder="52 Week Low"
-                  defaultValue={stock.week_low}
+                  defaultValue={Number(stock.week_low).toFixed(2)}
                   onChange={(e) => editForm(e)}
                 />
               </div>
@@ -392,7 +392,7 @@ export default function Admin() {
                   type="number"
                   className="form-control"
                   name="week_high"
-                  defaultValue={stock.week_high}
+                  defaultValue={Number(stock.week_high).toFixed(2)}
                   placeholder="52 Week High"
                   onChange={(e) => editForm(e)}
                 />
