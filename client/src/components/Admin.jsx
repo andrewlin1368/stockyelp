@@ -110,7 +110,7 @@ export default function Admin() {
         setStock(result.data);
         setLoading(false);
       }
-    }, 5000);
+    }, 3000);
   };
   const [addStock] = useAddstockMutation();
   const navigate = useNavigate();
@@ -307,7 +307,8 @@ export default function Admin() {
             <Link style={{ textDecoration: "none" }} onClick={handleShow}>
               Click me!
             </Link>{" "}
-            or to edit an existing stock? Search by its symbol below.
+            Need to edit an existing stock? Search by its symbol below and then
+            fill out the form.
           </div>
           <div
             className="input-group mt-3"
