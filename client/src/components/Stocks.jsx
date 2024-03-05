@@ -549,7 +549,7 @@ export default function Stocks() {
           </div>
           <hr className="hr" />
           <div className="lead mb-3" style={{ textAlign: "center" }}>
-            <strong>Checkout any stocks by clicking on them!</strong>
+            <strong>Checkout any stocks below!</strong>
           </div>
           <div className="cardParent">
             {displayStocks.map((stock) => {
