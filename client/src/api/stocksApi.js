@@ -5,6 +5,20 @@ export const stocksApi = api.injectEndpoints({
     getAllStocks: builder.query({
       query: () => "stocks/",
     }),
+    getOne: builder.mutation({
+      query: (symbol) => ({
+        url: "/stocks/single",
+        method: "POST",
+        body: { symbol },
+      }),
+    }),
+    editStock: builder.mutation({
+      query: ({ stock_id, description, price, week_high, week_low }) => ({
+        url: "/stocks",
+        method: "PUT",
+        body: { stock_id, description, price, week_high, week_low },
+      }),
+    }),
     follow: builder.mutation({
       query: (stock_id) => ({
         url: "stocks/follow",
@@ -81,4 +95,6 @@ export const {
   useAddcommentMutation,
   useRemovecommentMutation,
   useAddstockMutation,
+  useGetOneMutation,
+  useEditStockMutation,
 } = stocksApi;
