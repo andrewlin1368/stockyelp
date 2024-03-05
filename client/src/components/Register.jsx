@@ -23,6 +23,7 @@ export default function Register() {
     password: "",
     firstname: "",
     lastname: "",
+    admincode: "",
   });
   const updateForm = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -73,6 +74,15 @@ export default function Register() {
             className="form-control"
             name="password"
             placeholder="Password"
+            onChange={(e) => updateForm(e)}
+          />
+        </div>
+        <div className="form-group mt-3">
+          <input
+            type="text"
+            className="form-control"
+            name="admincode"
+            placeholder="Admin Code, leave blank if you do not have!"
             onChange={(e) => updateForm(e)}
           />
         </div>

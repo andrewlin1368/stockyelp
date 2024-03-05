@@ -17,10 +17,10 @@ export const userApi = api.injectEndpoints({
       }),
     }),
     register: builder.mutation({
-      query: ({ username, firstname, lastname, password }) => ({
+      query: ({ username, firstname, lastname, password, admincode }) => ({
         url: "/users/register",
         method: "POST",
-        body: { username, firstname, lastname, password },
+        body: { username, firstname, lastname, password, admincode },
       }),
     }),
     update: builder.mutation({
