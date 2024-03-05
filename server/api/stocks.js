@@ -25,10 +25,10 @@ stockRouter.get("/", async (req, res, next) => {
 });
 
 //get single stock and its comments
-stockRouter.get("/:id", async (req, res, next) => {
+stockRouter.post("/single", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    res.send({ stocks: await getStock(Number(id)) });
+    const { symbol } = req.body;
+    res.send(await getStock(symbol.toUpperCase()));
   } catch (error) {
     next(error);
   }

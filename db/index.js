@@ -23,23 +23,15 @@ const getAllStocks = async () => {
   return stocksWithComments;
 };
 
-//get single stock with comments in desc order
-const getStock = async (stock_id) => {
+//get single stock
+const getStock = async (symbol) => {
   const stock = await prisma.stocks.findFirst({
     where: {
-      stock_id,
+      symbol,
     },
   });
-  if (!stock) return [];
-  const comments = await prisma.comments.findMany({
-    where: {
-      stock_id,
-    },
-    orderBy: {
-      created_at: "desc",
-    },
-  });
-  return { ...stock, comments };
+  if (!stock) return { error: "Stock not found" };
+  return stock;
 };
 
 //add a new stock (ADMIN ONLY)
@@ -62,7 +54,7 @@ const addStock = async ({
   const stock = await prisma.stocks.create({
     data: {
       fullname,
-      symbol,
+      symbol: symbol.toUpperCase(),
       description,
       week_high: week_high || 0,
       week_low: week_low || 0,
