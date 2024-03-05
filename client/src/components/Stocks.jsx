@@ -552,28 +552,32 @@ export default function Stocks() {
             <strong>Checkout any stocks below!</strong>
           </div>
           <div className="cardParent">
-            {displayStocks.map((stock) => {
-              return (
-                <div
-                  className="stockscards lead"
-                  key={stock.stock_id}
-                  id={stock.stock_id}
-                >
-                  <Link style={{ textDecoration: "none" }}>
-                    <strong
-                      title="Click to see more details"
-                      id={stock.stock_id}
-                      onClick={(e) => handleShow(e)}
-                    >
-                      {stock.symbol.split(" ").join("")}
-                    </strong>
-                  </Link>
-                  {"\u00A0"}
-                  {"|"}
-                  {"\u00A0"}
-                </div>
-              );
-            })}
+            {displayStocks.length ? (
+              displayStocks.map((stock) => {
+                return (
+                  <div
+                    className="stockscards lead"
+                    key={stock.stock_id}
+                    id={stock.stock_id}
+                  >
+                    <Link style={{ textDecoration: "none" }}>
+                      <strong
+                        title="Click to see more details"
+                        id={stock.stock_id}
+                        onClick={(e) => handleShow(e)}
+                      >
+                        {stock.symbol.split(" ").join("")}
+                      </strong>
+                    </Link>
+                    {"\u00A0"}
+                    {"|"}
+                    {"\u00A0"}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="loader" style={{ margin: "auto" }}></div>
+            )}
           </div>
         </div>
       </div>
