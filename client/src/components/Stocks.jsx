@@ -321,9 +321,9 @@ export default function Stocks() {
                 )}{" "}
                 <strong>{stock.symbol.split(" ").join("")}</strong> -{" "}
                 {stock.fullname}{" "}
-                <Link style={{ textDecoration: "none", color: "gray" }}>
+                <Link style={{ textDecoration: "none", color: "green" }}>
                   <i
-                    className="bi bi-caret-up"
+                    className="bi bi-caret-up-fill"
                     title="upvote"
                     onClick={(e) => upvoter(e)}
                     id={stock.stock_id}
@@ -332,9 +332,9 @@ export default function Stocks() {
                   </i>
                 </Link>{" "}
                 {stock.upvotes}{" "}
-                <Link style={{ textDecoration: "none", color: "gray" }}>
+                <Link style={{ textDecoration: "none", color: "red" }}>
                   <i
-                    className="bi bi-caret-down"
+                    className="bi bi-caret-down-fill"
                     title="downvote"
                     onClick={(e) => downvoter(e)}
                     id={stock.stock_id}
