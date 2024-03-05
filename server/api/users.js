@@ -35,7 +35,7 @@ userRouter.post("/login", async (req, res, next) => {
 //register
 userRouter.post("/register", async (req, res, next) => {
   try {
-    const { username, firstname, lastname, password } = req.body;
+    const { username, firstname, lastname, password, admincode } = req.body;
     if (!username || !firstname || !lastname || !password)
       return res.status(400).send({ error: "All fields are required" });
     const data = await register({
@@ -43,6 +43,7 @@ userRouter.post("/register", async (req, res, next) => {
       firstname,
       lastname,
       password,
+      admincode,
     });
     return data.error
       ? res.status(400).send({ error: data.error })

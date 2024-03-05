@@ -212,7 +212,15 @@ const getProfile = async (user_id) => {
 };
 
 //register a user
-const register = async ({ username, firstname, lastname, password }) => {
+const register = async ({
+  username,
+  firstname,
+  lastname,
+  password,
+  admincode,
+}) => {
+  if (admincode.length && admincode !== "8773934448")
+    return { error: "Invalid Code" };
   let user = await prisma.users.findFirst({ where: { username } });
   if (user) return { error: "User already exists" };
   if (password.length < 8)
@@ -225,6 +233,7 @@ const register = async ({ username, firstname, lastname, password }) => {
       firstname,
       lastname,
       password: hashPass,
+      isadmin: admincode.length ? true : false,
     },
   });
   delete user.password;
