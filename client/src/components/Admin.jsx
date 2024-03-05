@@ -92,6 +92,7 @@ export default function Admin() {
   };
   const updateSearch = (e) => setSearch(e.target.value);
   const handleSearch = async () => {
+    setStock(null);
     if (!search) {
       toast.error("All fields must be filled", {
         position: "top-right",
