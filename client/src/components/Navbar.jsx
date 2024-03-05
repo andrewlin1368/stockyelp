@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { logoutUser } from "../api/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbarcomponent() {
   const { token, user } = useSelector((state) => state.user);
@@ -22,28 +23,41 @@ function Navbarcomponent() {
           </Navbar.Brand>
           <Nav className="me-auto lead">
             {!token && (
-              <Nav.Link href="/login">
-                Login <i className="bi bi-box-arrow-in-right"></i>
+              <Nav.Link>
+                <Link to="/login" style={{ textDecoration: "none" }}>
+                  Login{" "}
+                </Link>
+                <i className="bi bi-box-arrow-in-right"></i>
               </Nav.Link>
             )}
             {!token && (
-              <Nav.Link href="/register">
-                Register <i className="bi bi-person-plus-fill"></i>
+              <Nav.Link>
+                <Link to="/register" style={{ textDecoration: "none" }}>
+                  Register{" "}
+                </Link>
+                <i className="bi bi-person-plus-fill"></i>
               </Nav.Link>
             )}
             {token && (
-              <Nav.Link href="/profile">
-                Profile <i className="bi bi-person-circle"></i>
+              <Nav.Link>
+                <Link to="/profile" style={{ textDecoration: "none" }}>
+                  Profile{" "}
+                </Link>
+                <i className="bi bi-person-circle"></i>
               </Nav.Link>
             )}
             {token && user.isadmin && (
-              <Nav.Link href="/admin">
-                Admin <i className="bi bi-shield-lock"></i>
+              <Nav.Link>
+                <Link to="/admin" style={{ textDecoration: "none" }}>
+                  Admin{" "}
+                </Link>
+                <i className="bi bi-shield-lock"></i>
               </Nav.Link>
             )}
             {token && (
-              <Nav.Link href="" onClick={logout}>
-                Logout <i className="bi bi-box-arrow-right"></i>
+              <Nav.Link onClick={logout}>
+                <Link style={{ textDecoration: "none" }}>Logout </Link>
+                <i className="bi bi-box-arrow-right"></i>
               </Nav.Link>
             )}
           </Nav>
