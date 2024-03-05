@@ -51,6 +51,7 @@ export default function Admin() {
       return;
     }
     if (Number(stock.week_high) < Number(stock.week_low)) {
+      console.log(stock.week_high, stock.week_low);
       toast.error(
         "52 Week Low price cannot be greater than 52 Week High price",
         {
@@ -68,9 +69,9 @@ export default function Admin() {
     const result = await editStockMu({
       stock_id: stock.stock_id,
       description: stock.description,
-      price: stock.price,
-      week_high: stock.week_high,
-      week_low: stock.week_low,
+      price: Number(stock.price),
+      week_high: Number(stock.week_high),
+      week_low: Number(stock.week_low),
     });
     if (result.error) {
       toast.error(result.error.data.error, {
@@ -217,7 +218,7 @@ export default function Admin() {
     };
     if (!user || (user && !user.isadmin)) valid();
   }, []);
-  console.log(stock);
+  // console.log(stock);
   return (
     user &&
     user.isadmin && (
