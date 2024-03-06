@@ -41,6 +41,9 @@ export default function Register() {
     <div>
       <form className="login_reg_Form" onSubmit={(e) => sendForm(e)}>
         <h1 className="display-4">Register.</h1>
+        <p className="lead">
+          If an admin code is provied to you. Enter it in the admin code field.
+        </p>
         <div className="form-group mt-3 mb-3">
           <input
             type="text"
@@ -82,7 +85,7 @@ export default function Register() {
             type="text"
             className="form-control"
             name="admincode"
-            placeholder="Admin Code, leave blank if you do not have!"
+            placeholder="Admin Code"
             onChange={(e) => updateForm(e)}
           />
         </div>
