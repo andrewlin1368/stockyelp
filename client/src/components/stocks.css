@@ -68,3 +68,17 @@
     transform: rotate(360deg);
   }
 }
+
+@media screen and (max-width: 600px) {
+  .stockgraphs,
+  .bi-box-arrow-in-right,
+  .bi-person-plus-fill,
+  .bi-person-circle,
+  .bi-shield-lock,
+  .bi-box-arrow-right {
+    display: none;
+  }
+  .rightside {
+    width: 100%;
+  }
+}

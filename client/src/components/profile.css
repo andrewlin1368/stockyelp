@@ -10,3 +10,18 @@
 .following {
   width: 25%;
 }
+
+@media screen and (max-width: 600px) {
+  .not_user {
+    display: grid;
+  }
+  .comments {
+    width: 100%;
+  }
+  .following {
+    width: 100%;
+  }
+  .flex-shrink-0 {
+    display: none;
+  }
+}
