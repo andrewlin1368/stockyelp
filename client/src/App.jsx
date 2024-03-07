@@ -6,11 +6,23 @@ import Register from "./components/Register.jsx";
 import Profile from "./components/Profile.jsx";
 import Navbarcomponent from "./components/Navbar.jsx";
 import Admin from "./components/Admin.jsx";
+import { useEffect, useState } from "react";
+import loading from "./assets/loading.webp";
 
 function App() {
+  const [load, setLoad] = useState(false);
   const { isLoading } = useGetAllStocksQuery();
   // return <>{(isLoading && <>Loading...</>) || <Stocks></Stocks>}</>;
-  return (
+  useEffect(() => {
+    setTimeout(() => {
+      setLoad(true);
+    }, 4000);
+  }, []);
+  return !load ? (
+    <div>
+      <img src={loading} alt="loading" width="100%" height="auto" />
+    </div>
+  ) : (
     <BrowserRouter>
       <Navbarcomponent></Navbarcomponent>
       <Routes>
