@@ -223,12 +223,12 @@ export default function Stocks() {
     setDisplayStocks(newDisplayStocks);
   };
   return (
-    <>
+    <div>
       {edit && (
         <Modal show={edit} onHide={handleEditClose} centered>
           <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="display-6">Edit Comment</h1>
+              <h1 className="display-6">Edit Comment.</h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -243,7 +243,7 @@ export default function Stocks() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={handleEditClose}>
-              Confirm
+              Edit
             </Button>
           </Modal.Footer>
         </Modal>
@@ -252,9 +252,7 @@ export default function Stocks() {
         <Modal show={show2} onHide={handleClose2} size="s" centered>
           <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="display-6">
-                @{profile.user.username} is watching...
-              </h1>
+              <h1 className="display-6">@{profile.user.username} likes...</h1>
             </Modal.Title>
           </Modal.Header>
           <Container>
@@ -262,7 +260,7 @@ export default function Stocks() {
               <Col xs={18} md={12}>
                 {!profile.following.length ? (
                   <p className="lead mt-4 mb-4">
-                    This user is not following any stocks...
+                    @{profile.user.username} is not liking any stocks...
                   </p>
                 ) : (
                   <div className="table-wrapper-scroll-y my-custom-scrollbar2">
@@ -270,13 +268,13 @@ export default function Stocks() {
                       {profile.following.map((stock) => {
                         return (
                           <React.Fragment key={stock.stock_id}>
-                            <div className="card-body p-4">
+                            <div className="card-body p-1">
                               <div className="d-flex flex-start">
                                 <div>
                                   <p className="lead mb-0">
                                     <strong>
                                       {stocks[stock.stock_id - 1].symbol}
-                                    </strong>
+                                    </strong>{" "}
                                     - {stocks[stock.stock_id - 1].fullname}
                                   </p>
                                 </div>
@@ -298,7 +296,7 @@ export default function Stocks() {
       {stock && (
         <Modal show={show} onHide={handleClose} size="xl">
           <Modal.Header closeButton>
-            <Modal.Title>
+            <Modal.Title style={{ width: "100%" }}>
               <h1 className="display-6">
                 {(extra_following[stock.stock_id] && (
                   <Link style={{ color: "#FFDF00" }}>
@@ -321,36 +319,40 @@ export default function Stocks() {
                 )}{" "}
                 <strong>{stock.symbol.split(" ").join("")}</strong> -{" "}
                 {stock.fullname}{" "}
-                <Link style={{ textDecoration: "none", color: "green" }}>
-                  <i
-                    className="bi bi-caret-up-fill"
-                    title="upvote"
-                    onClick={(e) => upvoter(e)}
-                    id={stock.stock_id}
-                  >
-                    {" "}
-                  </i>
-                </Link>{" "}
-                {stock.upvotes}{" "}
-                <Link style={{ textDecoration: "none", color: "red" }}>
-                  <i
-                    className="bi bi-caret-down-fill"
-                    title="downvote"
-                    onClick={(e) => downvoter(e)}
-                    id={stock.stock_id}
-                  >
-                    {" "}
-                  </i>
-                </Link>{" "}
-                {stock.downvotes}
+                <div style={{ float: "right" }}>
+                  <Link style={{ textDecoration: "none", color: "green" }}>
+                    <i
+                      className="bi bi-caret-up-fill"
+                      title="upvote"
+                      onClick={(e) => upvoter(e)}
+                      id={stock.stock_id}
+                    >
+                      {" "}
+                    </i>
+                  </Link>{" "}
+                  {stock.upvotes}{" "}
+                  <Link style={{ textDecoration: "none", color: "red" }}>
+                    <i
+                      className="bi bi-caret-down-fill"
+                      title="downvote"
+                      onClick={(e) => downvoter(e)}
+                      id={stock.stock_id}
+                    >
+                      {" "}
+                    </i>
+                  </Link>{" "}
+                  {stock.downvotes}
+                </div>
               </h1>
             </Modal.Title>
           </Modal.Header>
           <Container>
-            <Row>
-              <Col xs={6} md={4}>
+            <div className="stockdetails">
+              <div className="stockdetails1">
                 <Modal.Body>
-                  <p className="lead">{stock.description}</p>
+                  <p className="lead">
+                    <small>{stock.description}</small>
+                  </p>
                   <hr />
                   <div className="lead">
                     <p>
@@ -371,8 +373,8 @@ export default function Stocks() {
                   </div>
                   <hr />
                 </Modal.Body>
-              </Col>
-              <Col xs={12} md={8}>
+              </div>
+              <div className="stockdetails2">
                 {(token && (
                   <div className="form-outline mb-4 mt-4">
                     <form id={stock.stock_id} onSubmit={(e) => addComment(e)}>
@@ -381,23 +383,27 @@ export default function Stocks() {
                         className="form-control"
                         placeholder={newMessage}
                         onChange={(e) => updateAddMessage(e)}
+                        style={{ width: "80%", margin: "auto" }}
                       />
                     </form>
                   </div>
                 )) || (
                   <>
-                    <p className="lead mt-3">
+                    <p className="lead mt-3" style={{ textAlign: "center" }}>
                       <Link to="/login" style={{ textDecoration: "none" }}>
                         Login
                       </Link>{" "}
-                      to comment on this stock.
+                      to comment.
                     </p>
                   </>
                 )}
                 <hr className="my-0" />
                 {stock.comments &&
                   ((!stock.comments.length && (
-                    <h1 className="display-6 mt-2">
+                    <h1
+                      className="display-3 mt-2"
+                      style={{ textAlign: "center" }}
+                    >
                       Be the first to comment...
                     </h1>
                   )) || (
@@ -406,10 +412,13 @@ export default function Stocks() {
                         {stock.comments.map((comment) => {
                           return (
                             <React.Fragment key={comment.comment_id}>
-                              <div className="card-body p-4">
-                                <div className="d-flex flex-start">
+                              <div className="card-body p-2">
+                                <div>
                                   <div>
-                                    <p className="lead mb-0">
+                                    <p
+                                      className="lead mb-0 "
+                                      style={{ width: "100%" }}
+                                    >
                                       <Link style={{ textDecoration: "none" }}>
                                         <strong
                                           className="text-primary lead"
@@ -422,7 +431,7 @@ export default function Stocks() {
                                           @{comment.username}
                                         </strong>
                                       </Link>{" "}
-                                      <small>
+                                      <small style={{ float: "right" }}>
                                         {" "}
                                         <i className="bi bi-clock-history"></i>{" "}
                                         {comment.created_at.split("T")[0]}
@@ -434,8 +443,8 @@ export default function Stocks() {
                                         {comment.message}{" "}
                                         {token &&
                                           comment.user_id === user.user_id && (
-                                            <>
-                                              <Link style={{ color: "gray" }}>
+                                            <span style={{ float: "right" }}>
+                                              <Link style={{ color: "green" }}>
                                                 <i
                                                   className="bi bi-pencil"
                                                   title="edit"
@@ -446,7 +455,7 @@ export default function Stocks() {
                                                   }
                                                 ></i>
                                               </Link>{" "}
-                                              <Link style={{ color: "gray" }}>
+                                              <Link style={{ color: "red" }}>
                                                 <i
                                                   className="bi bi-trash"
                                                   id={comment.comment_id}
@@ -456,12 +465,15 @@ export default function Stocks() {
                                                   title="delete"
                                                 ></i>
                                               </Link>
-                                            </>
+                                            </span>
                                           )}
                                       </p>
                                     )) || (
-                                      <p className="mb-0 lead">
-                                        <del>{comment.message}</del>
+                                      <p
+                                        className="mb-0 lead"
+                                        style={{ fontStyle: "italic" }}
+                                      >
+                                        This message has been deleted...
                                       </p>
                                     )}
                                   </div>
@@ -475,15 +487,15 @@ export default function Stocks() {
                       </table>
                     </div>
                   ))}
-              </Col>
-            </Row>
+              </div>
+            </div>
           </Container>
         </Modal>
       )}
-      <>
+      <div className="page">
         <div
           className="input-group mb-3 mt-2"
-          style={{ width: "70%", margin: "auto" }}
+          style={{ width: "50%", margin: "auto" }}
         >
           <div className="input-group-prepend">
             <span className="input-group-text" id="basic-addon1">
@@ -495,95 +507,178 @@ export default function Stocks() {
             className="form-control"
             aria-label="Username"
             aria-describedby="basic-addon1"
+            placeholder="Search for a stock"
             onChange={(e) => updateSearch(e)}
           />
         </div>
-      </>
-      <div className="topParent">
-        <div className="stockgraphs">
-          <div className="container">
-            <div className="row">
-              <div className="panel panel-default">
-                <table className="table table-fixed">
-                  <tbody>
-                    {stocks.length ? (
-                      stocks.map((stock) => {
-                        return (
-                          <tr key={stock.stock_id}>
-                            <td className="col-xs-12 lead">
-                              <span style={{ fontWeight: "bold" }}>
-                                {stock.symbol.split(" ").join("")}
-                              </span>{" "}
-                              ${Number(stock.price).toFixed(2)}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <div className="loader"></div>
-                    )}
-                  </tbody>
-                </table>
+
+        <div className="topParent">
+          <div className="stockgraphs mt-3">
+            <div className="container">
+              <div className="row">
+                <div className="panel panel-default">
+                  <table className="table table-fixed">
+                    <tbody>
+                      {stocks.length ? (
+                        stocks.map((stock) => {
+                          return (
+                            <tr key={stock.stock_id}>
+                              <td className="col-xs-12 lead">
+                                <span style={{ fontWeight: "bold" }}>
+                                  {stock.symbol.split(" ").join("")}
+                                </span>{" "}
+                                ${Number(stock.price).toFixed(2)}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <div
+                          className="loader"
+                          style={{ margin: "auto" }}
+                        ></div>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="rightside">
-          <div className="topright mt-0 " style={{ margin: "auto" }}>
-            <Carousel>
-              <Carousel.Item interval={4000}>
-                <img src={uber} alt="UBER" height="300px" />
-              </Carousel.Item>
-              <Carousel.Item interval={4000}>
-                <img src={nvidia} alt="NVIDIA" height="300px" />
-              </Carousel.Item>
-              <Carousel.Item interval={4000}>
-                <img src={amd} alt="AMD" height="300px" />
-              </Carousel.Item>
-              <Carousel.Item interval={4000}>
-                <img src={spotify} alt="SPOTIFY" height="300px" />
-              </Carousel.Item>
-              <Carousel.Item interval={4000}>
-                <img src={groupon} alt="GROUPON" height="300px" />
-              </Carousel.Item>
-            </Carousel>
-          </div>
-          <hr className="hr" />
-          <div className="lead mb-3" style={{ textAlign: "center" }}>
-            <strong>Checkout any stocks below!</strong>
-          </div>
-          <div className="cardParent">
-            {displayStocks.length ? (
-              displayStocks.map((stock) => {
-                return (
-                  <div
-                    className="stockscards lead"
-                    key={stock.stock_id}
-                    id={stock.stock_id}
-                  >
-                    <Link style={{ textDecoration: "none" }}>
-                      <strong
-                        title="Click to see more details"
-                        id={stock.stock_id}
-                        onClick={(e) => handleShow(e)}
-                      >
-                        {stock.symbol.split(" ").join("")}
+          <div className="rightside">
+            <div
+              className="topright mt-0 "
+              style={{
+                margin: "auto",
+                backgroundColor: "#fcfcfd",
+                // width: "50%",
+                borderRadius: "50px",
+                opacity: "0.75",
+              }}
+            >
+              <Carousel style={{ color: "black" }}>
+                <Carousel.Item interval={3000}>
+                  <Link>
+                    <img
+                      src={uber}
+                      alt="UBER"
+                      height="300px"
+                      onClick={() => {
+                        window.open("https://www.uber.com/", "_blank");
+                      }}
+                    />
+                  </Link>
+                </Carousel.Item>
+                <Carousel.Item interval={3000}>
+                  <Link>
+                    <img
+                      src={nvidia}
+                      alt="NVIDIA"
+                      height="300px"
+                      onClick={() => {
+                        window.open("https://www.nvidia.com/en-us/", "_blank");
+                      }}
+                    />
+                  </Link>
+                </Carousel.Item>
+                <Carousel.Item interval={3000}>
+                  <Link>
+                    <img
+                      src={amd}
+                      alt="AMD"
+                      height="300px"
+                      onClick={() => {
+                        window.open("https://www.amd.com/en.html", "_blank");
+                      }}
+                    />
+                  </Link>
+                </Carousel.Item>
+                <Carousel.Item interval={3000}>
+                  <Link>
+                    <img
+                      src={spotify}
+                      alt="SPOTIFY"
+                      height="300px"
+                      onClick={() => {
+                        window.open("https://open.spotify.com/", "_blank");
+                      }}
+                    />
+                  </Link>
+                </Carousel.Item>
+                <Carousel.Item interval={3000}>
+                  <Link>
+                    <img
+                      src={groupon}
+                      alt="GROUPON"
+                      height="300px"
+                      onClick={() => {
+                        window.open("https://www.groupon.com/", "_blank");
+                      }}
+                    />
+                  </Link>
+                </Carousel.Item>
+              </Carousel>
+            </div>
+            <hr className="hr" style={{ color: "white", width: "98%" }} />
+            <div style={{ textAlign: "center", color: "white" }}>
+              <h1 className="display-4">Checkout any stocks below!</h1>
+            </div>
+            <div
+              className="cardParent"
+              style={{
+                padding: "2px",
+                margin: "auto",
+                display: "flex",
+                flexWrap: "wrap",
+                // overflow: "hidden",
+                gap: "4px",
+              }}
+            >
+              {displayStocks.length ? (
+                displayStocks.map((stock) => {
+                  return (
+                    <div
+                      className="stockscards lead"
+                      key={stock.stock_id}
+                      id={stock.stock_id}
+                      style={{
+                        border: "1px solid black",
+                        backgroundColor: "#fcfcfd",
+                        padding: "2px",
+                        borderRadius: "10px",
+                        opacity: "0.7",
+                        flexBasis: "6%",
+                        textAlign: "center",
+                      }}
+                    >
+                      <strong>
+                        <Link
+                          style={{
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          <strong
+                            title="Click to see more details"
+                            id={stock.stock_id}
+                            onClick={(e) => handleShow(e)}
+                          >
+                            {stock.symbol.split(" ").join("")}
+                          </strong>
+                        </Link>
                       </strong>
-                    </Link>
-                    {"\u00A0"}
-                    {"|"}
-                    {"\u00A0"}
-                  </div>
-                );
-              })
-            ) : (
-              <div className="loader" style={{ margin: "auto" }}></div>
-            )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="loader" style={{ margin: "auto" }}></div>
+              )}
+            </div>
+            <hr className="hr" style={{ color: "white", width: "98%" }} />
           </div>
         </div>
       </div>
       <ToastContainer></ToastContainer>
-    </>
+    </div>
   );
 }

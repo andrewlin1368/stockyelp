@@ -223,11 +223,11 @@ export default function Admin() {
   return (
     user &&
     user.isadmin && (
-      <div>
-        <Modal show={show} onHide={handleClose} centered>
+      <div className="addEditPage" style={{ height: "100vh", marginTop: "2%" }}>
+        <Modal show={show} onHide={handleClose} centered size="lg">
           <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="display-6">Add a new stock</h1>
+              <h1 className="display-6">Add a new stock.</h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -296,25 +296,40 @@ export default function Admin() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={addNewStock}>
-              Add
+              Add Stock
             </Button>
           </Modal.Footer>
         </Modal>
-        <div className="topsection">
-          <h1 className="display-6 mt-3 mb-3" style={{ textAlign: "center" }}>
-            Welcome @{user.username}!
-          </h1>
-          <div className="lead" style={{ textAlign: "center" }}>
-            Need to add a new stock?{" "}
-            <Link style={{ textDecoration: "none" }} onClick={handleShow}>
-              Click me!
-            </Link>{" "}
-            Need to edit an existing stock? Search by its symbol below and then
-            fill out the form.
+        <div
+          className="topsection"
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            backgroundColor: "#fcfcfd",
+            margin: "auto",
+            borderRadius: "25px",
+            opacity: "0.9",
+            padding: "5px",
+          }}
+        >
+          <h1 className="display-6 mt-3 mb-3">Welcome @{user.username}!</h1>
+          <div className="lead">
+            <strong>
+              Need to add a new stock?{" "}
+              <Link style={{ textDecoration: "none" }} onClick={handleShow}>
+                Click me!
+              </Link>{" "}
+              Need to edit an existing stock? Search by its symbol below and
+              then fill out the form.
+            </strong>
           </div>
           <div
             className="input-group mt-3"
-            style={{ width: "50%", margin: "auto" }}
+            style={{
+              width: "70%",
+              margin: "auto",
+              borderRadius: "9px",
+            }}
           >
             <input
               type="text"
@@ -333,17 +348,20 @@ export default function Admin() {
               </button>
             </div>
           </div>
+        </div>
+        <div className="bottomsection" style={{ marginTop: "2%" }}>
           {loading && (
             <div className="loader mt-4" style={{ margin: "auto" }}></div>
           )}
           {stock && (
-            <div style={{ margin: "auto", width: "50%" }}>
+            <div className="searchFormEdit">
               <h1
                 className="display-6 mt-3 mb-3"
-                style={{ textAlign: "center" }}
+                style={{ textAlign: "center", fontWeight: "bold" }}
               >
                 {stock.fullname}
               </h1>
+
               <div className="form-group mt-3 mb-3">
                 <textarea
                   className="form-control"
@@ -398,21 +416,23 @@ export default function Admin() {
                   onChange={(e) => editForm(e)}
                 />
               </div>
-              <div style={{ float: "right" }}>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={sendNewUpdate}
-                >
-                  Confirm
-                </button>{" "}
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={cancelEdit}
-                >
-                  Cancel
-                </button>
+              <div>
+                <div style={{ float: "right" }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={sendNewUpdate}
+                  >
+                    Confirm
+                  </button>{" "}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={cancelEdit}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           )}

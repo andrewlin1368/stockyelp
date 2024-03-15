@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRegisterMutation } from "../api/userApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import bg from "../assets/bglr.jpg";
 
 export default function Register() {
   const { token } = useSelector((state) => state.user);
@@ -38,11 +39,27 @@ export default function Register() {
   };
 
   return (
-    <div>
-      <form className="login_reg_Form" onSubmit={(e) => sendForm(e)}>
-        <h1 className="display-4">Register.</h1>
-        <p className="lead">
-          If an admin code is provied to you. Enter it in the admin code field.
+    <div
+      style={{
+        height: "100vh",
+        display: "grid",
+        placeItems: "center",
+        backgroundImage: `url(${bg})`,
+      }}
+    >
+      <form
+        className="login_reg_Form"
+        onSubmit={(e) => sendForm(e)}
+        style={{ backgroundColor: "#fcfcfd" }}
+      >
+        <h1 className="display-4">
+          <i className="bi bi-coin"></i> Register.
+        </h1>
+        <p>
+          <small className="lead">
+            If an admin code is provied to you. Enter it in the admin code
+            field.
+          </small>
         </p>
         <div className="form-group mt-3 mb-3">
           <input
@@ -90,7 +107,7 @@ export default function Register() {
           />
         </div>
         {/* {error && <p className="lead mt-2 mb-0 text-danger">{error}</p>} */}
-        <button type="submit" className="btn btn-primary mt-2">
+        <button type="submit" className="btn btn-primary mt-3">
           Register
         </button>
         <p className="lead mt-2">

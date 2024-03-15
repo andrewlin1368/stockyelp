@@ -16,14 +16,14 @@ function Navbarcomponent() {
   };
   return (
     <>
-      <Navbar bg="light" data-bs-theme="light">
+      <Navbar bg="light" data-bs-theme="light" className="py-2">
         <Container>
-          <Navbar.Brand href="/" className="lead">
+          <Navbar.Brand href="/" className="lead fs-4">
             <i className="bi bi-coin"></i> StockYelp
           </Navbar.Brand>
-          <Nav className="me-auto lead">
+          <Nav className="ml-auto lead">
             {!token && (
-              <Nav.Link>
+              <Nav.Link className="fs-4">
                 <Link to="/login" style={{ textDecoration: "none" }}>
                   Login{" "}
                 </Link>
@@ -31,7 +31,7 @@ function Navbarcomponent() {
               </Nav.Link>
             )}
             {!token && (
-              <Nav.Link>
+              <Nav.Link className="fs-4">
                 <Link to="/register" style={{ textDecoration: "none" }}>
                   Register{" "}
                 </Link>
@@ -39,7 +39,7 @@ function Navbarcomponent() {
               </Nav.Link>
             )}
             {token && (
-              <Nav.Link>
+              <Nav.Link className="fs-4">
                 <Link to="/profile" style={{ textDecoration: "none" }}>
                   Profile{" "}
                 </Link>
@@ -47,7 +47,7 @@ function Navbarcomponent() {
               </Nav.Link>
             )}
             {token && user.isadmin && (
-              <Nav.Link>
+              <Nav.Link className="fs-4">
                 <Link to="/admin" style={{ textDecoration: "none" }}>
                   Admin{" "}
                 </Link>
@@ -55,11 +55,35 @@ function Navbarcomponent() {
               </Nav.Link>
             )}
             {token && (
-              <Nav.Link onClick={logout}>
+              <Nav.Link onClick={logout} className="fs-4">
                 <Link style={{ textDecoration: "none" }}>Logout </Link>
                 <i className="bi bi-box-arrow-right"></i>
               </Nav.Link>
             )}
+            {"\u00A0"}
+            {"\u00A0"}
+            {"\u00A0"}
+            <Nav.Link className="fs-4">
+              <Link style={{ textDecoration: "none" }}> </Link>
+              <i
+                className="bi bi-linkedin"
+                onClick={() => {
+                  window.open(
+                    "https://www.linkedin.com/in/andrewlin1368/",
+                    "_blank"
+                  );
+                }}
+              ></i>{" "}
+            </Nav.Link>
+            <Nav.Link className="fs-4">
+              <Link style={{ textDecoration: "none" }}> </Link>
+              <i
+                className="bi bi-github"
+                onClick={() => {
+                  window.open("https://github.com/andrewlin1368", "_blank");
+                }}
+              ></i>{" "}
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>

@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import bg from "../assets/bglr.jpg";
 
 export default function Profile() {
   const { token, error } = useSelector((state) => state.user);
@@ -62,11 +63,11 @@ export default function Profile() {
   // console.log(user, following, comments);
   // console.log(following);
   return (
-    <>
+    <div className="profile" style={{ border: "1px solid transparent" }}>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h1 className="display-6">Edit Profile</h1>
+            <h1 className="display-6">Edit Profile.</h1>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -114,14 +115,17 @@ export default function Profile() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <div className="profile">
+      <div>
         {user && (
-          <div className="user">
+          <div className="user" style={{}}>
             <section>
               <div className="container py-3">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                   <div className="col col-md-9 col-lg-7 col-xl-5">
-                    <div className="card" style={{ borderRadius: "15px" }}>
+                    <div
+                      className="card"
+                      style={{ borderRadius: "15px", opacity: "0.95" }}
+                    >
                       <div className="card-body p-4">
                         <div className="d-flex text-black">
                           <div className="flex-shrink-0">
@@ -129,27 +133,48 @@ export default function Profile() {
                               src={person}
                               alt="Generic placeholder image"
                               className="img-fluid"
-                              style={{ width: "180px", borderRadius: "10px" }}
+                              style={{
+                                width: "180px",
+                                borderRadius: "10px",
+                                backgroundColor: "gray",
+                              }}
                             />
                           </div>
                           <div className="flex-grow-1 ms-3">
-                            <h5 className="mb-1 lead">@{user.username}</h5>
-                            <p className="mb-2 pb-1 lead">
-                              {user.firstname} {user.lastname}
+                            <h5
+                              className="mb-1 lead"
+                              style={{
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                color: "#0d6efd",
+                              }}
+                            >
+                              @{user.username}
+                            </h5>
+                            <p
+                              className="mb-2 pb-1 lead"
+                              style={{ textAlign: "center" }}
+                            >
+                              <strong>
+                                {user.firstname} {user.lastname}
+                              </strong>
                             </p>
                             <div
                               className="d-flex justify-content-start rounded-3 p-2 mt-2 mb-2"
-                              style={{ backgroundColor: "#efefef" }}
+                              style={{
+                                backgroundColor: "#efefef",
+                                textAlign: "center",
+                              }}
                             >
-                              <div>
+                              <div style={{ width: "50%" }}>
                                 <p className="small text-muted mb-1 lead">
-                                  Following
+                                  <strong>Likes</strong>
                                 </p>
                                 <p className="mb-0 lead">{following.length}</p>
                               </div>
-                              <div className="px-3">
+                              <div className="px-3" style={{ width: "50%" }}>
                                 <p className="small text-muted mb-1 lead">
-                                  Comments
+                                  <strong>Comment</strong>
                                 </p>
                                 <p className="mb-0 lead">{comments.length}</p>
                               </div>
@@ -173,28 +198,28 @@ export default function Profile() {
             </section>
           </div>
         )}
-        <div className="not_user">
+        <div className="not_user" style={{ opacity: "0.9" }}>
           <div className="following">
             <h1 className="display-6" style={{ textAlign: "center" }}>
-              Following
+              Likes
             </h1>
-            <hr />
+            <hr style={{ marginBottom: "0" }} />
             {!following.length ? (
               <p className="lead" style={{ textAlign: "center" }}>
-                You are not following any stocks... Start by checking out some{" "}
+                You are not liking any stocks... Start by checking out some{" "}
                 <Link to="/" style={{ textDecoration: "none" }}>
                   stocks.
                 </Link>
               </p>
             ) : (
-              <div className="table-wrapper-scroll-y my-custom-scrollbar mb-4">
+              <div className="table-wrapper-scroll-y my-custom-scrollbar mb-0">
                 <table className="table table-bordered table-striped mb-0">
                   {stocks.length ? (
                     following.map((stock) => {
                       return (
                         <React.Fragment key={stock.stock_id}>
-                          <div className="card-body p-4">
-                            <div className="d-flex flex-start">
+                          <div className="card-body p-1">
+                            <div>
                               <div>
                                 <p className="lead mb-0">
                                   <strong>
@@ -221,9 +246,9 @@ export default function Profile() {
           </div>
           <div className="comments">
             <h1 className="display-6" style={{ textAlign: "center" }}>
-              Comments
+              Comment History
             </h1>
-            <hr />
+            <hr style={{ marginBottom: "0" }} />
             {!comments.length ? (
               <p className="lead" style={{ textAlign: "center" }}>
                 You did not make any comments... Start by checking out some{" "}
@@ -232,23 +257,23 @@ export default function Profile() {
                 </Link>
               </p>
             ) : (
-              <div className="table-wrapper-scroll-y my-custom-scrollbar mb-4">
-                <table className="table table-bordered table-striped mb-0">
+              <div className="table-wrapper-scroll-y my-custom-scrollbar">
+                <table className="table table-bordered table-striped">
                   {stocks.length ? (
                     comments.map((comment) => {
                       return (
                         <React.Fragment key={comment.comment_id}>
-                          <div className="card-body p-4">
-                            <div className="d-flex flex-start">
+                          <div className="card-body p-2">
+                            <div>
                               <div>
                                 <p className="lead mb-0">
                                   {/* Stock:{" "} */}
-                                  <strong>
+                                  <strong style={{ fontWeight: "bold" }}>
                                     {stocks[comment.stock_id - 1].symbol
                                       .split(" ")
                                       .join("")}
                                   </strong>{" "}
-                                  <small>
+                                  <small style={{ float: "right" }}>
                                     {" "}
                                     <i className="bi bi-clock-history"></i>{" "}
                                     {comment.created_at.split("T")[0]}
@@ -258,7 +283,10 @@ export default function Profile() {
                                   <p className="mb-0 lead">{comment.message}</p>
                                 )) || (
                                   <p className="mb-0 lead">
-                                    <del>{comment.message}</del>
+                                    <del>{comment.message}</del> -{" "}
+                                    <span style={{ fontStyle: "italic" }}>
+                                      This message has been deleted...
+                                    </span>
                                   </p>
                                 )}
                               </div>
@@ -279,6 +307,6 @@ export default function Profile() {
         </div>
       </div>
       <ToastContainer />
-    </>
+    </div>
   );
 }

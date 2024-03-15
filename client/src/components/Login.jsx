@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import bg from "../assets/bglr.jpg";
 
 export default function Login() {
   const { token } = useSelector((state) => state.user);
@@ -32,10 +33,23 @@ export default function Login() {
   };
 
   return (
-    <>
-      <form className="login_reg_Form" onSubmit={(e) => sendForm(e)}>
-        <h1 className="display-4">Login.</h1>
-        <div className="form-group mt-3 mb-3">
+    <div
+      style={{
+        height: "100vh",
+        display: "grid",
+        placeItems: "center",
+        backgroundImage: `url(${bg})`,
+      }}
+    >
+      <form
+        className="login_reg_Form"
+        onSubmit={(e) => sendForm(e)}
+        style={{ backgroundColor: "#fcfcfd" }}
+      >
+        <h1 className="display-4">
+          <i className="bi bi-coin"></i> Login.
+        </h1>
+        <div className="form-group mt-5 mb-3">
           <input
             type="text"
             className="form-control"
@@ -54,10 +68,10 @@ export default function Login() {
           />
         </div>
         {/* {error && <p className="lead mt-2 mb-0 text-danger">{error}</p>} */}
-        <button type="submit" className="btn btn-primary mt-2">
+        <button type="submit" className="btn btn-primary mt-3">
           Login
         </button>
-        <p className="lead mt-2">
+        <p className="lead mt-3">
           No account?{" "}
           <Link to="/register" style={{ textDecoration: "none" }}>
             Register.
@@ -65,6 +79,6 @@ export default function Login() {
         </p>
       </form>
       <ToastContainer></ToastContainer>
-    </>
+    </div>
   );
 }

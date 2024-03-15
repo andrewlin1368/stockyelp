@@ -13,14 +13,14 @@
   overflow: auto;
 }
 
-.stockscards {
+/* .stockscards {
   height: 30px;
 }
 
 .cardParent {
   display: flex;
   flex-wrap: wrap;
-}
+} */
 
 .rightside {
   width: 80%;
@@ -43,6 +43,9 @@
   height: 600px;
   overflow-y: auto;
   width: 90%;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  opacity: 0.65;
 }
 
 .table-fixed tbody,
@@ -79,6 +82,60 @@
     display: none;
   }
   .rightside {
+    width: 100%;
+  }
+}
+@media screen and (min-width: 600px) {
+  .topright {
+    width: 50%;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.carousel-control-next,
+.carousel-control-prev,
+.carousel-indicators {
+  filter: invert(100%);
+}
+
+.stockdetails {
+  display: flex;
+  flex-wrap: wrap;
+}
+.stockdetails1 {
+  width: 25%;
+}
+.stockdetails2 {
+  width: 75%;
+}
+
+@media screen and (max-width: 1000px) {
+  .stockdetails {
+    display: grid;
+  }
+  .stockdetails1 {
+    width: 100%;
+  }
+  .stockdetails2 {
     width: 100%;
   }
 }
