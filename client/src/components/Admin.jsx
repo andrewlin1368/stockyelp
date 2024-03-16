@@ -314,14 +314,14 @@ export default function Admin() {
         >
           <h1 className="display-6 mt-3 mb-3">Welcome @{user.username}!</h1>
           <div className="lead">
-            <strong>
+            <>
               Need to add a new stock?{" "}
               <Link style={{ textDecoration: "none" }} onClick={handleShow}>
                 Click me!
               </Link>{" "}
               Need to edit an existing stock? Search by its symbol below and
               then fill out the form.
-            </strong>
+            </>
           </div>
           <div
             className="input-group mt-3"
@@ -357,7 +357,7 @@ export default function Admin() {
             <div className="searchFormEdit">
               <h1
                 className="display-6 mt-3 mb-3"
-                style={{ textAlign: "center", fontWeight: "bold" }}
+                style={{ textAlign: "center" }}
               >
                 {stock.fullname}
               </h1>

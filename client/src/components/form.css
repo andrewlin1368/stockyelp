@@ -17,21 +17,27 @@
 }
 
 .login_reg_Form button,
+.btn,
 textarea,
+.input-group-prepend,
 input::-webkit-input-placeholder {
   font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .login_reg_Form button,
+.btn,
 textarea,
+.input-group-prepend,
 input::-ms-input-placeholder {
   font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
-.login_reg_Form button,
+.login_reg_Form,
+.btn button,
 textarea,
+.input-group-prepend,
 input::-moz-placeholder {
   font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
@@ -64,4 +70,9 @@ input::-moz-placeholder {
   .topsection {
     width: 100%;
   }
+}
+
+.modal-title {
+  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }

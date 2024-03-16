@@ -52,3 +52,21 @@
     height: 200vh;
   }
 }
+
+.editbutton button,
+input::-webkit-input-placeholder {
+  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.editbutton button,
+input::-ms-input-placeholder {
+  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.editbutton button,
+input::-moz-placeholder {
+  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}

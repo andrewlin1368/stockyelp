@@ -110,7 +110,7 @@ export default function Profile() {
           )} */}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={(e) => handleSave(e)}>
+          <Button variant="primary editbuttonm" onClick={(e) => handleSave(e)}>
             Confirm
           </Button>
         </Modal.Footer>
@@ -145,7 +145,6 @@ export default function Profile() {
                               className="mb-1 lead"
                               style={{
                                 textAlign: "center",
-                                fontWeight: "bold",
                                 color: "#0d6efd",
                               }}
                             >
@@ -155,9 +154,7 @@ export default function Profile() {
                               className="mb-2 pb-1 lead"
                               style={{ textAlign: "center" }}
                             >
-                              <strong>
-                                {user.firstname} {user.lastname}
-                              </strong>
+                              {user.firstname} {user.lastname}
                             </p>
                             <div
                               className="d-flex justify-content-start rounded-3 p-2 mt-2 mb-2"
@@ -179,7 +176,7 @@ export default function Profile() {
                                 <p className="mb-0 lead">{comments.length}</p>
                               </div>
                             </div>
-                            <div className="d-flex pt-1">
+                            <div className="d-flex pt-1 editbutton">
                               <button
                                 type="button"
                                 className="btn btn-outline-primary me-1 flex-grow-1"
