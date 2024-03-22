@@ -1,72 +1,183 @@
-.not_user {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3%;
-  margin: 2%;
+.cardp {
+  width: 380px;
+  border: none;
+  border-radius: 15px;
+  padding: 8px;
+  background-color: #fff;
+  position: relative;
+  height: 370px;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
 }
 
+.upper {
+  height: 100px;
+  background-color: rgb(56, 56, 56);
+  border-radius: 15px 15px 0px 0px;
+}
+
+.upper img {
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.user {
+  position: relative;
+}
+
+.profile img {
+  height: 80px;
+  width: 80px;
+  margin-top: 2px;
+  background-color: white;
+}
+
+.profile {
+  position: absolute;
+  top: -50px;
+  left: 38%;
+  height: 90px;
+  width: 90px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+}
+
+.follow {
+  border-radius: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 35px;
+}
+
+.stats span {
+  font-size: 29px;
+}
+
+.formp[type="button"],
+.formp[type="submit"],
+.formp[type="reset"] {
+  background-color: #000000;
+  border: none;
+  color: white;
+  padding: 15px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 13px;
+  -webkit-box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 20px 40px 20px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.formp[type="button"]:hover,
+.formp[type="submit"]:hover,
+.formp[type="reset"]:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.formp[type="button"]:active,
+.formp[type="submit"]:active,
+.formp[type="reset"]:active {
+  -moz-transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -o-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
+}
+
+.formp[type="text"],
+.formp[type="password"] {
+  background-color: #ffffff;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 100%;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.formp[type="text"]:focus,
+.formp[type="password"]:focus {
+  background-color: #fff;
+  border: 2px solid #000000;
+}
+
+.formp[type="text"]:placeholder,
+.formp[type="password"]:placeholder {
+  color: #ffffff;
+}
+
+.modal-header,
+.modal-footer {
+  margin: auto;
+}
+
+.display-6 {
+  text-align: center;
+}
+
+.removed {
+  font-style: italic;
+  color: rgb(255, 0, 0);
+}
+
+.my-custom-scrollbarp {
+  position: relative;
+  height: 450px;
+  overflow: auto;
+}
+.table-wrapper-scroll-yp {
+  display: block;
+}
+
+.my-custom-scrollbarpl {
+  position: relative;
+  height: 250px;
+  overflow: auto;
+}
+.table-wrapper-scroll-ypl {
+  display: block;
+}
+
+.following,
 .comments {
-  box-sizing: border-box;
-  border: 1px solid white;
-  padding: 0.5em;
-  border-radius: 2em;
-  box-shadow: 10px 10px 5px gray;
-  width: 70%;
-  background-color: #fcfcfd;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
+  margin: 20px;
+  border-radius: 15px;
+  padding: 15px;
 }
 
-.following {
-  box-sizing: border-box;
-  border: 1px solid white;
-  padding: 0.5em;
-  border-radius: 2em;
-  box-shadow: 10px 10px 5px gray;
-  width: 25%;
-  background-color: #fcfcfd;
+.nolc {
+  color: rgb(59, 59, 59);
+  text-align: center;
 }
 
-@media screen and (max-width: 600px) {
-  .not_user {
-    display: grid;
-  }
-  .comments {
-    width: 100%;
-    min-width: 0;
-  }
-  .following {
-    width: 100%;
-  }
-  .flex-shrink-0 {
-    display: none;
-  }
+.loginap {
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
-@media screen and (min-height: 600px) {
-  .profile {
-    height: 150vh;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .profile {
-    height: 200vh;
-  }
-}
-
-.editbutton button,
-input::-webkit-input-placeholder {
-  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-}
-
-.editbutton button,
-input::-ms-input-placeholder {
-  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-}
-
-.editbutton button,
-input::-moz-placeholder {
-  font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+.prow {
+  margin-right: 20px;
+  padding: 15px;
 }

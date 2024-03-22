@@ -5,6 +5,7 @@ import { logoutUser } from "../api/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import "./navbar.css";
 
 function Navbarcomponent() {
   const { token, user } = useSelector((state) => state.user);
@@ -15,79 +16,78 @@ function Navbarcomponent() {
     navigate("/");
   };
   return (
-    <>
-      <Navbar bg="light" data-bs-theme="light" className="py-2">
+    <header>
+      <Navbar>
         <Container>
-          <Navbar.Brand href="/" className="lead fs-4">
-            <i className="bi bi-coin"></i> StockYelp
+          <Navbar.Brand className="logo">
+            <Link to="/" className="linksinlogo">
+              <i className="bi bi-coin"></i> StockYelp
+            </Link>
           </Navbar.Brand>
-          <Nav className="ml-auto lead">
+
+          <Nav className="nav">
             {!token && (
-              <Nav.Link className="fs-4">
-                <Link to="/login" style={{ textDecoration: "none" }}>
-                  Login{" "}
+              <Nav.Link>
+                <Link to="/login" className="links">
+                  Login <i className="bi bi-box-arrow-in-right"></i>
                 </Link>
-                <i className="bi bi-box-arrow-in-right"></i>
               </Nav.Link>
             )}
             {!token && (
-              <Nav.Link className="fs-4">
-                <Link to="/register" style={{ textDecoration: "none" }}>
-                  Register{" "}
+              <Nav.Link>
+                <Link to="/register" className="links">
+                  Register <i className="bi bi-person-plus-fill"></i>
                 </Link>
-                <i className="bi bi-person-plus-fill"></i>
               </Nav.Link>
             )}
             {token && (
-              <Nav.Link className="fs-4">
-                <Link to="/profile" style={{ textDecoration: "none" }}>
-                  Profile{" "}
+              <Nav.Link>
+                <Link to="/profile" className="links">
+                  Profile <i className="bi bi-person-circle"></i>
                 </Link>
-                <i className="bi bi-person-circle"></i>
               </Nav.Link>
             )}
             {token && user.isadmin && (
-              <Nav.Link className="fs-4">
-                <Link to="/admin" style={{ textDecoration: "none" }}>
-                  Admin{" "}
+              <Nav.Link>
+                <Link to="/admin" className="links">
+                  Admin <i className="bi bi-shield-lock"></i>
                 </Link>
-                <i className="bi bi-shield-lock"></i>
               </Nav.Link>
             )}
             {token && (
-              <Nav.Link onClick={logout} className="fs-4">
-                <Link style={{ textDecoration: "none" }}>Logout </Link>
-                <i className="bi bi-box-arrow-right"></i>
+              <Nav.Link onClick={logout}>
+                <Link className="links">
+                  Logout <i className="bi bi-box-arrow-right"></i>
+                </Link>
               </Nav.Link>
             )}
-            {"\u00A0"}
-            {"\u00A0"}
-            {"\u00A0"}
-            <Nav.Link className="fs-4">
-              <Link style={{ textDecoration: "none" }}> </Link>
-              <i
-                className="bi bi-linkedin"
-                onClick={() => {
-                  window.open(
-                    "https://www.linkedin.com/in/andrewlin1368/",
-                    "_blank"
-                  );
-                }}
-              ></i>{" "}
+            <Nav.Link>
+              <Link className="links">
+                <i
+                  className="bi bi-linkedin"
+                  onClick={() => {
+                    window.open(
+                      "https://www.linkedin.com/in/andrewlin1368/",
+                      "_blank"
+                    );
+                  }}
+                ></i>
+              </Link>
             </Nav.Link>
-            <Nav.Link className="fs-4">
-              <Link style={{ textDecoration: "none" }}> </Link>
-              <i
-                className="bi bi-github"
-                onClick={() => {
-                  window.open("https://github.com/andrewlin1368", "_blank");
-                }}
-              ></i>{" "}
+            <Nav.Link>
+              <Link className="links">
+                <i
+                  className="bi bi-github"
+                  onClick={() => {
+                    window.open("https://github.com/andrewlin1368", "_blank");
+                  }}
+                ></i>{" "}
+              </Link>
             </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
-    </>
+    </header>
   );
 }
 

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./form.css";
+import "./login.css";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useRegisterMutation } from "../api/userApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import bg from "../assets/bglr.jpg";
 
 export default function Register() {
   const { token } = useSelector((state) => state.user);
@@ -39,84 +38,60 @@ export default function Register() {
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "grid",
-        placeItems: "center",
-        backgroundImage: `url(${bg})`,
-      }}
-    >
-      <form
-        className="login_reg_Form"
-        onSubmit={(e) => sendForm(e)}
-        style={{ backgroundColor: "#fcfcfd" }}
-      >
-        <h1 className="display-4">
-          <i className="bi bi-coin"></i> Register.
-        </h1>
-        <p>
-          <small className="lead">
-            If an admin code is provied to you. Enter it in the admin code
-            field.
-          </small>
-        </p>
-        <div className="form-group mt-3 mb-3">
+    <div className="wrapper fadeInDown mt-3">
+      <div id="formContent">
+        <div className="fadeIn first">
+          <h1 className="display-6 mt-3 mb-3">Register</h1>
+        </div>
+        <form onSubmit={(e) => sendForm(e)}>
           <input
             type="text"
-            className="form-control"
             name="username"
             placeholder="Username"
+            className="formz mb-2"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        <div className="form-group mt-3 mb-3">
           <input
             type="text"
-            className="form-control"
             name="firstname"
             placeholder="First Name"
+            className="formz mb-2"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        <div className="form-group mt-3 mb-3">
           <input
             type="text"
-            className="form-control"
             name="lastname"
             placeholder="Last Name"
+            className="formz mb-2"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        <div className="form-group">
           <input
             type="password"
-            className="form-control"
             name="password"
             placeholder="Password"
+            className="formz mb-2"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        <div className="form-group mt-3">
           <input
             type="text"
-            className="form-control"
             name="admincode"
-            placeholder="Admin Code"
+            placeholder="Admin Code (Not required)"
+            className="formz mb-2"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        {/* {error && <p className="lead mt-2 mb-0 text-danger">{error}</p>} */}
-        <button type="submit" className="btn btn-primary mt-3">
-          Register
-        </button>
-        <p className="lead mt-2">
+          <input
+            type="submit"
+            className="formz fadeIn fourth"
+            value="Register"
+          />
+        </form>
+        <div id="formFooter" className="lead">
           Already have an account?{" "}
-          <Link to="/login" style={{ textDecoration: "none" }}>
-            Login.
+          <Link className="logina" to="/login">
+            Login
           </Link>
-        </p>
-      </form>
+        </div>
+      </div>
       <ToastContainer></ToastContainer>
     </div>
   );

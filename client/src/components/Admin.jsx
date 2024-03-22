@@ -12,6 +12,7 @@ import {
   useEditStockMutation,
 } from "../api/stocksApi";
 import { useNavigate } from "react-router-dom";
+import "./admin.css";
 
 export default function Admin() {
   const [getOne] = useGetOneMutation();
@@ -223,217 +224,151 @@ export default function Admin() {
   return (
     user &&
     user.isadmin && (
-      <div className="addEditPage" style={{ height: "100vh", marginTop: "2%" }}>
+      <div className="textp">
         <Modal show={show} onHide={handleClose} centered size="lg">
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title>
-              <h1 className="display-6">Add a new stock.</h1>
+              <h1 className="display-6">Add a new stock</h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="form-group mt-1 mb-3">
-              <input
-                type="text"
-                className="form-control"
-                name="fullname"
-                placeholder="Name"
-                onChange={(e) => updateForm(e)}
-              />
-            </div>
-            <div className="form-group mt-3 mb-3">
-              <input
-                type="text"
-                className="form-control"
-                name="symbol"
-                placeholder="Symbol"
-                onChange={(e) => updateForm(e)}
-              />
-            </div>
-            <div className="form-group mt-3 mb-3">
-              <textarea
-                className="form-control"
-                name="description"
-                placeholder="Description"
-                onChange={(e) => updateForm(e)}
-              />
-            </div>
-            <div className="input-group mt-3 mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text">$</span>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                name="price"
-                placeholder="Current Price"
-                onChange={(e) => updateForm(e)}
-              />
-            </div>
-            <div className="input-group mt-3 mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text">$</span>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                name="week_low"
-                placeholder="52 Week Low"
-                onChange={(e) => updateForm(e)}
-              />
-            </div>
-            <div className="input-group mt-3 mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text">$</span>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                name="week_high"
-                placeholder="52 Week High"
-                onChange={(e) => updateForm(e)}
-              />
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={addNewStock}>
-              Add Stock
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <div
-          className="topsection"
-          style={{
-            textAlign: "center",
-            fontWeight: "bold",
-            backgroundColor: "#fcfcfd",
-            margin: "auto",
-            borderRadius: "25px",
-            opacity: "0.9",
-            padding: "5px",
-          }}
-        >
-          <h1 className="display-6 mt-3 mb-3">Welcome @{user.username}!</h1>
-          <div className="lead">
-            <>
-              Need to add a new stock?{" "}
-              <Link style={{ textDecoration: "none" }} onClick={handleShow}>
-                Click me!
-              </Link>{" "}
-              Need to edit an existing stock? Search by its symbol below and
-              then fill out the form.
-            </>
-          </div>
-          <div
-            className="input-group mt-3"
-            style={{
-              width: "70%",
-              margin: "auto",
-              borderRadius: "9px",
-            }}
-          >
             <input
               type="text"
-              className="form-control"
-              placeholder="Symbol"
-              aria-describedby="basic-addon2"
-              onChange={(e) => updateSearch(e)}
+              className="forma"
+              name="fullname"
+              placeholder="Name"
+              onChange={(e) => updateForm(e)}
             />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={handleSearch}
-              >
-                Search
-              </button>
-            </div>
+
+            <input
+              type="text"
+              name="symbol"
+              className="forma"
+              placeholder="Symbol"
+              onChange={(e) => updateForm(e)}
+            />
+
+            <textarea
+              className="forma"
+              name="description"
+              placeholder="Description"
+              onChange={(e) => updateForm(e)}
+            />
+
+            <input
+              type="number"
+              className="forma"
+              name="price"
+              placeholder="Current Price"
+              onChange={(e) => updateForm(e)}
+            />
+
+            <input
+              type="number"
+              className="forma"
+              name="week_low"
+              placeholder="52 Week Low"
+              onChange={(e) => updateForm(e)}
+            />
+
+            <input
+              type="number"
+              className="forma"
+              name="week_high"
+              placeholder="52 Week High"
+              onChange={(e) => updateForm(e)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <input
+              type="submit"
+              className="forma mb-0"
+              onClick={addNewStock}
+              value="Add Stock"
+            />
+          </Modal.Footer>
+        </Modal>
+        <div className="topsection">
+          <h1 className="display-4 mt-3 mb-3">Welcome @{user.username}!</h1>
+          <div className="nolc">
+            Need to add a new stock?{" "}
+            <Link className="loginap" onClick={handleShow}>
+              Click me!
+            </Link>{" "}
+            or need to edit an existing stock? Search by its symbol below and
+            then fill out the form.
           </div>
+
+          <input
+            type="text"
+            className="forma"
+            placeholder="Symbol"
+            onChange={(e) => updateSearch(e)}
+          />
+          <input
+            type="submit"
+            className="forma mb-3"
+            onClick={handleSearch}
+            value="Search"
+          />
         </div>
-        <div className="bottomsection" style={{ marginTop: "2%" }}>
+        <div className="bottomsection">
           {loading && (
-            <div className="loader mt-4" style={{ margin: "auto" }}></div>
+            <div className="ring">
+              Loading...
+              <div className="span"></div>
+            </div>
           )}
           {stock && (
             <div className="searchFormEdit">
-              <h1
-                className="display-6 mt-3 mb-3"
-                style={{ textAlign: "center" }}
-              >
-                {stock.fullname}
-              </h1>
-
-              <div className="form-group mt-3 mb-3">
-                <textarea
-                  className="form-control"
-                  name="description"
-                  placeholder="Description"
-                  defaultValue={stock.description}
-                  onChange={(e) => editForm(e)}
-                />
-              </div>
-              <div className="input-group mt-3 mb-3">
-                <div className="input-group-prepend">
-                  <span className="input-group-text" style={{ width: "125px" }}>
-                    Price
-                  </span>
-                </div>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="price"
-                  placeholder="Current Price"
-                  defaultValue={Number(stock.price).toFixed(2)}
-                  onChange={(e) => editForm(e)}
-                />
-              </div>
-              <div className="input-group mt-3 mb-3">
-                <div className="input-group-prepend">
-                  <span className="input-group-text" style={{ width: "125px" }}>
-                    52 Week Low
-                  </span>
-                </div>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="week_low"
-                  placeholder="52 Week Low"
-                  defaultValue={Number(stock.week_low).toFixed(2)}
-                  onChange={(e) => editForm(e)}
-                />
-              </div>
-              <div className="input-group mt-3 mb-3">
-                <div className="input-group-prepend">
-                  <span className="input-group-text" style={{ width: "125px" }}>
-                    52 Week High
-                  </span>
-                </div>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="week_high"
-                  defaultValue={Number(stock.week_high).toFixed(2)}
-                  placeholder="52 Week High"
-                  onChange={(e) => editForm(e)}
-                />
-              </div>
-              <div>
-                <div style={{ float: "right" }}>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={sendNewUpdate}
-                  >
-                    Confirm
-                  </button>{" "}
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={cancelEdit}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
+              <h1 className="display-6">{stock.fullname}</h1>
+              <p className="la">Description</p>
+              <textarea
+                className="forma"
+                name="description"
+                placeholder="Description"
+                defaultValue={stock.description}
+                onChange={(e) => editForm(e)}
+              />
+              <p className="la">Current Price</p>
+              <input
+                type="number"
+                className="forma"
+                name="price"
+                placeholder="Current Price"
+                defaultValue={Number(stock.price).toFixed(2)}
+                onChange={(e) => editForm(e)}
+              />
+              <p className="la">52 Week Low</p>
+              <input
+                type="number"
+                className="forma"
+                name="week_low"
+                placeholder="52 Week Low"
+                defaultValue={Number(stock.week_low).toFixed(2)}
+                onChange={(e) => editForm(e)}
+              />
+              <p className="la">52 Week High</p>
+              <input
+                type="number"
+                className="forma"
+                name="week_high"
+                defaultValue={Number(stock.week_high).toFixed(2)}
+                placeholder="52 Week High"
+                onChange={(e) => editForm(e)}
+              />
+              <input
+                type="submit"
+                className="forma mb-3"
+                onClick={sendNewUpdate}
+                value="Update"
+              />
+              <input
+                type="submit"
+                onClick={cancelEdit}
+                className="forma mb-3"
+                value="Cancel"
+              />
             </div>
           )}
         </div>

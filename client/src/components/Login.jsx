@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./form.css";
+import "./login.css";
 import { useLoginMutation } from "../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import bg from "../assets/bglr.jpg";
 
 export default function Login() {
   const { token } = useSelector((state) => state.user);
@@ -33,51 +32,39 @@ export default function Login() {
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "grid",
-        placeItems: "center",
-        backgroundImage: `url(${bg})`,
-      }}
-    >
-      <form
-        className="login_reg_Form"
-        onSubmit={(e) => sendForm(e)}
-        style={{ backgroundColor: "#fcfcfd" }}
-      >
-        <h1 className="display-4">
-          <i className="bi bi-coin"></i> Login.
-        </h1>
-        <div className="form-group mt-5 mb-3">
+    <div className="wrapper fadeInDown mt-5">
+      <div id="formContent">
+        <div className="fadeIn first">
+          <h1 className="display-6 mt-3 mb-3">Login</h1>
+        </div>
+        <form onSubmit={(e) => sendForm(e)}>
           <input
             type="text"
-            className="form-control"
+            id="username"
             name="username"
             placeholder="Username"
+            className="formz mb-3"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        <div className="form-group">
+
           <input
             type="password"
-            className="form-control"
+            id="password"
             name="password"
             placeholder="Password"
+            className="formz mb-3"
             onChange={(e) => updateForm(e)}
           />
-        </div>
-        {/* {error && <p className="lead mt-2 mb-0 text-danger">{error}</p>} */}
-        <button type="submit" className="btn btn-primary mt-3">
-          Login
-        </button>
-        <p className="lead mt-3">
+
+          <input type="submit" className="formz fadeIn fourth" value="Login" />
+        </form>
+        <div id="formFooter" className="lead">
           No account?{" "}
-          <Link to="/register" style={{ textDecoration: "none" }}>
-            Register.
+          <Link className="logina" to="/register">
+            Register
           </Link>
-        </p>
-      </form>
+        </div>
+      </div>
       <ToastContainer></ToastContainer>
     </div>
   );

@@ -4,6 +4,7 @@ const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://stockyelp.onrender.com/",
+    // baseUrl: "http://localhost:3000/",
     prepareHeaders: (headers, { getState }) => {
       const token = getState().user.token;
       headers.set("Content-Type", "application/json");

@@ -33,6 +33,7 @@ import nvidia from "../assets/nvidia.png";
 import amd from "../assets/amd.png";
 import spotify from "../assets/spotify.png";
 import groupon from "../assets/groupon.png";
+import bg from "../assets/bglr.jpg";
 
 export default function Stocks() {
   const [removingComment] = useRemovecommentMutation();
@@ -226,57 +227,233 @@ export default function Stocks() {
     <div>
       {edit && (
         <Modal show={edit} onHide={handleEditClose} centered>
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title>
-              <h1 className="display-6">Edit Comment.</h1>
+              <h1 className="display-6">Edit Comment</h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="form-group mt-1 mb-3">
               <input
                 type="text"
-                className="form-control"
+                className="forma"
                 defaultValue={editMessage.message}
                 onChange={(e) => updateCommentMessage(e)}
               />
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={handleEditClose}>
-              Edit
-            </Button>
+            <input
+              type="submit"
+              className="forma mb-0"
+              onClick={handleEditClose}
+              value="Edit"
+            />
           </Modal.Footer>
         </Modal>
       )}
       {profile && (
-        <Modal show={show2} onHide={handleClose2} size="s" centered>
-          <Modal.Header closeButton>
+        <Modal
+          show={show2}
+          onHide={handleClose2}
+          size="s"
+          centered
+          className="textp"
+        >
+          <Modal.Header>
             <Modal.Title>
               <h1 className="display-6">@{profile.user.username} likes...</h1>
             </Modal.Title>
           </Modal.Header>
-          <Container>
-            <Row>
-              <Col xs={18} md={12}>
-                {!profile.following.length ? (
-                  <p className="lead mt-4 mb-4">
-                    @{profile.user.username} is not liking any stocks...
+          <Modal.Body>
+            {!profile.following.length ? (
+              <p className="msg">
+                @{profile.user.username} is not liking any stocks...
+              </p>
+            ) : (
+              <div className="table-wrapper-scroll-ypl my-custom-scrollbarpl">
+                <table className="table table-bordered table-striped mb-0">
+                  {profile.following.map((stock) => {
+                    return (
+                      <React.Fragment key={stock.stock_id}>
+                        <div className="card-body p-1">
+                          <div className="d-flex flex-start">
+                            <div>
+                              <p className="lead mb-0">
+                                <strong>
+                                  {stocks[stock.stock_id - 1].symbol}
+                                </strong>{" "}
+                                - {stocks[stock.stock_id - 1].fullname}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr className="my-0" />
+                      </React.Fragment>
+                    );
+                  })}
+                </table>
+              </div>
+            )}
+          </Modal.Body>
+        </Modal>
+      )}
+      {stock && (
+        <Modal show={show} onHide={handleClose} size="xl">
+          <Modal.Header>
+            <Modal.Title>
+              <h1 className="stockheadmodal">
+                {(extra_following[stock.stock_id] && (
+                  <Link>
+                    <i
+                      className="bi bi-star-fill"
+                      title="unfollow"
+                      id={stock.stock_id}
+                      onClick={(e) => unfollow(e)}
+                    ></i>
+                  </Link>
+                )) || (
+                  <Link>
+                    <i
+                      className="bi bi-star"
+                      title="follow"
+                      id={stock.stock_id}
+                      onClick={(e) => follow(e)}
+                    ></i>
+                  </Link>
+                )}{" "}
+                {stock.symbol.split(" ").join("")} - {stock.fullname}{" "}
+                <Link>
+                  <i
+                    className="bi bi-caret-up-fill"
+                    title="upvote"
+                    onClick={(e) => upvoter(e)}
+                    id={stock.stock_id}
+                  ></i>
+                </Link>
+                {stock.upvotes}{" "}
+                <Link>
+                  <i
+                    className="bi bi-caret-down-fill"
+                    title="downvote"
+                    onClick={(e) => downvoter(e)}
+                    id={stock.stock_id}
+                  ></i>
+                </Link>
+                {stock.downvotes}
+              </h1>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="textp">
+            <div className="stockdetails1">
+              <p>{stock.description}</p>
+              <div className="row">
+                <strong className="col-sm">
+                  Last Updated: {stock.current_data.split("T")[0]}
+                </strong>
+                <strong className="col-sm">
+                  Price: ${Number(stock.price).toFixed(2)}
+                </strong>
+                <strong className="col-sm">
+                  52 Week Low: ${Number(stock.week_low).toFixed(2)}
+                </strong>{" "}
+                <strong className="col-sm">
+                  52 Week High: {Number(stock.week_high).toFixed(2)}
+                </strong>
+              </div>
+              <hr />
+            </div>
+            <div className="stockdetails2">
+              {(token && (
+                <form id={stock.stock_id} onSubmit={(e) => addComment(e)}>
+                  <input
+                    type="text"
+                    className="forma mt-0 mb-3"
+                    placeholder={newMessage}
+                    onChange={(e) => updateAddMessage(e)}
+                  />
+                </form>
+              )) || (
+                <>
+                  <p className=" msg mb-2">
+                    <Link className="logina" to="/login">
+                      Login
+                    </Link>{" "}
+                    to comment.
                   </p>
-                ) : (
-                  <div className="table-wrapper-scroll-y my-custom-scrollbar2">
-                    <table className="table table-bordered table-striped mb-0">
-                      {profile.following.map((stock) => {
+                </>
+              )}
+              <hr className="my-0" />
+              {stock.comments &&
+                ((!stock.comments.length && (
+                  <h1
+                    className="display-6 mt-4 mb-2"
+                    style={{ textAlign: "center" }}
+                  >
+                    Be the first to comment...
+                  </h1>
+                )) || (
+                  <div className="table-wrapper-scroll-yp my-custom-scrollbarp">
+                    <table className="table table-bordered table-striped">
+                      {stock.comments.map((comment) => {
                         return (
-                          <React.Fragment key={stock.stock_id}>
+                          <React.Fragment key={comment.comment_id}>
                             <div className="card-body p-1">
-                              <div className="d-flex flex-start">
+                              <div>
                                 <div>
-                                  <p className="lead mb-0">
-                                    <strong>
-                                      {stocks[stock.stock_id - 1].symbol}
-                                    </strong>{" "}
-                                    - {stocks[stock.stock_id - 1].fullname}
+                                  <p className="mb-0 ">
+                                    <Link className="logina">
+                                      <strong
+                                        className="text-primary lead"
+                                        title="view user"
+                                        id={comment.user_id}
+                                        onClick={(e) => {
+                                          getProfile(e);
+                                        }}
+                                      >
+                                        @{comment.username}
+                                      </strong>
+                                    </Link>{" "}
+                                    <small style={{ float: "right" }}>
+                                      <i className="bi bi-clock-history"></i>{" "}
+                                      {comment.created_at.split("T")[0]}
+                                    </small>
                                   </p>
+
+                                  {(!comment.isdeleted && (
+                                    <p className="mb-0">
+                                      {comment.message}{" "}
+                                      {token &&
+                                        comment.user_id === user.user_id && (
+                                          <span style={{ float: "right" }}>
+                                            <Link>
+                                              <i
+                                                className="bi bi-pencil-fill fs-5"
+                                                title="edit"
+                                                id={comment.comment_id}
+                                                data-message={comment.message}
+                                                onClick={(e) => editComment(e)}
+                                              ></i>
+                                            </Link>{" "}
+                                            <Link>
+                                              <i
+                                                className="bi bi-trash-fill fs-5"
+                                                id={comment.comment_id}
+                                                onClick={(e) =>
+                                                  removeComment(e)
+                                                }
+                                                title="delete"
+                                              ></i>
+                                            </Link>
+                                          </span>
+                                        )}
+                                    </p>
+                                  )) || (
+                                    <p className="removed mb-0">
+                                      This message has been deleted...
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -287,398 +464,166 @@ export default function Stocks() {
                       })}
                     </table>
                   </div>
-                )}
-              </Col>
-            </Row>
-          </Container>
+                ))}
+            </div>
+          </Modal.Body>
         </Modal>
       )}
-      {stock && (
-        <Modal show={show} onHide={handleClose} size="xl">
-          <Modal.Header closeButton>
-            <Modal.Title style={{ width: "100%" }}>
-              <h1 className="display-6">
-                {(extra_following[stock.stock_id] && (
-                  <Link style={{ color: "#FFDF00" }}>
-                    <i
-                      className="bi bi-star-fill"
-                      title="unfollow"
-                      id={stock.stock_id}
-                      onClick={(e) => unfollow(e)}
-                    ></i>
-                  </Link>
-                )) || (
-                  <Link style={{ color: "#FFDF00" }}>
-                    <i
-                      className="bi bi-star"
-                      title="follow"
-                      id={stock.stock_id}
-                      onClick={(e) => follow(e)}
-                    ></i>
-                  </Link>
-                )}{" "}
-                <strong>{stock.symbol.split(" ").join("")}</strong> -{" "}
-                {stock.fullname}{" "}
-                <div style={{ float: "right" }}>
-                  <Link style={{ textDecoration: "none", color: "green" }}>
-                    <i
-                      className="bi bi-caret-up-fill"
-                      title="upvote"
-                      onClick={(e) => upvoter(e)}
-                      id={stock.stock_id}
-                    >
-                      {" "}
-                    </i>
-                  </Link>{" "}
-                  {stock.upvotes}{" "}
-                  <Link style={{ textDecoration: "none", color: "red" }}>
-                    <i
-                      className="bi bi-caret-down-fill"
-                      title="downvote"
-                      onClick={(e) => downvoter(e)}
-                      id={stock.stock_id}
-                    >
-                      {" "}
-                    </i>
-                  </Link>{" "}
-                  {stock.downvotes}
-                </div>
-              </h1>
-            </Modal.Title>
-          </Modal.Header>
-          <Container>
-            <div className="stockdetails">
-              <div className="stockdetails1">
-                <Modal.Body>
-                  <p className="lead">
-                    <small>{stock.description}</small>
-                  </p>
-                  <hr />
-                  <div className="lead">
-                    <p>
-                      <strong>Last Updated: </strong>
-                      {stock.current_data.split("T")[0]}
-                    </p>
-                    <p>
-                      <strong>Price:</strong> ${Number(stock.price).toFixed(2)}
-                    </p>
-                    <p>
-                      <strong>52 Week Low:</strong> $
-                      {Number(stock.week_low).toFixed(2)}
-                    </p>
-                    <p>
-                      <strong>52 Week High:</strong> $
-                      {Number(stock.week_high).toFixed(2)}
-                    </p>
-                  </div>
-                  <hr />
-                </Modal.Body>
-              </div>
-              <div className="stockdetails2">
-                {(token && (
-                  <div className="form-outline mb-4 mt-4">
-                    <form id={stock.stock_id} onSubmit={(e) => addComment(e)}>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder={newMessage}
-                        onChange={(e) => updateAddMessage(e)}
-                        style={{ width: "80%", margin: "auto" }}
-                      />
-                    </form>
-                  </div>
-                )) || (
-                  <>
-                    <p className="lead mt-3" style={{ textAlign: "center" }}>
-                      <Link to="/login" style={{ textDecoration: "none" }}>
-                        Login
-                      </Link>{" "}
-                      to comment.
-                    </p>
-                  </>
-                )}
-                <hr className="my-0" />
-                {stock.comments &&
-                  ((!stock.comments.length && (
-                    <h1
-                      className="display-3 mt-2"
-                      style={{ textAlign: "center" }}
-                    >
-                      Be the first to comment...
-                    </h1>
-                  )) || (
-                    <div className="table-wrapper-scroll-y my-custom-scrollbar">
-                      <table className="table table-bordered table-striped mb-0">
-                        {stock.comments.map((comment) => {
-                          return (
-                            <React.Fragment key={comment.comment_id}>
-                              <div className="card-body p-2">
-                                <div>
-                                  <div>
-                                    <p
-                                      className="lead mb-0 "
-                                      style={{ width: "100%" }}
-                                    >
-                                      <Link style={{ textDecoration: "none" }}>
-                                        <strong
-                                          className="text-primary lead"
-                                          title="view user"
-                                          id={comment.user_id}
-                                          onClick={(e) => {
-                                            getProfile(e);
-                                          }}
-                                        >
-                                          @{comment.username}
-                                        </strong>
-                                      </Link>{" "}
-                                      <small style={{ float: "right" }}>
-                                        {" "}
-                                        <i className="bi bi-clock-history"></i>{" "}
-                                        {comment.created_at.split("T")[0]}
-                                      </small>
-                                    </p>
 
-                                    {(!comment.isdeleted && (
-                                      <p className="mb-0 lead">
-                                        {comment.message}{" "}
-                                        {token &&
-                                          comment.user_id === user.user_id && (
-                                            <span style={{ float: "right" }}>
-                                              <Link style={{ color: "green" }}>
-                                                <i
-                                                  className="bi bi-pencil"
-                                                  title="edit"
-                                                  id={comment.comment_id}
-                                                  data-message={comment.message}
-                                                  onClick={(e) =>
-                                                    editComment(e)
-                                                  }
-                                                ></i>
-                                              </Link>{" "}
-                                              <Link style={{ color: "red" }}>
-                                                <i
-                                                  className="bi bi-trash"
-                                                  id={comment.comment_id}
-                                                  onClick={(e) =>
-                                                    removeComment(e)
-                                                  }
-                                                  title="delete"
-                                                ></i>
-                                              </Link>
-                                            </span>
-                                          )}
-                                      </p>
-                                    )) || (
-                                      <p
-                                        className="mb-0 lead"
-                                        style={{ fontStyle: "italic" }}
-                                      >
-                                        This message has been deleted...
-                                      </p>
-                                    )}
-                                  </div>
+      <div className="page">
+        <div className="topParent">
+          <div className="carcar fadeIn third">
+            <Carousel>
+              <Carousel.Item interval={3000}>
+                <Link>
+                  <img
+                    src={uber}
+                    alt="UBER"
+                    height="150px"
+                    onClick={() => {
+                      window.open("https://www.uber.com/", "_blank");
+                    }}
+                  />
+                </Link>
+              </Carousel.Item>
+              <Carousel.Item interval={3000}>
+                <Link>
+                  <img
+                    src={nvidia}
+                    alt="NVIDIA"
+                    height="150px"
+                    onClick={() => {
+                      window.open("https://www.nvidia.com/en-us/", "_blank");
+                    }}
+                  />
+                </Link>
+              </Carousel.Item>
+              <Carousel.Item interval={3000}>
+                <Link>
+                  <img
+                    src={amd}
+                    alt="AMD"
+                    height="150px"
+                    onClick={() => {
+                      window.open("https://www.amd.com/en.html", "_blank");
+                    }}
+                  />
+                </Link>
+              </Carousel.Item>
+              <Carousel.Item interval={3000}>
+                <Link>
+                  <img
+                    src={spotify}
+                    alt="SPOTIFY"
+                    height="150px"
+                    onClick={() => {
+                      window.open("https://open.spotify.com/", "_blank");
+                    }}
+                  />
+                </Link>
+              </Carousel.Item>
+              <Carousel.Item interval={3000}>
+                <Link>
+                  <img
+                    src={groupon}
+                    alt="GROUPON"
+                    height="150px"
+                    onClick={() => {
+                      window.open("https://www.groupon.com/", "_blank");
+                    }}
+                  />
+                </Link>
+              </Carousel.Item>
+            </Carousel>
+          </div>
+
+          <div className="pic">
+            <div className="apple">
+              <div className=" sdesgintable fadeInDown mt-3">
+                <div className="table-wrapper-scroll-ypl my-custom-scrollbarpl ptables fadeInDown">
+                  <table className="table table-bordered table-striped">
+                    {stocks.length ? (
+                      stocks.map((stock) => {
+                        return (
+                          <React.Fragment key={stock.stock_id}>
+                            <div className="card-body textp p-1">
+                              <div>
+                                <div>
+                                  <p className="mb-0">
+                                    <strong>
+                                      {stock.symbol.split(" ").join("")}
+                                    </strong>{" "}
+                                    - ${Number(stock.price).toFixed(2)}
+                                  </p>
                                 </div>
                               </div>
-
-                              <hr className="my-0" />
-                            </React.Fragment>
-                          );
-                        })}
-                      </table>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </Container>
-        </Modal>
-      )}
-      <div className="page">
-        <div
-          className="input-group mb-3 mt-2"
-          style={{ width: "50%", margin: "auto" }}
-        >
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="basic-addon1">
-              <i className="bi bi-search"></i>
-            </span>
-          </div>
-          <input
-            type="text"
-            className="form-control"
-            aria-label="Username"
-            aria-describedby="basic-addon1"
-            placeholder="Search for a stock"
-            onChange={(e) => updateSearch(e)}
-          />
-        </div>
-
-        <div className="topParent">
-          <div className="stockgraphs mt-3">
-            <div className="container">
-              <div className="row">
-                <div className="panel panel-default">
-                  <table className="table table-fixed">
-                    <tbody>
-                      {stocks.length ? (
-                        stocks.map((stock) => {
-                          return (
-                            <tr key={stock.stock_id}>
-                              <td className="col-xs-12 lead">
-                                <span style={{ fontWeight: "bold" }}>
-                                  {stock.symbol.split(" ").join("")}
-                                </span>{" "}
-                                ${Number(stock.price).toFixed(2)}
-                              </td>
-                            </tr>
-                          );
-                        })
-                      ) : (
-                        <div
-                          className="loader"
-                          style={{ margin: "auto" }}
-                        ></div>
-                      )}
-                    </tbody>
+                            </div>
+                          </React.Fragment>
+                        );
+                      })
+                    ) : (
+                      <div className="ring">
+                        Loading...
+                        <div className="span"></div>
+                      </div>
+                    )}
                   </table>
                 </div>
               </div>
+              <div className="sstocks fadeIn first">
+                <p className="textp spsp">Search for a stock</p>
+                <input
+                  type="text"
+                  className="forma"
+                  placeholder="Search for a stock"
+                  onChange={(e) => updateSearch(e)}
+                />
+              </div>
+            </div>
+
+            <div className="imghome fadeInDown">
+              <img src={bg} alt="Investments" />
             </div>
           </div>
-
-          <div className="rightside">
-            <div
-              className="topright mt-0 "
-              style={{
-                margin: "auto",
-                backgroundColor: "#fcfcfd",
-                // width: "50%",
-                borderRadius: "50px",
-                opacity: "0.75",
-              }}
-            >
-              <Carousel style={{ color: "black" }}>
-                <Carousel.Item interval={3000}>
-                  <Link>
-                    <img
-                      src={uber}
-                      alt="UBER"
-                      height="300px"
-                      onClick={() => {
-                        window.open("https://www.uber.com/", "_blank");
-                      }}
-                    />
-                  </Link>
-                </Carousel.Item>
-                <Carousel.Item interval={3000}>
-                  <Link>
-                    <img
-                      src={nvidia}
-                      alt="NVIDIA"
-                      height="300px"
-                      onClick={() => {
-                        window.open("https://www.nvidia.com/en-us/", "_blank");
-                      }}
-                    />
-                  </Link>
-                </Carousel.Item>
-                <Carousel.Item interval={3000}>
-                  <Link>
-                    <img
-                      src={amd}
-                      alt="AMD"
-                      height="300px"
-                      onClick={() => {
-                        window.open("https://www.amd.com/en.html", "_blank");
-                      }}
-                    />
-                  </Link>
-                </Carousel.Item>
-                <Carousel.Item interval={3000}>
-                  <Link>
-                    <img
-                      src={spotify}
-                      alt="SPOTIFY"
-                      height="300px"
-                      onClick={() => {
-                        window.open("https://open.spotify.com/", "_blank");
-                      }}
-                    />
-                  </Link>
-                </Carousel.Item>
-                <Carousel.Item interval={3000}>
-                  <Link>
-                    <img
-                      src={groupon}
-                      alt="GROUPON"
-                      height="300px"
-                      onClick={() => {
-                        window.open("https://www.groupon.com/", "_blank");
-                      }}
-                    />
-                  </Link>
-                </Carousel.Item>
-              </Carousel>
-            </div>
-            <hr className="hr" style={{ color: "white", width: "98%" }} />
-            <div style={{ textAlign: "center", color: "white" }}>
-              <h1 className="display-4">Checkout any stocks below!</h1>
-            </div>
-            <div
-              className="cardParent"
-              style={{
-                padding: "2px",
-                margin: "auto",
-                display: "flex",
-                flexWrap: "wrap",
-                // overflow: "hidden",
-                gap: "4px",
-              }}
-            >
-              {displayStocks.length ? (
-                displayStocks.map((stock) => {
-                  return (
-                    <div
-                      className="stockscards lead"
-                      key={stock.stock_id}
-                      id={stock.stock_id}
-                      style={{
-                        border: "1px solid black",
-                        backgroundColor: "#fcfcfd",
-                        padding: "2px",
-                        borderRadius: "10px",
-                        opacity: "0.7",
-                        flexBasis: "6%",
-                        textAlign: "center",
-                      }}
-                    >
-                      <strong>
-                        <Link
-                          style={{
-                            textDecoration: "none",
-                            color: "black",
-                          }}
+          <div>
+            <h1 className="display-6 mt-5">Checkout any stocks below!</h1>
+          </div>
+          <div className="cardss fadeIn fourth">
+            {displayStocks.length ? (
+              displayStocks.map((stock) => {
+                return (
+                  <div
+                    className="card l-bg-blue-dark"
+                    key={stock.stock_id}
+                    id={stock.stock_id}
+                  >
+                    <div className="card-statistic-3 p-1">
+                      <Link className="mb-4 carddesign">
+                        <h4
+                          className="card-title mb-0 textp"
+                          id={stock.stock_id}
+                          onClick={(e) => handleShow(e)}
                         >
-                          <strong
-                            title="Click to see more details"
-                            id={stock.stock_id}
-                            onClick={(e) => handleShow(e)}
-                          >
-                            {stock.symbol.split(" ").join("")}
-                          </strong>
-                        </Link>
-                      </strong>
+                          {stock.symbol.split(" ").join("")}
+                        </h4>
+                        <h5>${Number(stock.price).toFixed(2)}</h5>
+                      </Link>
                     </div>
-                  );
-                })
-              ) : (
-                <div className="loader" style={{ margin: "auto" }}></div>
-              )}
-            </div>
-            <hr className="hr" style={{ color: "white", width: "98%" }} />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="ring">
+                Loading...
+                <div className="span"></div>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
       <ToastContainer></ToastContainer>
     </div>
   );
+  te;
 }
