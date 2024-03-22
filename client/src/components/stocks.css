@@ -35,6 +35,10 @@
   .imghome {
     display: none;
   }
+  .topsection {
+    width: 90% !important;
+    margin: auto !important;
+  }
 }
 
 .carcar {
