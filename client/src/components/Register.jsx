@@ -15,7 +15,7 @@ export default function Register() {
     };
     token && checkLoggedIn();
   });
-  const { error } = useSelector((state) => state.user);
+  useSelector((state) => state.user);
   const [setRegister] = useRegisterMutation();
   const navigate = useNavigate();
   const [form, setForm] = useState({

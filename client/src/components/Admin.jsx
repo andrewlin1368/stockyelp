@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -52,7 +52,6 @@ export default function Admin() {
       return;
     }
     if (Number(stock.week_high) < Number(stock.week_low)) {
-      console.log(stock.week_high, stock.week_low);
       toast.error(
         "52 Week Low price cannot be greater than 52 Week High price",
         {
@@ -201,7 +200,6 @@ export default function Admin() {
       week_low: Number(form.week_low),
       week_high: Number(form.week_high),
     });
-    console.log(result);
     if (result.data.error)
       toast.error(result.data.error, {
         position: "top-right",
@@ -220,7 +218,7 @@ export default function Admin() {
     };
     if (!user || (user && !user.isadmin)) valid();
   }, []);
-  // console.log(stock);
+
   return (
     user &&
     user.isadmin && (

@@ -1,15 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import {
-  Modal,
-  Col,
-  Container,
-  Row,
-  Form,
-  Button,
-  Carousel,
-} from "react-bootstrap";
+import { Modal, Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./stocks.css";

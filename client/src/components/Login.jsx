@@ -16,7 +16,7 @@ export default function Login() {
     token && checkLoggedIn();
   });
   const [form, setForm] = useState({ username: "", password: "" });
-  const { error } = useSelector((state) => state.user);
+  useSelector((state) => state.user);
   const [sendLogin] = useLoginMutation();
   const navigate = useNavigate();
   const updateForm = (e) =>

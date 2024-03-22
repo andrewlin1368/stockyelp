@@ -5,15 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import person from "../assets/person.jpg";
 import "./profile.css";
-import { useGetAllStocksQuery } from "../api/stocksApi";
 import { useUpdateMutation } from "../api/userApi";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
-  const { token, error } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
   const { stocks } = useSelector((state) => state.stocks);
   const [updateUser] = useUpdateMutation();
   const [show, setShow] = useState(false);
@@ -34,8 +33,6 @@ export default function Profile() {
         position: "top-right",
       });
   };
-  //set up tables to have stocks name and symbols to prevent useless db calls
-  // useGetAllStocksQuery();
   const navigate = useNavigate();
   useEffect(() => {
     const checkLoggedIn = () => {
