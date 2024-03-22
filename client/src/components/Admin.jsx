@@ -73,6 +73,7 @@ export default function Admin() {
       week_high: Number(stock.week_high),
       week_low: Number(stock.week_low),
     });
+    console.log(result);
     if (result.error) {
       toast.error(result.error.data.error, {
         position: "top-right",
@@ -296,19 +297,20 @@ export default function Admin() {
             or need to edit an existing stock? Search by its symbol below and
             then fill out the form.
           </div>
-
-          <input
-            type="text"
-            className="forma"
-            placeholder="Symbol"
-            onChange={(e) => updateSearch(e)}
-          />
-          <input
-            type="submit"
-            className="forma mb-3"
-            onClick={handleSearch}
-            value="Search"
-          />
+          <div className="symbolsearch">
+            <input
+              type="text"
+              className="forma"
+              placeholder="Symbol"
+              onChange={(e) => updateSearch(e)}
+            />
+            <input
+              type="submit"
+              className="forma mb-3"
+              onClick={handleSearch}
+              value="Search"
+            />
+          </div>
         </div>
         <div className="bottomsection">
           {loading && (

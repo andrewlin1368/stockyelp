@@ -61,6 +61,16 @@ const stocksSlice = createSlice({
         state.stocks = stocks;
       }
     );
+    builder.addMatcher(
+      stocksApi.endpoints.editStock.matchFulfilled,
+      (state, { payload }) => {
+        state.stocks = state.stocks.map((stock) =>
+          stock.stock_id === payload.stock_id
+            ? { ...payload, comments: stock.comments }
+            : stock
+        );
+      }
+    );
   },
 });
 
