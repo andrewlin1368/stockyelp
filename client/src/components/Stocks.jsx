@@ -89,11 +89,38 @@ export default function Stocks() {
   const updateAddMessage = (e) => {
     setNewMessage(e.target.value);
   };
-  const addComment = async (e) => {
-    e.preventDefault();
+  const addComment = async () => {
     if (newMessage === "Add a comment..." || !newMessage.length) {
       setNewMessage("Add a comment...");
-      return;
+      return toast.error("Comment cannot be empty!", {
+        position: "top-right",
+      });
+    }
+    let found = false;
+    const words = {
+      nigga: 1,
+      nig: 1,
+      niqqa: 1,
+      asshole: 1,
+      fuck: 1,
+      bitch: 1,
+      hoe: 1,
+      rape: 1,
+      asswipe: 1,
+      cunt: 1,
+      ass: 1,
+      dick: 1,
+    };
+    const check = newMessage.split(" ");
+    for (let char of check)
+      if (words[char]) {
+        found = true;
+        break;
+      }
+    if (found) {
+      return toast.error("Profanity detected!", {
+        position: "top-right",
+      });
     }
     if (newMessage.length > 499) {
       toast.error("Comment is too long!", {
@@ -102,7 +129,7 @@ export default function Stocks() {
       return;
     }
     const result = await addingComment({
-      stock_id: Number(e.target.id),
+      stock_id: Number(Number(idComment)),
       message: newMessage,
     });
     if (!result.error) {
@@ -114,6 +141,7 @@ export default function Stocks() {
       };
       setStock(updateStock);
       setNewMessage("Add a comment...");
+      handleCloseCom();
     }
   };
   const removeComment = async (e) => {
@@ -215,8 +243,46 @@ export default function Stocks() {
     });
     setDisplayStocks(newDisplayStocks);
   };
+
+  const [showCom, setShowCom] = useState(false);
+
+  const handleCloseCom = () => {
+    setShowCom(false);
+    setNewMessage("Add a comment...");
+    setIdComment(null);
+  };
+  const handleShowCom = (e) => {
+    setIdComment(e.target.id);
+    setShowCom(true);
+  };
+
+  const [idComment, setIdComment] = useState(null);
+
   return (
     <div>
+      <Modal show={showCom} onHide={handleCloseCom} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h1 className="display-6 mb-0">New Comment</h1>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <textarea
+            type="text"
+            className="forma mt-0 mb-1"
+            placeholder={newMessage}
+            onChange={(e) => updateAddMessage(e)}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <input
+            type="submit"
+            className="formp mb-0"
+            value="Post"
+            onClick={addComment}
+          />
+        </Modal.Footer>
+      </Modal>
       {edit && (
         <Modal show={edit} onHide={handleEditClose} centered>
           <Modal.Header closeButton>
@@ -360,25 +426,15 @@ export default function Stocks() {
             </div>
             <div className="stockdetails2">
               {(token && (
-                <form
-                  id={stock.stock_id}
-                  onSubmit={(e) => addComment(e)}
-                  style={{ textAlign: "center" }}
-                >
+                <div style={{ textAlign: "center" }}>
                   <input
-                    type="text"
-                    className="forma mt-0 mb-1"
-                    placeholder={newMessage}
-                    onChange={(e) => updateAddMessage(e)}
-                    style={{ paddingTop: "10px", paddingBottom: "10px" }}
-                  />
-                  <input
+                    id={stock.stock_id}
                     type="submit"
-                    className="formp mb-1 mt-0"
-                    value="Post"
-                    style={{ padding: "10px 20px", boxShadow: "none" }}
+                    onClick={handleShowCom}
+                    className="formp mb-2 mt-0"
+                    value="New Comment"
                   />
-                </form>
+                </div>
               )) || (
                 <>
                   <p className=" msg mb-2">

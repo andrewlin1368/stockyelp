@@ -73,7 +73,7 @@ export default function Admin() {
       week_high: Number(stock.week_high),
       week_low: Number(stock.week_low),
     });
-    console.log(result);
+
     if (result.error) {
       toast.error(result.error.data.error, {
         position: "top-right",
@@ -84,15 +84,12 @@ export default function Admin() {
         position: "top-right",
       });
       setSearch(null);
-      setStock(null);
+      handleClose2();
     }
   };
-  const cancelEdit = () => {
-    // setSearch(null);
-    setStock(null);
-  };
   const updateSearch = (e) => setSearch(e.target.value);
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     setStock(null);
     if (!search) {
       toast.error("All fields must be filled", {
@@ -112,6 +109,7 @@ export default function Admin() {
       } else {
         setStock(result.data);
         setLoading(false);
+        handleShow2();
       }
     }, 3000);
   };
@@ -220,6 +218,15 @@ export default function Admin() {
     if (!user || (user && !user.isadmin)) valid();
   }, []);
 
+  const [show2, setShow2] = useState(false);
+
+  const handleClose2 = () => {
+    setShow2(false);
+    setStock(null);
+  };
+  const handleShow2 = () => {
+    setShow2(true);
+  };
   return (
     user &&
     user.isadmin && (
@@ -287,6 +294,59 @@ export default function Admin() {
             />
           </Modal.Footer>
         </Modal>
+
+        <Modal show={show2} onHide={handleClose2} centered size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <h1 className="display-6 mb-0">{stock?.fullname}</h1>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="la">Description</p>
+            <textarea
+              className="forma"
+              name="description"
+              placeholder="Description"
+              defaultValue={stock?.description}
+              onChange={(e) => editForm(e)}
+            />
+            <p className="la">Current Price</p>
+            <input
+              type="number"
+              className="forma"
+              name="price"
+              placeholder="Current Price"
+              defaultValue={Number(stock?.price).toFixed(2)}
+              onChange={(e) => editForm(e)}
+            />
+            <p className="la">52 Week Low</p>
+            <input
+              type="number"
+              className="forma"
+              name="week_low"
+              placeholder="52 Week Low"
+              defaultValue={Number(stock?.week_low).toFixed(2)}
+              onChange={(e) => editForm(e)}
+            />
+            <p className="la">52 Week High</p>
+            <input
+              type="number"
+              className="forma"
+              name="week_high"
+              defaultValue={Number(stock?.week_high).toFixed(2)}
+              placeholder="52 Week High"
+              onChange={(e) => editForm(e)}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <input
+              type="submit"
+              className="formp mb-0"
+              onClick={sendNewUpdate}
+              value="Update"
+            />
+          </Modal.Footer>
+        </Modal>
         <div className="topsection">
           <h1 className="display-4 mt-3 mb-3">Welcome @{user.username}!</h1>
           <div className="nolc">
@@ -298,18 +358,20 @@ export default function Admin() {
             then fill out the form.
           </div>
           <div className="symbolsearch">
-            <input
-              type="text"
-              className="forma"
-              placeholder="Symbol"
-              onChange={(e) => updateSearch(e)}
-            />
-            <input
-              type="submit"
-              className="forma mb-3"
-              onClick={handleSearch}
-              value="Search"
-            />
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                className="forma"
+                placeholder="Symbol"
+                onChange={(e) => updateSearch(e)}
+              />
+              <input
+                type="submit"
+                className="forma mb-3"
+                onClick={handleSearch}
+                value="Search"
+              />
+            </form>
           </div>
         </div>
         <div className="bottomsection">
@@ -323,63 +385,6 @@ export default function Admin() {
               </div>
               <div className="spinner-grow text-dark">
                 <span className="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          )}
-          {stock && (
-            <div className="searchFormEdit mb-5">
-              <h1 className="display-6">{stock.fullname}</h1>
-              <p className="la">Description</p>
-              <textarea
-                className="forma"
-                name="description"
-                placeholder="Description"
-                defaultValue={stock.description}
-                onChange={(e) => editForm(e)}
-              />
-              <p className="la">Current Price</p>
-              <input
-                type="number"
-                className="forma"
-                name="price"
-                placeholder="Current Price"
-                defaultValue={Number(stock.price).toFixed(2)}
-                onChange={(e) => editForm(e)}
-              />
-              <p className="la">52 Week Low</p>
-              <input
-                type="number"
-                className="forma"
-                name="week_low"
-                placeholder="52 Week Low"
-                defaultValue={Number(stock.week_low).toFixed(2)}
-                onChange={(e) => editForm(e)}
-              />
-              <p className="la">52 Week High</p>
-              <input
-                type="number"
-                className="forma"
-                name="week_high"
-                defaultValue={Number(stock.week_high).toFixed(2)}
-                placeholder="52 Week High"
-                onChange={(e) => editForm(e)}
-              />
-
-              <div className="row m-auto mt-2">
-                <div className="col-sm-7" />
-                <input
-                  type="submit"
-                  onClick={cancelEdit}
-                  className="forma mb-3 col-sm-2"
-                  value="Cancel"
-                />
-                <div className="col-sm-1" />
-                <input
-                  type="submit"
-                  className="forma mb-3 col-sm-2"
-                  onClick={sendNewUpdate}
-                  value="Update"
-                />
               </div>
             </div>
           )}
