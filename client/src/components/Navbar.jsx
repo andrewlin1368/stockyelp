@@ -21,7 +21,7 @@ function Navbarcomponent() {
         <Container>
           <Navbar.Brand className="logo">
             <Link to="/" className="linksinlogo">
-              <i className="bi bi-coin"></i> StockYelp
+              <i className="bi bi-piggy-bank-fill"></i> StockYelp
             </Link>
           </Navbar.Brand>
 
