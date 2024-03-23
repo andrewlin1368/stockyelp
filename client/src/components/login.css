@@ -37,7 +37,6 @@
   border-radius: 0 0 10px 10px;
 }
 
-
 .formz[type="button"],
 .formz[type="submit"],
 .formz[type="reset"] {
@@ -230,7 +229,6 @@
   width: 100%;
 }
 
-
 *:focus {
   outline: none;
 }
@@ -266,4 +264,8 @@ input::-moz-placeholder {
 .Toastify__toast-body {
   font-family: "myFont", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.log {
+  min-height: 80vh;
 }

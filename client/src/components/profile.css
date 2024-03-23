@@ -127,11 +127,6 @@
   color: #ffffff;
 }
 
-.modal-header,
-.modal-footer {
-  margin: auto;
-}
-
 .display-6 {
   text-align: center;
 }
@@ -180,17 +175,4 @@
 .prow {
   margin-right: 20px;
   padding: 15px;
-}
-
-.footbutton {
-  display: flex;
-  justify-content: space-between;
-}
-
-.footbutton .formp {
-  margin: 0;
-}
-
-.space {
-  width: 10px;
 }

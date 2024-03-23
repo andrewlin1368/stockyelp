@@ -88,7 +88,7 @@ export default function Admin() {
     }
   };
   const cancelEdit = () => {
-    setSearch(null);
+    // setSearch(null);
     setStock(null);
   };
   const updateSearch = (e) => setSearch(e.target.value);
@@ -225,9 +225,9 @@ export default function Admin() {
     user.isadmin && (
       <div className="textp">
         <Modal show={show} onHide={handleClose} centered size="lg">
-          <Modal.Header>
+          <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="display-6">Add a new stock</h1>
+              <h1 className="display-6 mb-0">Add a new stock</h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -279,21 +279,12 @@ export default function Admin() {
             />
           </Modal.Body>
           <Modal.Footer>
-            <div className="footbutton">
-              <input
-                type="submit"
-                className="formp mb-0 "
-                onClick={handleClose}
-                value="Cancel"
-              />
-              <div className="space"> </div>
-              <input
-                type="submit"
-                className="formp mb-0"
-                onClick={addNewStock}
-                value="Add Stock"
-              />
-            </div>
+            <input
+              type="submit"
+              className="formp mb-0"
+              onClick={addNewStock}
+              value="Add Stock"
+            />
           </Modal.Footer>
         </Modal>
         <div className="topsection">
@@ -373,18 +364,23 @@ export default function Admin() {
                 placeholder="52 Week High"
                 onChange={(e) => editForm(e)}
               />
-              <input
-                type="submit"
-                className="forma mb-3"
-                onClick={sendNewUpdate}
-                value="Update"
-              />
-              <input
-                type="submit"
-                onClick={cancelEdit}
-                className="forma mb-3"
-                value="Cancel"
-              />
+
+              <div className="row m-auto mt-2">
+                <div className="col-sm-7" />
+                <input
+                  type="submit"
+                  onClick={cancelEdit}
+                  className="forma mb-3 col-sm-2"
+                  value="Cancel"
+                />
+                <div className="col-sm-1" />
+                <input
+                  type="submit"
+                  className="forma mb-3 col-sm-2"
+                  onClick={sendNewUpdate}
+                  value="Update"
+                />
+              </div>
             </div>
           )}
         </div>

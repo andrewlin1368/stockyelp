@@ -59,9 +59,9 @@ export default function Profile() {
   return (
     <div>
       <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title>
-            <h1 className="display-6">Edit Profile</h1>
+            <h1 className="display-6 mb-0">Edit Profile</h1>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -92,21 +92,12 @@ export default function Profile() {
           />
         </Modal.Body>
         <Modal.Footer>
-          <div className="footbutton">
-            <input
-              type="submit"
-              className="formp mb-0 "
-              onClick={handleClose}
-              value="Cancel"
-            />
-            <div className="space"> </div>
-            <input
-              type="submit"
-              className="formp mb-0 "
-              onClick={(e) => handleSave(e)}
-              value="Confirm"
-            />
-          </div>
+          <input
+            type="submit"
+            className="formp mb-0"
+            onClick={(e) => handleSave(e)}
+            value="Confirm"
+          />
         </Modal.Footer>
       </Modal>
 

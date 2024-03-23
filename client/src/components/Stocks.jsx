@@ -219,9 +219,9 @@ export default function Stocks() {
     <div>
       {edit && (
         <Modal show={edit} onHide={handleEditClose} centered>
-          <Modal.Header>
+          <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="display-6">Edit Comment</h1>
+              <h1 className="display-6 mb-0">Edit Comment</h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -235,21 +235,12 @@ export default function Stocks() {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <div className="footbutton">
-              <input
-                type="submit"
-                className="formp mb-0"
-                onClick={handleEditClose}
-                value="Cancel"
-              />
-              <div className="space"></div>
-              <input
-                type="submit"
-                className="formp mb-0"
-                onClick={handleEditClose}
-                value="Edit"
-              />
-            </div>
+            <input
+              type="submit"
+              className="formp mb-0"
+              onClick={handleEditClose}
+              value="Edit"
+            />
           </Modal.Footer>
         </Modal>
       )}
@@ -261,9 +252,11 @@ export default function Stocks() {
           centered
           className="textp"
         >
-          <Modal.Header>
+          <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="display-6">@{profile.user.username} likes...</h1>
+              <h1 className="display-6 mb-0">
+                @{profile.user.username} likes...
+              </h1>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -302,9 +295,9 @@ export default function Stocks() {
       )}
       {stock && (
         <Modal show={show} onHide={handleClose} size="xl">
-          <Modal.Header>
+          <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="stockheadmodal">
+              <h1 className="stockheadmodal mb-0">
                 {(extra_following[stock.stock_id] && (
                   <Link>
                     <i
@@ -348,13 +341,6 @@ export default function Stocks() {
           </Modal.Header>
           <Modal.Body className="textp">
             <div className="stockdetails1">
-              <input
-                type="submit"
-                className="forma mb-1 mt-0"
-                value="Close"
-                onClick={handleClose}
-                style={{ padding: "10px 20px", boxShadow: "none" }}
-              />
               <p>{stock.description}</p>
               <div className="row">
                 <strong className="col-sm">

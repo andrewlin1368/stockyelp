@@ -32,7 +32,7 @@ export default function Login() {
   };
 
   return (
-    <div className="wrapper fadeInDown mt-5">
+    <div className="wrapper fadeInDown mt-5 log">
       <div id="formContent">
         <div className="fadeIn first">
           <h1 className="display-6 mt-3 mb-3">Login</h1>
