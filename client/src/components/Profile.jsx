@@ -92,12 +92,21 @@ export default function Profile() {
           />
         </Modal.Body>
         <Modal.Footer>
-          <input
-            type="submit"
-            className="formp mb-0"
-            onClick={(e) => handleSave(e)}
-            value="Confirm"
-          />
+          <div className="footbutton">
+            <input
+              type="submit"
+              className="formp mb-0 "
+              onClick={handleClose}
+              value="Cancel"
+            />
+            <div className="space"> </div>
+            <input
+              type="submit"
+              className="formp mb-0 "
+              onClick={(e) => handleSave(e)}
+              value="Confirm"
+            />
+          </div>
         </Modal.Footer>
       </Modal>
 
@@ -185,7 +194,17 @@ export default function Profile() {
                       );
                     })
                   ) : (
-                    <div className="loader"></div>
+                    <div className="mt-5" style={{ textAlign: "center" }}>
+                      <div className="spinner-grow text-dark">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      <div className="spinner-grow text-dark">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      <div className="spinner-grow text-dark">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
                   )}
                 </table>
               </div>
@@ -245,7 +264,17 @@ export default function Profile() {
                     );
                   })
                 ) : (
-                  <div className="loader"></div>
+                  <div className="mt-5" style={{ textAlign: "center" }}>
+                    <div className="spinner-grow text-dark">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-dark">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className="spinner-grow text-dark">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
                 )}
               </table>
             </div>

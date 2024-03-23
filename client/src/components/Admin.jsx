@@ -279,12 +279,21 @@ export default function Admin() {
             />
           </Modal.Body>
           <Modal.Footer>
-            <input
-              type="submit"
-              className="forma mb-0"
-              onClick={addNewStock}
-              value="Add Stock"
-            />
+            <div className="footbutton">
+              <input
+                type="submit"
+                className="formp mb-0 "
+                onClick={handleClose}
+                value="Cancel"
+              />
+              <div className="space"> </div>
+              <input
+                type="submit"
+                className="formp mb-0"
+                onClick={addNewStock}
+                value="Add Stock"
+              />
+            </div>
           </Modal.Footer>
         </Modal>
         <div className="topsection">
@@ -314,13 +323,20 @@ export default function Admin() {
         </div>
         <div className="bottomsection">
           {loading && (
-            <div className="ring">
-              Loading...
-              <div className="span"></div>
+            <div className="mt-5" style={{ textAlign: "center" }}>
+              <div className="spinner-grow text-dark">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <div className="spinner-grow text-dark">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <div className="spinner-grow text-dark">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
           )}
           {stock && (
-            <div className="searchFormEdit">
+            <div className="searchFormEdit mb-5">
               <h1 className="display-6">{stock.fullname}</h1>
               <p className="la">Description</p>
               <textarea

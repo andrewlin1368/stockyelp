@@ -181,3 +181,16 @@
   margin-right: 20px;
   padding: 15px;
 }
+
+.footbutton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footbutton .formp {
+  margin: 0;
+}
+
+.space {
+  width: 10px;
+}

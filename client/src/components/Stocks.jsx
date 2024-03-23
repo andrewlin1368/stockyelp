@@ -235,12 +235,21 @@ export default function Stocks() {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <input
-              type="submit"
-              className="forma mb-0"
-              onClick={handleEditClose}
-              value="Edit"
-            />
+            <div className="footbutton">
+              <input
+                type="submit"
+                className="formp mb-0"
+                onClick={handleEditClose}
+                value="Cancel"
+              />
+              <div className="space"></div>
+              <input
+                type="submit"
+                className="formp mb-0"
+                onClick={handleEditClose}
+                value="Edit"
+              />
+            </div>
           </Modal.Footer>
         </Modal>
       )}
@@ -339,6 +348,13 @@ export default function Stocks() {
           </Modal.Header>
           <Modal.Body className="textp">
             <div className="stockdetails1">
+              <input
+                type="submit"
+                className="forma mb-1 mt-0"
+                value="Close"
+                onClick={handleClose}
+                style={{ padding: "10px 20px", boxShadow: "none" }}
+              />
               <p>{stock.description}</p>
               <div className="row">
                 <strong className="col-sm">
@@ -358,12 +374,23 @@ export default function Stocks() {
             </div>
             <div className="stockdetails2">
               {(token && (
-                <form id={stock.stock_id} onSubmit={(e) => addComment(e)}>
+                <form
+                  id={stock.stock_id}
+                  onSubmit={(e) => addComment(e)}
+                  style={{ textAlign: "center" }}
+                >
                   <input
                     type="text"
-                    className="forma mt-0 mb-3"
+                    className="forma mt-0 mb-1"
                     placeholder={newMessage}
                     onChange={(e) => updateAddMessage(e)}
+                    style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                  />
+                  <input
+                    type="submit"
+                    className="formp mb-1 mt-0"
+                    value="Post"
+                    style={{ padding: "10px 20px", boxShadow: "none" }}
                   />
                 </form>
               )) || (
@@ -554,9 +581,16 @@ export default function Stocks() {
                         );
                       })
                     ) : (
-                      <div className="ring">
-                        Loading...
-                        <div className="span"></div>
+                      <div style={{ textAlign: "center" }}>
+                        <div className="spinner-grow text-dark">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        <div className="spinner-grow text-dark">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        <div className="spinner-grow text-dark">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
                       </div>
                     )}
                   </table>
@@ -605,9 +639,16 @@ export default function Stocks() {
                 );
               })
             ) : (
-              <div className="ring">
-                Loading...
-                <div className="span"></div>
+              <div className="m-5">
+                <div className="spinner-grow text-dark">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <div className="spinner-grow text-dark">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <div className="spinner-grow text-dark">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </div>
             )}
           </div>

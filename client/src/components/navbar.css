@@ -58,3 +58,7 @@ header::after {
 .links:hover::before {
   width: 100%;
 }
+
+.footer {
+  background-color: black;
+}
