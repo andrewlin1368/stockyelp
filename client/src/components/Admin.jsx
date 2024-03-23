@@ -230,7 +230,7 @@ export default function Admin() {
   return (
     user &&
     user.isadmin && (
-      <div className="textp">
+      <div className="textp rtx4090">
         <Modal show={show} onHide={handleClose} centered size="lg">
           <Modal.Header closeButton>
             <Modal.Title>

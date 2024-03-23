@@ -32,7 +32,7 @@ export default function Login() {
   };
 
   return (
-    <div className="wrapper fadeInDown mt-5 log">
+    <div className="wrapper fadeInDown mt-5 rtx4090">
       <div id="formContent">
         <div className="fadeIn first">
           <h1 className="display-6 mt-3 mb-3">Login</h1>
@@ -58,7 +58,7 @@ export default function Login() {
 
           <input type="submit" className="formz fadeIn fourth" value="Login" />
         </form>
-        <div id="formFooter" className="lead">
+        <div id="formFooter" className="textp">
           No account?{" "}
           <Link className="logina" to="/register">
             Register

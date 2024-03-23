@@ -38,7 +38,7 @@ export default function Register() {
   };
 
   return (
-    <div className="wrapper fadeInDown mt-3">
+    <div className="wrapper fadeInDown mt-3 rtx4090">
       <div id="formContent">
         <div className="fadeIn first">
           <h1 className="display-6 mt-3 mb-3">Register</h1>
@@ -85,7 +85,7 @@ export default function Register() {
             value="Register"
           />
         </form>
-        <div id="formFooter" className="lead">
+        <div id="formFooter" className="textp">
           Already have an account?{" "}
           <Link className="logina" to="/login">
             Login

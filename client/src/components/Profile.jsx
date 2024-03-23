@@ -57,7 +57,7 @@ export default function Profile() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   return (
-    <div>
+    <div className="rtx4090">
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>
