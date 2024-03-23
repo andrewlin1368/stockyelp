@@ -6,6 +6,7 @@ import Register from "./components/Register.jsx";
 import Profile from "./components/Profile.jsx";
 import Navbarcomponent from "./components/Navbar.jsx";
 import Admin from "./components/Admin.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   useGetAllStocksQuery();
@@ -13,6 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbarcomponent></Navbarcomponent>
+
       <Routes>
         <Route path="/" element={<Stocks></Stocks>}></Route>
         <Route path="*" element={<Navigate to="/" />}></Route>
@@ -21,6 +23,7 @@ function App() {
         <Route path="/profile" element={<Profile></Profile>}></Route>
         <Route path="/admin" element={<Admin></Admin>}></Route>
       </Routes>
+      <Footer></Footer>
     </BrowserRouter>
   );
 }
