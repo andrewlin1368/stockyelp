@@ -98,22 +98,22 @@ export default function Stocks() {
     }
     let found = false;
     const words = {
-      nigga: 1,
-      nig: 1,
-      niqqa: 1,
-      asshole: 1,
-      fuck: 1,
-      bitch: 1,
-      hoe: 1,
-      rape: 1,
-      asswipe: 1,
-      cunt: 1,
-      ass: 1,
-      dick: 1,
+      NIGGA: 1,
+      NIG: 1,
+      NIQQA: 1,
+      ASSHOLE: 1,
+      FUCK: 1,
+      BITCH: 1,
+      HOE: 1,
+      RAPE: 1,
+      ASSWIPE: 1,
+      CUNT: 1,
+      ASS: 1,
+      DICK: 1,
     };
     const check = newMessage.split(" ");
     for (let char of check)
-      if (words[char]) {
+      if (words[char.toUpperCase()]) {
         found = true;
         break;
       }
