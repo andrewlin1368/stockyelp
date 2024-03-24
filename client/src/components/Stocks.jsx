@@ -368,7 +368,7 @@ export default function Stocks() {
                   <Link>
                     <i
                       className="bi bi-star-fill"
-                      title="unfollow"
+                      // title="unfollow"
                       id={stock.stock_id}
                       onClick={(e) => unfollow(e)}
                     ></i>
@@ -377,7 +377,7 @@ export default function Stocks() {
                   <Link>
                     <i
                       className="bi bi-star"
-                      title="follow"
+                      // title="follow"
                       id={stock.stock_id}
                       onClick={(e) => follow(e)}
                     ></i>
@@ -387,7 +387,7 @@ export default function Stocks() {
                 <Link>
                   <i
                     className="bi bi-caret-up-fill"
-                    title="upvote"
+                    // title="upvote"
                     onClick={(e) => upvoter(e)}
                     id={stock.stock_id}
                   ></i>
@@ -396,7 +396,7 @@ export default function Stocks() {
                 <Link>
                   <i
                     className="bi bi-caret-down-fill"
-                    title="downvote"
+                    // title="downvote"
                     onClick={(e) => downvoter(e)}
                     id={stock.stock_id}
                   ></i>
@@ -467,7 +467,7 @@ export default function Stocks() {
                                     <Link className="logina">
                                       <strong
                                         className="text-primary lead"
-                                        title="view user"
+                                        // title="view user"
                                         id={comment.user_id}
                                         onClick={(e) => {
                                           getProfile(e);
@@ -491,7 +491,7 @@ export default function Stocks() {
                                             <Link>
                                               <i
                                                 className="bi bi-pencil-fill fs-5"
-                                                title="edit"
+                                                // title="edit"
                                                 id={comment.comment_id}
                                                 data-message={comment.message}
                                                 onClick={(e) => editComment(e)}
@@ -504,7 +504,7 @@ export default function Stocks() {
                                                 onClick={(e) =>
                                                   removeComment(e)
                                                 }
-                                                title="delete"
+                                                // title="delete"
                                               ></i>
                                             </Link>
                                           </span>
