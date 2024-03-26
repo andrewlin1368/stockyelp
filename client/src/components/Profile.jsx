@@ -16,7 +16,14 @@ export default function Profile() {
   const { stocks } = useSelector((state) => state.stocks);
   const [updateUser] = useUpdateMutation();
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setForm({
+      firstname: (user && user.firstname) || "",
+      lastname: (user && user.lastname) || "",
+      password: "",
+    });
+  };
   const handleShow = () => setShow(true);
   const handleSave = async (e) => {
     e.preventDefault();
@@ -42,8 +49,8 @@ export default function Profile() {
   });
   const { user, following, comments } = useSelector((state) => state.user);
   const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
+    firstname: (user && user.firstname) || "",
+    lastname: (user && user.lastname) || "",
     password: "",
   });
   useEffect(() => {
