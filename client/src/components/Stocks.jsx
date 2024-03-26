@@ -241,7 +241,11 @@ export default function Stocks() {
     const newDisplayStocks = stocks.filter((displayStock) => {
       return displayStock.symbol.includes(e.target.value.toUpperCase());
     });
-    setDisplayStocks(newDisplayStocks);
+    if (!newDisplayStocks.length) {
+      toast.error("Stock not found", {
+        position: "top-right",
+      });
+    } else setDisplayStocks(newDisplayStocks);
   };
 
   const [showCom, setShowCom] = useState(false);
@@ -419,7 +423,7 @@ export default function Stocks() {
                   52 Week Low: ${Number(stock.week_low).toFixed(2)}
                 </strong>{" "}
                 <strong className="col-sm">
-                  52 Week High: {Number(stock.week_high).toFixed(2)}
+                  52 Week High: ${Number(stock.week_high).toFixed(2)}
                 </strong>
               </div>
               <hr />
@@ -674,7 +678,9 @@ export default function Stocks() {
                         >
                           {stock.symbol.split(" ").join("")}
                         </h4>
-                        <h5>${Number(stock.price).toFixed(2)}</h5>
+                        <h5 id={stock.stock_id} onClick={(e) => handleShow(e)}>
+                          ${Number(stock.price).toFixed(2)}
+                        </h5>
                       </Link>
                     </div>
                   </div>
