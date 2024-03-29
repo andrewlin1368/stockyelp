@@ -261,7 +261,7 @@ export default function Stocks() {
   };
 
   const [idComment, setIdComment] = useState(null);
-
+  const [warning, setWarning] = useState(true);
   return (
     <div>
       <Modal show={showCom} onHide={handleCloseCom} centered>
@@ -534,7 +534,25 @@ export default function Stocks() {
           </Modal.Body>
         </Modal>
       )}
-
+      {warning && (
+        <div
+          className="alert alert-warning fade show textp warningm"
+          role="alert"
+        >
+          <strong>
+            Loading of data might exceed expected duration. Kindly allow a
+            minute for the data to be fully loaded.
+          </strong>
+          <Link
+            className="warningx"
+            onClick={() => {
+              setWarning(false);
+            }}
+          >
+            X
+          </Link>
+        </div>
+      )}
       <div className="page">
         <div className="topParent">
           <div className="carcar fadeIn third">

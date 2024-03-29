@@ -136,3 +136,13 @@
   width: 40%;
   margin-right: 20px;
 }
+
+.warningx {
+  text-decoration: none;
+  color: black;
+  float: right;
+}
+
+.warningm {
+  text-align: center;
+}
