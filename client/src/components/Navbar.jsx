@@ -19,7 +19,7 @@ function Navbarcomponent() {
     <header>
       <Navbar>
         <Container>
-          <Navbar.Brand className="logo">
+          <Navbar.Brand className="logo textp">
             <Link to="/" className="linksinlogo">
               <i className="bi bi-piggy-bank-fill"></i> StockYelp
             </Link>
