@@ -237,7 +237,7 @@ export default function Admin() {
               <h1 className="display-6 mb-0">Add a new stock</h1>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="textp">
             <input
               type="text"
               className="forma"
@@ -301,7 +301,7 @@ export default function Admin() {
               <h1 className="display-6 mb-0">{stock?.fullname}</h1>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="textp">
             <p className="la">Description</p>
             <textarea
               className="forma"

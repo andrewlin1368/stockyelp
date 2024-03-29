@@ -540,8 +540,8 @@ export default function Stocks() {
           role="alert"
         >
           <strong>
-            Loading of data might exceed expected duration. Kindly allow a
-            minute for the data to be fully loaded.
+            Initial loading of data might exceed expected duration. Kindly allow
+            a minute for the data to be fully loaded.
           </strong>
           <Link
             className="warningx"
