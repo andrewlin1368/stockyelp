@@ -294,7 +294,7 @@ export default function Stocks() {
               <h1 className="display-6 mb-0">Edit Comment</h1>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="textp">
             <div className="form-group mt-1 mb-3">
               <input
                 type="text"
@@ -534,7 +534,7 @@ export default function Stocks() {
           </Modal.Body>
         </Modal>
       )}
-      {warning && (
+      {warning && !displayStocks.length && (
         <div
           className="alert alert-warning fade show textp warningm"
           role="alert"
@@ -664,7 +664,7 @@ export default function Stocks() {
                 <p className="textp spsp">Search for a stock</p>
                 <input
                   type="text"
-                  className="forma"
+                  className="forma textp"
                   placeholder="Search for a stock"
                   onChange={(e) => updateSearch(e)}
                 />

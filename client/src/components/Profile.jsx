@@ -71,7 +71,7 @@ export default function Profile() {
             <h1 className="display-6 mb-0">Edit Profile</h1>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="textp">
           <input
             type="text"
             className="formp mb-2"

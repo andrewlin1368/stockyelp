@@ -37,7 +37,7 @@ export default function Login() {
         <div className="fadeIn first">
           <h1 className="display-6 mt-3 mb-3">Login</h1>
         </div>
-        <form onSubmit={(e) => sendForm(e)}>
+        <form onSubmit={(e) => sendForm(e)} className="textp">
           <input
             type="text"
             id="username"

@@ -43,7 +43,7 @@ export default function Register() {
         <div className="fadeIn first">
           <h1 className="display-6 mt-3 mb-3">Register</h1>
         </div>
-        <form onSubmit={(e) => sendForm(e)}>
+        <form onSubmit={(e) => sendForm(e)} className="textp">
           <input
             type="text"
             name="username"
