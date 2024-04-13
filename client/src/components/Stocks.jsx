@@ -427,13 +427,22 @@ export default function Stocks() {
                   Last Updated: {stock.current_data.split("T")[0]}
                 </strong>{" "}
                 <strong className="col-sm">
-                  Current Price: ${Number(stock.price).toFixed(2)}
+                  Current Price:{" "}
+                  <span style={{ color: "green" }}>
+                    $ {Number(stock.price).toFixed(2)}
+                  </span>
                 </strong>
                 <strong className="col-sm">
-                  52 Week Low Price: ${Number(stock.week_low).toFixed(2)}
+                  52 Week Low Price:{" "}
+                  <span style={{ color: "green" }}>
+                    $ {Number(stock.week_low).toFixed(2)}
+                  </span>
                 </strong>{" "}
                 <strong className="col-sm">
-                  52 Week High Price: ${Number(stock.week_high).toFixed(2)}
+                  52 Week High Price:{" "}
+                  <span style={{ color: "green" }}>
+                    $ {Number(stock.week_high).toFixed(2)}
+                  </span>
                 </strong>
               </div>
               <hr />
@@ -605,7 +614,11 @@ export default function Stocks() {
                 },
                 {
                   name: <strong>Price</strong>,
-                  selector: (row) => `$${Number(row.price).toFixed(2)}`,
+                  selector: (row) => (
+                    <strong style={{ color: "green" }}>
+                      $ {Number(row.price).toFixed(2)}
+                    </strong>
+                  ),
                 },
                 {
                   name: <strong>See Details</strong>,

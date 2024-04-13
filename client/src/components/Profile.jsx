@@ -282,11 +282,11 @@ export default function Profile() {
                         <div className="row pt-1">
                           <div className="col-6 mb-3">
                             <h6>Following</h6>
-                            <p className="text-muted">{following.length}</p>
+                            <strong>{following.length}</strong>
                           </div>
                           <div className="col-6 mb-3">
                             <h6>Comments</h6>
-                            <p className="text-muted">{comments.length}</p>
+                            <strong>{comments.length}</strong>
                           </div>
                         </div>
                         <h6>Data</h6>
