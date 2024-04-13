@@ -74,7 +74,7 @@ export default function Footer() {
       </Modal>
       <div className="container">
         <button
-          className="btn btn-dark mb-2"
+          className="btn btn-light mb-2"
           data-mdb-button-init
           onClick={handleShow}
         >
