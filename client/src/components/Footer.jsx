@@ -76,7 +76,7 @@ export default function Footer() {
         <button
           type="submit"
           data-mdb-button-init
-          className="btn btn-primary btn-block mb-4"
+          className="btn btn-primary btn-block mb-4 button-87"
           onClick={handleShow}
         >
           Contact Me
