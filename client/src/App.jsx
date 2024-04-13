@@ -7,6 +7,9 @@ import Profile from "./components/Profile.jsx";
 import Navbarcomponent from "./components/Navbar.jsx";
 import Admin from "./components/Admin.jsx";
 import Footer from "./components/Footer.jsx";
+import "mdb-ui-kit/css/mdb.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "./App.css";
 
 function App() {
   useGetAllStocksQuery();

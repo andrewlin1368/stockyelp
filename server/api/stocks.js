@@ -38,25 +38,25 @@ stockRouter.post("/single", async (req, res, next) => {
 stockRouter.post("/", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { fullname, symbol, description, price, week_low, week_high } =
       req.body;
     if (!fullname.length || !symbol.length || !description.length)
-      return res.status(400).send({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required!" });
     if (
       (price && price < 0) ||
       (week_high && week_high < 0) ||
       (week_low && week_low < 0)
     )
-      return res.status(400).send({ error: "Values cannot be less than 0" });
+      return res.status(400).send({ error: "Values cannot be less than 0!" });
     if (week_high && week_low && week_high < week_low)
       return res
         .status(400)
-        .send({ error: "52 Week High cannot be less than 52 Week Low" });
+        .send({ error: "52 Week High cannot be less than 52 Week Low!" });
     if (week_high && price && price > week_high)
       return res
         .status(400)
-        .send({ error: "52 Week High cannot be less than price" });
+        .send({ error: "52 Week High cannot be less than price!" });
     res.send(
       await addStock({
         user_id: req.user.user_id,
@@ -77,24 +77,24 @@ stockRouter.post("/", verifyToken, async (req, res, next) => {
 stockRouter.put("/", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { stock_id, description, price, week_low, week_high } = req.body;
     if (!description.length)
-      return res.status(400).send({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required!" });
     if (
       (price && price < 0) ||
       (week_high && week_high < 0) ||
       (week_low && week_low < 0)
     )
-      return res.status(400).send({ error: "Values cannot be less than 0" });
+      return res.status(400).send({ error: "Values cannot be less than 0!" });
     if (week_high && week_low && week_high < week_low)
       return res
         .status(400)
-        .send({ error: "52 Week High cannot be less than 52 Week Low" });
+        .send({ error: "52 Week High cannot be less than 52 Week Low!" });
     if (week_high && price && price > week_high)
       return res
         .status(400)
-        .send({ error: "52 Week High cannot be less than price" });
+        .send({ error: "52 Week High cannot be less than price!" });
     res.send(
       await editStock({
         user_id: req.user.user_id,
@@ -114,7 +114,7 @@ stockRouter.put("/", verifyToken, async (req, res, next) => {
 stockRouter.post("/follow", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { stock_id } = req.body;
     const data = await follow({ stock_id, user_id: req.user.user_id });
     return data.error
@@ -129,7 +129,7 @@ stockRouter.post("/follow", verifyToken, async (req, res, next) => {
 stockRouter.delete("/unfollow", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { stock_id } = req.body;
     const data = await unfollow({ stock_id, user_id: req.user.user_id });
     return data.error
@@ -144,7 +144,7 @@ stockRouter.delete("/unfollow", verifyToken, async (req, res, next) => {
 stockRouter.post("/upvote", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { stock_id } = req.body;
     const data = await upvote({ stock_id, user_id: req.user.user_id });
     return data.error
@@ -159,7 +159,7 @@ stockRouter.post("/upvote", verifyToken, async (req, res, next) => {
 stockRouter.post("/downvote", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { stock_id } = req.body;
     const data = await downvote({ stock_id, user_id: req.user.user_id });
     return data.error
@@ -174,7 +174,7 @@ stockRouter.post("/downvote", verifyToken, async (req, res, next) => {
 stockRouter.put("/removecomment", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { comment_id } = req.body;
     const data = await removeComment({ comment_id, user_id: req.user.user_id });
     return data.error
@@ -189,10 +189,10 @@ stockRouter.put("/removecomment", verifyToken, async (req, res, next) => {
 stockRouter.post("/addcomment", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { stock_id, message } = req.body;
     return !message.length
-      ? res.status(400).send({ error: "Cannot post empty messages" })
+      ? res.status(400).send({ error: "Cannot post empty messages!" })
       : res.send(
           await createComment({ stock_id, user_id: req.user.user_id, message })
         );
@@ -205,10 +205,10 @@ stockRouter.post("/addcomment", verifyToken, async (req, res, next) => {
 stockRouter.put("/editcomment", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { comment_id, message } = req.body;
     return !message.length
-      ? res.status(400).send({ error: "Cannot post empty messages" })
+      ? res.status(400).send({ error: "Cannot post empty messages!" })
       : res.send(
           await editComment({ comment_id, user_id: req.user.user_id, message })
         );

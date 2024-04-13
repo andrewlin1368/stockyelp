@@ -30,7 +30,7 @@ const getStock = async (symbol) => {
       symbol,
     },
   });
-  if (!stock) return { error: "Stock not found" };
+  if (!stock) return { error: "Stock not found!" };
   return stock;
 };
 
@@ -45,12 +45,12 @@ const addStock = async ({
   week_high,
 }) => {
   const user = await prisma.users.findFirst({ where: { user_id } });
-  if (!user || !user.isadmin) return { error: "Invalid credentials" };
+  if (!user || !user.isadmin) return { error: "Invalid credentials!" };
   const current_data = new Date();
   const checkStock = await prisma.stocks.findFirst({
     where: { OR: [{ fullname }, { symbol }] },
   });
-  if (checkStock) return { error: "Stock already exist" };
+  if (checkStock) return { error: "Stock already exist!" };
   const stock = await prisma.stocks.create({
     data: {
       fullname,
@@ -75,7 +75,7 @@ const editStock = async ({
   week_high,
 }) => {
   const user = await prisma.users.findFirst({ where: { user_id } });
-  if (!user || !user.isadmin) return { error: "Invalid credentials" };
+  if (!user || !user.isadmin) return { error: "Invalid credentials!" };
   const current_data = new Date();
   let stock = await prisma.stocks.findFirst({ where: { stock_id } });
   stock = await prisma.stocks.update({
@@ -94,8 +94,8 @@ const editStock = async ({
 //remove comment - Will not delete but instead updated isdeleted to true and front end will display "Comment has been deleted." profile.comment slice and stocks slice will be updated
 const removeComment = async ({ comment_id, user_id }) => {
   let comment = await prisma.comments.findFirst({ where: { comment_id } });
-  if (comment.user_id !== user_id) return { error: "Not original creator" };
-  if (comment.isdeleted) return { error: "Comment has already been removed" };
+  if (comment.user_id !== user_id) return { error: "Not original creator!" };
+  if (comment.isdeleted) return { error: "Comment has already been removed!" };
   comment = await prisma.comments.update({
     where: { comment_id },
     data: { isdeleted: true },
@@ -115,8 +115,8 @@ const createComment = async ({ stock_id, user_id, message }) => {
 //edit a comment
 const editComment = async ({ comment_id, user_id, message }) => {
   let comment = await prisma.comments.findFirst({ where: { comment_id } });
-  if (comment.user_id !== user_id) return { error: "Not original creator" };
-  if (comment.isdeleted) return { error: "Comment has already been removed" };
+  if (comment.user_id !== user_id) return { error: "Not original creator!" };
+  if (comment.isdeleted) return { error: "Comment has already been removed!" };
   comment = await prisma.comments.update({
     where: { comment_id },
     data: { message },
@@ -129,7 +129,7 @@ const upvote = async ({ stock_id, user_id }) => {
   const isUpvote = await prisma.upvote.findFirst({
     where: { stock_id, AND: { user_id } },
   });
-  if (isUpvote) return { error: "Already upvoted" };
+  if (isUpvote) return { error: "Already upvoted!" };
   const isDownvote = await prisma.downvote.findFirst({
     where: { stock_id, AND: { user_id } },
   });
@@ -156,7 +156,7 @@ const downvote = async ({ stock_id, user_id }) => {
   const isDownvote = await prisma.downvote.findFirst({
     where: { stock_id, AND: { user_id } },
   });
-  if (isDownvote) return { error: "Already downvoted" };
+  if (isDownvote) return { error: "Already downvoted!" };
   const isUpvote = await prisma.upvote.findFirst({
     where: { stock_id, AND: { user_id } },
   });
@@ -181,7 +181,7 @@ const follow = async ({ stock_id, user_id }) => {
   let isFollowing = await prisma.profiles.findFirst({
     where: { stock_id, AND: { user_id } },
   });
-  if (isFollowing) return { error: "Already following" };
+  if (isFollowing) return { error: "Already following!" };
   isFollowing = await prisma.profiles.create({ data: { stock_id, user_id } });
   return isFollowing;
 };
@@ -191,7 +191,7 @@ const unfollow = async ({ stock_id, user_id }) => {
   let notFollowing = await prisma.profiles.findFirst({
     where: { stock_id, AND: { user_id } },
   });
-  if (!notFollowing) return { error: "Already not following" };
+  if (!notFollowing) return { error: "Already not following!" };
   notFollowing = await prisma.profiles.delete({
     where: { profile_id: notFollowing.profile_id },
   });
@@ -201,7 +201,7 @@ const unfollow = async ({ stock_id, user_id }) => {
 //get user profile (user data, stocks following) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE WILL INSTEAD BY USED BY USERS TO SEE OTHER USERS
 const getProfile = async (user_id) => {
   const user = await prisma.users.findFirst({ where: { user_id } });
-  if (!user) return { error: "Invalid credentials" };
+  if (!user) return { error: "Invalid credentials!" };
   const following = await prisma.profiles.findMany({ where: { user_id } });
   // const comments = await prisma.comments.findMany({
   //   where: { user_id },
@@ -220,11 +220,11 @@ const register = async ({
   admincode,
 }) => {
   if (admincode.length && admincode !== "8773934448")
-    return { error: "Invalid Code" };
+    return { error: "Invalid Code!" };
   let user = await prisma.users.findFirst({ where: { username } });
-  if (user) return { error: "User already exists" };
+  if (user) return { error: "User already exists!" };
   if (password.length < 8)
-    return { error: "Password must be atleast 8 characters" };
+    return { error: "Password must be atleast 8 characters!" };
   const salt = await bcrypt.genSalt(8);
   const hashPass = await bcrypt.hash(password, salt);
   user = await prisma.users.create({
@@ -244,9 +244,9 @@ const register = async ({
 //login a user
 const login = async ({ username, password }) => {
   const user = await prisma.users.findFirst({ where: { username } });
-  if (!user) return { error: "Invalid credentials" };
+  if (!user) return { error: "Invalid credentials!" };
   const check = await bcrypt.compare(password, user.password);
-  if (!check) return { error: "Invalid credentials" };
+  if (!check) return { error: "Invalid credentials!" };
   const following = await prisma.profiles.findMany({
     where: { user_id: user.user_id },
   });

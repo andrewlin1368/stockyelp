@@ -1,13 +1,10 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useSelector } from "react-redux";
-import { logoutUser } from "../api/userSlice";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import "./navbar.css";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../api/userSlice";
+import { Collapse, Ripple, initMDB } from "mdb-ui-kit";
 
 function Navbarcomponent() {
+  initMDB({ Collapse, Ripple });
   const { token, user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,55 +13,97 @@ function Navbarcomponent() {
     navigate("/");
   };
   return (
-    <header>
-      <Navbar>
-        <Container>
-          <Navbar.Brand className="logo textp">
-            <Link to="/" className="linksinlogo">
-              <i className="bi bi-piggy-bank-fill"></i> StockYelp
-            </Link>
-          </Navbar.Brand>
+    <>
+      <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-body-tertiary">
+        <div className="container">
+          <button
+            data-mdb-ripple-init
+            type="button"
+            className="btn btn-light px-3 me-2"
+            onClick={() => navigate("/")}
+          >
+            StockYelp
+          </button>
 
-          <Nav className="nav">
+          <button
+            data-mdb-collapse-init
+            className="navbar-toggler btn btn-light"
+            type="button"
+            data-mdb-target="#navbarButtonsExample"
+            aria-controls="navbarButtonsExample"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i className="bi bi-three-dots"></i>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarButtonsExample">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
             {!token && (
-              <Nav.Link>
-                <Link to="/login" className="links">
-                  Login <i className="bi bi-box-arrow-in-right"></i>
-                </Link>
-              </Nav.Link>
-            )}
-            {!token && (
-              <Nav.Link>
-                <Link to="/register" className="links">
-                  Register <i className="bi bi-person-plus-fill"></i>
-                </Link>
-              </Nav.Link>
+              <>
+                <div className="d-flex align-items-center">
+                  <button
+                    data-mdb-ripple-init
+                    type="button"
+                    className="btn btn-light px-3 me-2"
+                    onClick={() => navigate("/login")}
+                  >
+                    Login
+                  </button>
+                </div>
+                <div className="d-flex align-items-center">
+                  <button
+                    data-mdb-ripple-init
+                    type="button"
+                    className="btn btn-light px-3 me-2"
+                    onClick={() => navigate("/register")}
+                  >
+                    Register
+                  </button>
+                </div>
+              </>
             )}
             {token && (
-              <Nav.Link>
-                <Link to="/profile" className="links">
-                  Profile <i className="bi bi-person-circle"></i>
-                </Link>
-              </Nav.Link>
+              <>
+                <div className="d-flex align-items-center">
+                  <button
+                    data-mdb-ripple-init
+                    type="button"
+                    className="btn btn-light px-3 me-2"
+                    onClick={() => navigate("/profile")}
+                  >
+                    Profile
+                  </button>
+                </div>
+                {user.isadmin && (
+                  <div className="d-flex align-items-center">
+                    <button
+                      data-mdb-ripple-init
+                      type="button"
+                      className="btn btn-light px-3 me-2"
+                      onClick={() => navigate("/admin")}
+                    >
+                      Admin
+                    </button>
+                  </div>
+                )}
+                <div className="d-flex align-items-center">
+                  <button
+                    data-mdb-ripple-init
+                    type="button"
+                    className="btn btn-light px-3 me-2"
+                    onClick={logout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
             )}
-            {token && user.isadmin && (
-              <Nav.Link>
-                <Link to="/admin" className="links">
-                  Admin <i className="bi bi-shield-lock"></i>
-                </Link>
-              </Nav.Link>
-            )}
-            {token && (
-              <Nav.Link onClick={logout}>
-                <Link className="links">
-                  Logout <i className="bi bi-box-arrow-right"></i>
-                </Link>
-              </Nav.Link>
-            )}
-          </Nav>
-        </Container>
-      </Navbar>
-    </header>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }
 

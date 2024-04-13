@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { Modal, Carousel } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "./stocks.css";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { Modal } from "react-bootstrap";
 import { useGetProfileMutation } from "../api/userApi";
 import {
   useFollowMutation,
@@ -15,40 +12,58 @@ import {
   useAddcommentMutation,
   useRemovecommentMutation,
 } from "../api/stocksApi";
-import { useDispatch } from "react-redux";
 import { removeProfile } from "../api/userSlice.js";
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import uber from "../assets/uber.png";
-import nvidia from "../assets/nvidia.png";
-import amd from "../assets/amd.png";
-import spotify from "../assets/spotify.png";
-import groupon from "../assets/groupon.png";
-import bg from "../assets/bglr.jpg";
+import toast, { Toaster } from "react-hot-toast";
+import { Ripple, initMDB } from "mdb-ui-kit";
+import DataTable from "react-data-table-component";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export default function Stocks() {
+  initMDB({ Ripple });
+  const dispatch = useDispatch();
+
   const [removingComment] = useRemovecommentMutation();
   const [addingComment] = useAddcommentMutation();
   const [editingComment] = useEditcommentMutation();
-  const dispatch = useDispatch();
   const [followStock] = useFollowMutation();
   const [unfollowStock] = useUnfollowMutation();
   const [upvoteStock] = useUpvoteMutation();
   const [downvoteStock] = useDownvoteMutation();
+  const [prof] = useGetProfileMutation();
+
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [stock, setStock] = useState(null);
   const [user_id, setUser_Id] = useState(-1);
   const [displayStocks, setDisplayStocks] = useState([]);
-  const { stocks } = useSelector((state) => state.stocks);
   const [edit, setEdit] = useState(false);
+  const [idComment, setIdComment] = useState(null);
+  const [warning, setWarning] = useState(true);
   const [editMessage, setEditMessage] = useState({
     message: null,
     comment_id: null,
   });
-  const updateCommentMessage = (e) => {
-    setEditMessage({ ...editMessage, message: e.target.value });
+  const [newMessage, setNewMessage] = useState("Add a comment...");
+  const [showCom, setShowCom] = useState(false);
+
+  const { stocks } = useSelector((state) => state.stocks);
+  const { profile, token, user, extra_following } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    const getProf = () => {
+      prof({ user_id });
+    };
+    if (user_id > -1) getProf();
+  }, [user_id]);
+  useEffect(() => {
+    setDisplayStocks(stocks);
+  }, [stocks]);
+
+  const handleEditShow = (e) => {
+    setEdit(true);
   };
   const handleEditClose = async () => {
     if (!editMessage.message.length) {
@@ -71,8 +86,8 @@ export default function Stocks() {
     }
     setEdit(false);
   };
-  const handleEditShow = (e) => {
-    setEdit(true);
+  const updateCommentMessage = (e) => {
+    setEditMessage({ ...editMessage, message: e.target.value });
   };
   const editComment = (e) => {
     const data = {
@@ -82,10 +97,7 @@ export default function Stocks() {
     setEditMessage(data);
     handleEditShow();
   };
-  const { profile, token, user, extra_following, following } = useSelector(
-    (state) => state.user
-  );
-  const [newMessage, setNewMessage] = useState("Add a comment...");
+
   const updateAddMessage = (e) => {
     setNewMessage(e.target.value);
   };
@@ -144,6 +156,7 @@ export default function Stocks() {
       handleCloseCom();
     }
   };
+
   const removeComment = async (e) => {
     const result = await removingComment(Number(e.target.id));
     if (!result.error) {
@@ -156,21 +169,33 @@ export default function Stocks() {
       setStock(updateStock);
     }
   };
-  const [prof] = useGetProfileMutation();
+
+  const handleShow = (e) => {
+    setShow(true);
+    setStock(stocks[Number(e.target.id) - 1]);
+  };
   const handleClose = () => {
     setShow(false);
     setStock(null);
   };
-  const handleShow = (e) => {
-    setShow(true);
-    setStock(stocks[Number(e.target.id) - 1]);
+  const handleShow2 = () => {
+    setShow2(true);
   };
   const handleClose2 = () => {
     setShow2(false);
     dispatch(removeProfile());
     setUser_Id(-1);
   };
-  const handleShow2 = () => setShow2(true);
+  const handleShowCom = (e) => {
+    setIdComment(e.target.id);
+    setShowCom(true);
+  };
+  const handleCloseCom = () => {
+    setShowCom(false);
+    setNewMessage("Add a comment...");
+    setIdComment(null);
+  };
+
   const follow = (e) => {
     if (!token) {
       toast.error("Login to follow this stock!", {
@@ -181,19 +206,7 @@ export default function Stocks() {
   const unfollow = (e) => {
     unfollowStock(Number(e.target.id));
   };
-  useEffect(() => {
-    const getProf = () => {
-      prof({ user_id });
-    };
-    if (user_id > -1) getProf();
-  }, [user_id]);
-  useEffect(() => {
-    setDisplayStocks(stocks);
-  }, [stocks]);
-  const getProfile = (e) => {
-    setUser_Id(Number(e.target.id));
-    handleShow2();
-  };
+
   const upvoter = async (e) => {
     if (!token)
       toast.error("Login to upvote this stock!", {
@@ -242,118 +255,113 @@ export default function Stocks() {
       return displayStock.symbol.includes(e.target.value.toUpperCase());
     });
     if (!newDisplayStocks.length) {
-      toast.error("Stock not found", {
+      toast.error("Stock not found!", {
         position: "top-right",
       });
     } else setDisplayStocks(newDisplayStocks);
   };
-
-  const [showCom, setShowCom] = useState(false);
-
-  const handleCloseCom = () => {
-    setShowCom(false);
-    setNewMessage("Add a comment...");
-    setIdComment(null);
-  };
-  const handleShowCom = (e) => {
-    setIdComment(e.target.id);
-    setShowCom(true);
+  const getProfile = (e) => {
+    setUser_Id(Number(e.target.id));
+    handleShow2();
   };
 
-  const [idComment, setIdComment] = useState(null);
-  const [warning, setWarning] = useState(true);
+  const images = [
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713028921/ci_y9k0ex.jpg",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713028927/ui_y9fazy.jpg",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713028922/fi_wd3bxc.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029205/gi_laj1ya.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029095/ni_ltjsrp.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029095/amdi_jrjc1g.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029327/ci_guupvl.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029327/mi_gh7ydg.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029428/aia_durrzi.png",
+  ];
+
   return (
-    <div>
+    <>
       <Modal show={showCom} onHide={handleCloseCom} centered>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h1 className="display-6 mb-0">New Comment</h1>
-          </Modal.Title>
+          <Modal.Title>Add a Comment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <textarea
-            type="text"
-            className="forma mt-0 mb-1"
-            placeholder={newMessage}
-            onChange={(e) => updateAddMessage(e)}
-          />
+          <div className="input mb-3">
+            <textarea
+              name="newMessage"
+              placeholder={newMessage}
+              className="form-control rounded"
+              aria-label="With textarea"
+              onChange={(e) => updateAddMessage(e)}
+            ></textarea>
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <input
-            type="submit"
-            className="formp mb-0"
-            value="Post"
+          <button
+            type="button"
+            className="btn btn-primary"
+            data-mdb-ripple-init
             onClick={addComment}
-          />
+          >
+            Post
+          </button>
         </Modal.Footer>
       </Modal>
+
       {edit && (
         <Modal show={edit} onHide={handleEditClose} centered>
           <Modal.Header closeButton>
-            <Modal.Title>
-              <h1 className="display-6 mb-0">Edit Comment</h1>
-            </Modal.Title>
+            <Modal.Title>Edit Comment</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="textp">
-            <div className="form-group mt-1 mb-3">
-              <input
-                type="text"
-                className="forma"
+          <Modal.Body>
+            <div className="input mb-3">
+              <textarea
                 defaultValue={editMessage.message}
+                className="form-control rounded"
+                aria-label="With textarea"
                 onChange={(e) => updateCommentMessage(e)}
-              />
+              ></textarea>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <input
-              type="submit"
-              className="formp mb-0"
+            <button
+              type="button"
+              className="btn btn-primary"
+              data-mdb-ripple-init
               onClick={handleEditClose}
-              value="Edit"
-            />
+            >
+              Confirm
+            </button>
           </Modal.Footer>
         </Modal>
       )}
+
       {profile && (
-        <Modal
-          show={show2}
-          onHide={handleClose2}
-          size="s"
-          centered
-          className="textp"
-        >
+        <Modal show={show2} onHide={handleClose2} centered>
           <Modal.Header closeButton>
-            <Modal.Title>
-              <h1 className="display-6 mb-0">
-                @{profile.user.username} likes...
-              </h1>
-            </Modal.Title>
+            <Modal.Title>@{profile.user.username} follows...</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {!profile.following.length ? (
-              <p className="msg">
-                @{profile.user.username} is not liking any stocks...
-              </p>
+              <p>@{profile.user.username} is not following any stocks...</p>
             ) : (
-              <div className="table-wrapper-scroll-ypl my-custom-scrollbarpl">
+              <div className="table-wrapper-scroll-y my-custom-scrollbar">
                 <table className="table table-bordered table-striped mb-0">
                   {profile.following.map((stock) => {
                     return (
                       <React.Fragment key={stock.stock_id}>
-                        <div className="card-body p-1">
-                          <div className="d-flex flex-start">
+                        <div className="card-body">
+                          <div>
                             <div>
-                              <p className="lead mb-0">
+                              <p className="mb-0">
                                 <strong>
-                                  {stocks[stock.stock_id - 1].symbol}
+                                  {stocks[stock.stock_id - 1].symbol
+                                    .split(" ")
+                                    .join("")}
                                 </strong>{" "}
                                 - {stocks[stock.stock_id - 1].fullname}
                               </p>
                             </div>
                           </div>
                         </div>
-
-                        <hr className="my-0" />
                       </React.Fragment>
                     );
                   })}
@@ -363,115 +371,104 @@ export default function Stocks() {
           </Modal.Body>
         </Modal>
       )}
+
       {stock && (
-        <Modal show={show} onHide={handleClose} size="xl">
+        <Modal show={show} onHide={handleClose} size="xl" centered>
           <Modal.Header closeButton>
             <Modal.Title>
-              <h1 className="stockheadmodal mb-0">
-                {(extra_following[stock.stock_id] && (
-                  <Link>
-                    <i
-                      className="bi bi-star-fill"
-                      // title="unfollow"
-                      id={stock.stock_id}
-                      onClick={(e) => unfollow(e)}
-                    ></i>
-                  </Link>
-                )) || (
-                  <Link>
-                    <i
-                      className="bi bi-star"
-                      // title="follow"
-                      id={stock.stock_id}
-                      onClick={(e) => follow(e)}
-                    ></i>
-                  </Link>
-                )}{" "}
-                {stock.symbol.split(" ").join("")} - {stock.fullname}{" "}
-                <Link>
+              {(extra_following[stock.stock_id] && (
+                <Link style={{ color: "gold" }}>
                   <i
-                    className="bi bi-caret-up-fill"
-                    // title="upvote"
-                    onClick={(e) => upvoter(e)}
+                    className="fs-3 bi bi-star-fill"
                     id={stock.stock_id}
+                    onClick={(e) => unfollow(e)}
                   ></i>
                 </Link>
-                {stock.upvotes}{" "}
-                <Link>
+              )) || (
+                <Link style={{ color: "gold" }}>
                   <i
-                    className="bi bi-caret-down-fill"
-                    // title="downvote"
-                    onClick={(e) => downvoter(e)}
+                    className="fs-3 bi bi-star"
                     id={stock.stock_id}
+                    onClick={(e) => follow(e)}
                   ></i>
                 </Link>
-                {stock.downvotes}
-              </h1>
+              )}{" "}
+              {stock.symbol.split(" ").join("")} - {stock.fullname}{" "}
+              <Link style={{ color: "green" }}>
+                <i
+                  className="fs-3 bi bi-caret-up-fill"
+                  onClick={(e) => upvoter(e)}
+                  id={stock.stock_id}
+                ></i>
+              </Link>
+              {stock.upvotes}{" "}
+              <Link style={{ color: "red" }}>
+                <i
+                  className="fs-3 bi bi-caret-down-fill"
+                  onClick={(e) => downvoter(e)}
+                  id={stock.stock_id}
+                ></i>
+              </Link>
+              {stock.downvotes}
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="textp">
-            <div className="stockdetails1">
+          <Modal.Body>
+            <div>
               <p>{stock.description}</p>
               <div className="row">
                 <strong className="col-sm">
                   Last Updated: {stock.current_data.split("T")[0]}
-                </strong>
-                <strong className="col-sm">
-                  Price: ${Number(stock.price).toFixed(2)}
-                </strong>
-                <strong className="col-sm">
-                  52 Week Low: ${Number(stock.week_low).toFixed(2)}
                 </strong>{" "}
                 <strong className="col-sm">
-                  52 Week High: ${Number(stock.week_high).toFixed(2)}
+                  Current Price: ${Number(stock.price).toFixed(2)}
+                </strong>
+                <strong className="col-sm">
+                  52 Week Low Price: ${Number(stock.week_low).toFixed(2)}
+                </strong>{" "}
+                <strong className="col-sm">
+                  52 Week High Price: ${Number(stock.week_high).toFixed(2)}
                 </strong>
               </div>
               <hr />
             </div>
-            <div className="stockdetails2">
+            <div>
               {(token && (
-                <div style={{ textAlign: "center" }}>
-                  <input
+                <div className="mb-3" style={{ textAlign: "center" }}>
+                  <button
                     id={stock.stock_id}
-                    type="submit"
+                    type="button"
+                    className="btn btn-primary"
+                    data-mdb-ripple-init
                     onClick={handleShowCom}
-                    className="formp mb-2 mt-0"
-                    value="New Comment"
-                  />
+                  >
+                    New Comment
+                  </button>
                 </div>
               )) || (
                 <>
-                  <p className=" msg mb-2">
-                    <Link className="logina" to="/login">
-                      Login
-                    </Link>{" "}
-                    to comment.
+                  <p className="mb-3" style={{ textAlign: "center" }}>
+                    <Link to="/login">Login</Link> to comment.
                   </p>
                 </>
               )}
               <hr className="my-0" />
               {stock.comments &&
                 ((!stock.comments.length && (
-                  <h1
-                    className="display-6 mt-4 mb-2"
-                    style={{ textAlign: "center" }}
-                  >
+                  <h3 className="mt-4 mb-2" style={{ textAlign: "center" }}>
                     Be the first to comment...
-                  </h1>
+                  </h3>
                 )) || (
-                  <div className="table-wrapper-scroll-yp my-custom-scrollbarp">
+                  <div className="table-wrapper-scroll-y my-custom-scrollbar">
                     <table className="table table-bordered table-striped">
                       {stock.comments.map((comment) => {
                         return (
                           <React.Fragment key={comment.comment_id}>
-                            <div className="card-body p-1">
+                            <div className="card-body">
                               <div>
                                 <div>
                                   <p className="mb-0 ">
-                                    <Link className="logina">
+                                    <Link>
                                       <strong
-                                        className="text-primary lead"
-                                        // title="view user"
                                         id={comment.user_id}
                                         onClick={(e) => {
                                           getProfile(e);
@@ -479,43 +476,43 @@ export default function Stocks() {
                                       >
                                         @{comment.username}
                                       </strong>
-                                    </Link>{" "}
+                                    </Link>
                                     <small style={{ float: "right" }}>
                                       <i className="bi bi-clock-history"></i>{" "}
-                                      {comment.created_at.split("T")[0]}
-                                    </small>
-                                  </p>
-
-                                  {(!comment.isdeleted && (
-                                    <p className="mb-0">
-                                      {comment.message}{" "}
+                                      {comment.created_at.split("T")[0]}{" "}
                                       {token &&
+                                        !comment.isdeleted &&
                                         comment.user_id === user.user_id && (
-                                          <span style={{ float: "right" }}>
-                                            <Link>
+                                          <span>
+                                            <Link style={{ color: "green" }}>
                                               <i
-                                                className="bi bi-pencil-fill fs-5"
-                                                // title="edit"
+                                                className="bi bi-pencil-fill"
                                                 id={comment.comment_id}
                                                 data-message={comment.message}
                                                 onClick={(e) => editComment(e)}
                                               ></i>
                                             </Link>{" "}
-                                            <Link>
+                                            <Link style={{ color: "red" }}>
                                               <i
-                                                className="bi bi-trash-fill fs-5"
+                                                className="bi bi-trash-fill"
                                                 id={comment.comment_id}
                                                 onClick={(e) =>
                                                   removeComment(e)
                                                 }
-                                                // title="delete"
                                               ></i>
                                             </Link>
                                           </span>
                                         )}
-                                    </p>
+                                    </small>
+                                  </p>
+
+                                  {(!comment.isdeleted && (
+                                    <p className="mb-0">{comment.message}</p>
                                   )) || (
-                                    <p className="removed mb-0">
+                                    <p
+                                      className="mb-0"
+                                      style={{ color: "red" }}
+                                    >
                                       This message has been deleted...
                                     </p>
                                   )}
@@ -534,195 +531,105 @@ export default function Stocks() {
           </Modal.Body>
         </Modal>
       )}
+
       {warning && !displayStocks.length && (
-        <div
-          className="alert alert-warning fade show textp warningm"
-          role="alert"
-        >
-          <strong>
-            Initial loading of data might exceed expected duration. Kindly allow
-            a minute for the data to be fully loaded.
-          </strong>
+        <div className="note note-warning mb-3">
+          <strong>Note warning:</strong> Initial loading of data might exceed
+          expected duration. Please allow a minute for server to fire up.
           <Link
-            className="warningx"
+            style={{ float: "right", color: "#896110" }}
             onClick={() => {
               setWarning(false);
             }}
           >
-            X
+            x
           </Link>
         </div>
       )}
-      <div className="page">
-        <div className="topParent">
-          <div className="carcar fadeIn third">
-            <Carousel>
-              <Carousel.Item interval={3000}>
-                <Link>
-                  <img
-                    src={uber}
-                    alt="UBER"
-                    height="150px"
-                    onClick={() => {
-                      window.open("https://www.uber.com/", "_blank");
-                    }}
-                  />
-                </Link>
-              </Carousel.Item>
-              <Carousel.Item interval={3000}>
-                <Link>
-                  <img
-                    src={nvidia}
-                    alt="NVIDIA"
-                    height="150px"
-                    onClick={() => {
-                      window.open("https://www.nvidia.com/en-us/", "_blank");
-                    }}
-                  />
-                </Link>
-              </Carousel.Item>
-              <Carousel.Item interval={3000}>
-                <Link>
-                  <img
-                    src={amd}
-                    alt="AMD"
-                    height="150px"
-                    onClick={() => {
-                      window.open("https://www.amd.com/en.html", "_blank");
-                    }}
-                  />
-                </Link>
-              </Carousel.Item>
-              <Carousel.Item interval={3000}>
-                <Link>
-                  <img
-                    src={spotify}
-                    alt="SPOTIFY"
-                    height="150px"
-                    onClick={() => {
-                      window.open("https://open.spotify.com/", "_blank");
-                    }}
-                  />
-                </Link>
-              </Carousel.Item>
-              <Carousel.Item interval={3000}>
-                <Link>
-                  <img
-                    src={groupon}
-                    alt="GROUPON"
-                    height="150px"
-                    onClick={() => {
-                      window.open("https://www.groupon.com/", "_blank");
-                    }}
-                  />
-                </Link>
-              </Carousel.Item>
-            </Carousel>
-          </div>
 
-          <div className="pic">
-            <div className="apple">
-              <div className=" sdesgintable fadeInDown mt-3">
-                <div className="table-wrapper-scroll-ypl my-custom-scrollbarpl ptables fadeInDown">
-                  <table className="table table-bordered table-striped">
-                    {stocks.length ? (
-                      stocks.map((stock) => {
-                        return (
-                          <React.Fragment key={stock.stock_id}>
-                            <div className="card-body textp p-1">
-                              <div>
-                                <div>
-                                  <p className="mb-0">
-                                    <strong>
-                                      {stock.symbol.split(" ").join("")}
-                                    </strong>{" "}
-                                    - ${Number(stock.price).toFixed(2)}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </React.Fragment>
-                        );
-                      })
-                    ) : (
-                      <div style={{ textAlign: "center" }}>
-                        <div className="spinner-grow text-dark">
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                        <div className="spinner-grow text-dark">
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                        <div className="spinner-grow text-dark">
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                      </div>
-                    )}
-                  </table>
-                </div>
-              </div>
-              <div className="sstocks fadeIn first">
-                <p className="textp spsp">Search for a stock</p>
-                <input
-                  type="text"
-                  className="forma textp"
-                  placeholder="Search for a stock"
-                  onChange={(e) => updateSearch(e)}
-                />
-              </div>
-            </div>
+      <Carousel
+        useKeyboardArrows={true}
+        autoPlay
+        interval={2000}
+        transitionTime={2000}
+        infiniteLoop
+        showThumbs={false}
+        dynamicHeight={false}
+        showArrows={false}
+        showIndicators={false}
+        centerMode
+        centerSlidePercentage={25}
+      >
+        {images.map((URL, index) => (
+          <div className="slide">
+            <img alt="sample_file" src={URL} key={index} />
+          </div>
+        ))}
+      </Carousel>
 
-            <div className="imghome fadeInDown">
-              <img src={bg} alt="Investments" />
-            </div>
-          </div>
-          <div>
-            <h1 className="display-6 mt-5">Checkout any stocks below!</h1>
-          </div>
-          <div className="cardss fadeIn fourth">
-            {displayStocks.length ? (
-              displayStocks.map((stock) => {
-                return (
-                  <div
-                    className="card l-bg-blue-dark"
-                    key={stock.stock_id}
-                    id={stock.stock_id}
-                  >
-                    <div className="card-statistic-3 p-1">
-                      <Link className="mb-4 carddesign">
-                        <h4
-                          className="card-title mb-0 textp"
-                          id={stock.stock_id}
-                          onClick={(e) => handleShow(e)}
-                        >
-                          {stock.symbol.split(" ").join("")}
-                        </h4>
-                        <h5 id={stock.stock_id} onClick={(e) => handleShow(e)}>
-                          ${Number(stock.price).toFixed(2)}
-                        </h5>
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="m-5">
-                <div className="spinner-grow text-dark">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <div className="spinner-grow text-dark">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <div className="spinner-grow text-dark">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className="search_home input-group mt-3 mb-3">
+        <span className="input-group-text border-0" id="search-addon">
+          <i className="bi bi-search"></i>
+        </span>
+        <input
+          type="search"
+          className="form-control rounded"
+          placeholder="Search"
+          aria-label="Search"
+          aria-describedby="search-addon"
+          onChange={(e) => updateSearch(e)}
+        />
       </div>
 
-      <ToastContainer></ToastContainer>
-    </div>
+      <div style={{ paddingBottom: "95px" }}>
+        {displayStocks.length ? (
+          <div className="container my-5">
+            <DataTable
+              columns={[
+                {
+                  name: <strong>Name</strong>,
+                  selector: (row) => row.fullname,
+                  sortable: true,
+                },
+                {
+                  name: <strong>Symbol</strong>,
+                  sortable: true,
+                  selector: (row) => row.symbol.split(" ").join(""),
+                },
+                {
+                  name: <strong>Price</strong>,
+                  selector: (row) => `$${Number(row.price).toFixed(2)}`,
+                },
+                {
+                  name: <strong>See Details</strong>,
+                  selector: (row) => (
+                    <Link>
+                      <i
+                        id={row.stock_id}
+                        onClick={handleShow}
+                        className="bi bi-search"
+                      ></i>
+                    </Link>
+                  ),
+                },
+              ]}
+              data={displayStocks}
+              fixedHeader
+              pagination
+              paginationRowsPerPageOptions={[5, 10, 15]}
+            ></DataTable>
+          </div>
+        ) : (
+          <div className="admin_search_load mb-5">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <Toaster />
+    </>
   );
   te;
 }

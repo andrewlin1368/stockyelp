@@ -22,7 +22,7 @@ userRouter.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password)
-      return res.status(400).send({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required!" });
     const data = await login({ username, password });
     return data.error
       ? res.status(400).send({ error: data.error })
@@ -37,7 +37,7 @@ userRouter.post("/register", async (req, res, next) => {
   try {
     const { username, firstname, lastname, password, admincode } = req.body;
     if (!username || !firstname || !lastname || !password)
-      return res.status(400).send({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required!" });
     const data = await register({
       username,
       firstname,
@@ -57,14 +57,14 @@ userRouter.post("/register", async (req, res, next) => {
 userRouter.put("/", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
-      return res.status(400).send({ error: "Invalid credentials" });
+      return res.status(400).send({ error: "Invalid credentials!" });
     const { firstname, lastname, password } = req.body;
     if (!firstname || !lastname || !firstname.length || !lastname.length)
-      return res.status(400).send({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required!" });
     if (password && password.length < 8)
       return res
         .status(400)
-        .send({ error: "Password must be atleast 8 characters" });
+        .send({ error: "Password must be atleast 8 characters!" });
     res.send(
       await updateUser({
         user_id: req.user.user_id,

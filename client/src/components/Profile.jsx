@@ -1,21 +1,31 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import person from "../assets/person.jpg";
-import "./profile.css";
 import { useUpdateMutation } from "../api/userApi";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from "react-hot-toast";
+import { Ripple, initMDB } from "mdb-ui-kit";
 
 export default function Profile() {
-  const { token } = useSelector((state) => state.user);
-  const { stocks } = useSelector((state) => state.stocks);
+  initMDB({ Ripple });
+  const navigate = useNavigate();
   const [updateUser] = useUpdateMutation();
+  const { token, user, following, comments } = useSelector(
+    (state) => state.user
+  );
+  const { stocks } = useSelector((state) => state.stocks);
+
   const [show, setShow] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [form, setForm] = useState({
+    firstname: (user && user.firstname) || "",
+    lastname: (user && user.lastname) || "",
+    password: "",
+  });
+
+  const handleShow = () => setShow(true);
   const handleClose = () => {
     setShow(false);
     setForm({
@@ -24,7 +34,14 @@ export default function Profile() {
       password: "",
     });
   };
-  const handleShow = () => setShow(true);
+  const handleShowFollowing = () => setShowFollowing(true);
+  const handleCloseFollowing = () => setShowFollowing(false);
+  const handleShowComments = () => setShowComments(true);
+  const handleCloseComments = () => setShowComments(false);
+
+  const updateForm = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   const handleSave = async (e) => {
     e.preventDefault();
     let result;
@@ -40,18 +57,12 @@ export default function Profile() {
         position: "top-right",
       });
   };
-  const navigate = useNavigate();
+
   useEffect(() => {
     const checkLoggedIn = () => {
       navigate("/login");
     };
     !token && checkLoggedIn();
-  });
-  const { user, following, comments } = useSelector((state) => state.user);
-  const [form, setForm] = useState({
-    firstname: (user && user.firstname) || "",
-    lastname: (user && user.lastname) || "",
-    password: "",
   });
   useEffect(() => {
     setForm({
@@ -60,185 +71,136 @@ export default function Profile() {
       lastname: (user && user.lastname) || "",
     });
   }, [user]);
-  const updateForm = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+
   return (
-    <div className="rtx4090">
+    <div className="mt-5 mb-5">
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h1 className="display-6 mb-0">Edit Profile</h1>
-          </Modal.Title>
+          <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="textp">
-          <input
-            type="text"
-            className="formp mb-2"
-            name="firstname"
-            placeholder="First Name"
-            defaultValue={(user && user.firstname) || ""}
-            onChange={(e) => updateForm(e)}
-          />
-
-          <input
-            type="text"
-            className="formp mb-2"
-            name="lastname"
-            placeholder="Last Name"
-            defaultValue={(user && user.lastname) || ""}
-            onChange={(e) => updateForm(e)}
-          />
-
-          <input
-            type="password"
-            className="formp mb-2"
-            name="password"
-            placeholder="New Password"
-            onChange={(e) => updateForm(e)}
-          />
+        <Modal.Body>
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              name="firstname"
+              placeholder="First Name"
+              aria-label="First name"
+              className="form-control"
+              defaultValue={(user && user.firstname) || ""}
+              onChange={(e) => updateForm(e)}
+            />
+            <input
+              type="text"
+              name="lastname"
+              placeholder="Last Name"
+              aria-label="Last name"
+              className="form-control"
+              defaultValue={(user && user.lastname) || ""}
+              onChange={(e) => updateForm(e)}
+            />
+          </div>
+          <div className="input mb-3">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="form-control"
+              placeholder="Password"
+              aria-label="Password"
+              aria-describedby="basic-addon1"
+              onChange={(e) => updateForm(e)}
+            />
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <input
-            type="submit"
-            className="formp mb-0"
+          <button
+            type="button"
+            className="btn btn-primary"
+            data-mdb-ripple-init
             onClick={(e) => handleSave(e)}
-            value="Confirm"
-          />
+          >
+            Confirm
+          </button>
         </Modal.Footer>
       </Modal>
-
-      {user && (
-        <div className="row prow">
-          <div className="d-flex justify-content-center align-items-center mt-3 mb-3 textp fadeIn col-sm-6">
-            <div className="cardp">
-              <div className="upper"></div>
-
-              <div className="user text-center">
-                <div className="profile">
-                  <img src={person} className="rounded-circle" width="100" />
-                </div>
-              </div>
-
-              <div className="mt-5 text-center">
-                <h4 className="mb-0">
-                  {user.firstname} {user.lastname}
-                </h4>
-                <span className="lead text-muted d-block mb-2">
-                  @{user.username}
-                </span>
-                <div className="d-flex justify-content-between align-items-center px-4">
-                  <div className="stats">
-                    <h6 className="mb-0"></h6>
-                    <span></span>
-                  </div>
-                  <div className="lead stats">
-                    <h6 className="mb-0">Likes</h6>
-                    <span>{following.length}</span>
-                  </div>
-
-                  <div className="lead stats">
-                    <h6 className="mb-0">Comments</h6>
-                    <span>{comments.length}</span>
-                  </div>
-
-                  <div className="stats">
-                    <h6 className="mb-0"></h6>
-                    <span></span>
-                  </div>
-                </div>
-                <input
-                  onClick={handleShow}
-                  type="submit"
-                  className="formz mt-2"
-                  value="Edit Profile"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="following textp col-sm-4 fadeIn second">
-            <h1 className="display-6">Likes</h1>
-            <hr />
-            {!following.length ? (
-              <p className="nolc">
-                You are not liking any stocks... Start by checking out some{" "}
-                <Link className="loginap" to="/">
-                  stocks.
-                </Link>
-              </p>
-            ) : (
-              <div className="table-wrapper-scroll-ypl my-custom-scrollbarpl ptables">
-                <table className="table table-bordered table-striped">
-                  {stocks.length ? (
-                    following.map((stock) => {
-                      return (
-                        <React.Fragment key={stock.stock_id}>
-                          <div className="card-body p-1">
-                            <div>
-                              <div>
-                                <p className="mb-0">
-                                  <strong>
-                                    {stocks[stock.stock_id - 1].symbol
-                                      .split(" ")
-                                      .join("")}
-                                  </strong>{" "}
-                                  - {stocks[stock.stock_id - 1].fullname}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </React.Fragment>
-                      );
-                    })
-                  ) : (
-                    <div className="mt-5" style={{ textAlign: "center" }}>
-                      <div className="spinner-grow text-dark">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      <div className="spinner-grow text-dark">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      <div className="spinner-grow text-dark">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                    </div>
-                  )}
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-      <div className="mt-4 textp">
-        <div className="comments fadeIn fourth">
-          <h1 className="display-4">Comment History</h1>
-          <hr></hr>
-          {!comments.length ? (
-            <p className="nolc">
-              You did not make any comments... Start by checking out some{" "}
-              <Link className="loginap" to="/">
-                stocks.
-              </Link>
+      <Modal show={showFollowing} onHide={handleCloseFollowing} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Following</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {!following.length ? (
+            <p>
+              You are not following any stocks... Start by checking out some
+              <Link to="/"> stocks.</Link>
             </p>
           ) : (
-            <div className="table-wrapper-scroll-yp my-custom-scrollbarp ptables">
+            <div className="table-wrapper-scroll-y my-custom-scrollbar">
+              <table className="table table-bordered table-striped">
+                {stocks.length ? (
+                  following.map((stock) => {
+                    return (
+                      <React.Fragment key={stock.stock_id}>
+                        <div className="card-body">
+                          <div>
+                            <div>
+                              <p className="mb-0">
+                                <strong>
+                                  {stocks[stock.stock_id - 1].symbol
+                                    .split(" ")
+                                    .join("")}
+                                </strong>{" "}
+                                - {stocks[stock.stock_id - 1].fullname}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    );
+                  })
+                ) : (
+                  <div className="admin_search_load">
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                )}
+              </table>
+            </div>
+          )}
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={showComments}
+        onHide={handleCloseComments}
+        centered
+        size="xl"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Comment History</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {!comments.length ? (
+            <p>
+              You did not make any comments... Start by checking out some
+              <Link to="/"> stocks.</Link>
+            </p>
+          ) : (
+            <div className="table-wrapper-scroll-y my-custom-scrollbar">
               <table className="table table-bordered table-striped">
                 {stocks.length ? (
                   comments.map((comment) => {
                     return (
                       <React.Fragment key={comment.comment_id}>
-                        <div className="card-body p-2">
+                        <div className="card-body">
                           <div>
                             <div>
                               <p className="mb-0">
-                                <strong style={{ fontWeight: "bold" }}>
+                                <strong>
                                   {stocks[comment.stock_id - 1].symbol
                                     .split(" ")
                                     .join("")}
-                                </strong>{" "}
+                                </strong>
                                 <small style={{ float: "right" }}>
-                                  {" "}
                                   <i className="bi bi-clock-history"></i>{" "}
                                   {comment.created_at.split("T")[0]}
                                 </small>
@@ -248,7 +210,10 @@ export default function Profile() {
                               )) || (
                                 <p className="mb-0 ">
                                   <del>{comment.message}</del>{" "}
-                                  <span className="removed">
+                                  <span
+                                    className="removed"
+                                    style={{ color: "red" }}
+                                  >
                                     This message has been deleted...
                                   </span>
                                 </p>
@@ -262,14 +227,8 @@ export default function Profile() {
                     );
                   })
                 ) : (
-                  <div className="mt-5" style={{ textAlign: "center" }}>
-                    <div className="spinner-grow text-dark">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                    <div className="spinner-grow text-dark">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                    <div className="spinner-grow text-dark">
+                  <div className="admin_search_load">
+                    <div className="spinner-border" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </div>
                   </div>
@@ -277,10 +236,95 @@ export default function Profile() {
               </table>
             </div>
           )}
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
-      <ToastContainer />
+      {user && (
+        <section>
+          <div className="container py-5 h-100">
+            <div className="row d-flex justify-content-center align-items-center h-100">
+              <div className="col col-lg-6 mb-4 mb-lg-0">
+                <div className="card mb-3" style={{ borderRadius: ".5rem" }}>
+                  <div className="row g-0">
+                    <div
+                      className="col-md-4 gradient-custom text-center text-white"
+                      style={{
+                        borderTopLeftRadius: ".5rem",
+                        borderBottomLeftRadius: ".5rem",
+                      }}
+                    >
+                      <img
+                        src={person}
+                        alt="Avatar"
+                        className="img-fluid my-5"
+                        style={{ width: "80px", borderRadius: ".5rem" }}
+                      />
+
+                      <h5>
+                        {user.firstname} {user.lastname}
+                      </h5>
+                      <p>@{user.username}</p>
+                      <p>
+                        <a
+                          onClick={handleShow}
+                          className="btn btn-primary"
+                          data-mdb-ripple-init
+                        >
+                          Edit Profile
+                        </a>
+                      </p>
+                      <i className="far fa-edit mb-5"></i>
+                    </div>
+                    <div className="col-md-8">
+                      <div className="card-body p-4">
+                        <h6>Stats</h6>
+                        <hr className="mt-0 mb-4" />
+                        <div className="row pt-1">
+                          <div className="col-6 mb-3">
+                            <h6>Following</h6>
+                            <p className="text-muted">{following.length}</p>
+                          </div>
+                          <div className="col-6 mb-3">
+                            <h6>Comments</h6>
+                            <p className="text-muted">{comments.length}</p>
+                          </div>
+                        </div>
+                        <h6>Data</h6>
+                        <hr className="mt-0 mb-4" />
+                        <div className="row pt-1">
+                          <div className="col-6 mb-3">
+                            <p className="text-muted">
+                              <a
+                                onClick={handleShowFollowing}
+                                className="btn btn-primary"
+                                data-mdb-ripple-init
+                              >
+                                Following
+                              </a>
+                            </p>
+                          </div>
+                          <div className="col-6 mb-3">
+                            <p className="text-muted">
+                              <a
+                                onClick={handleShowComments}
+                                className="btn btn-primary"
+                                data-mdb-ripple-init
+                              >
+                                Comments
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Toaster />
+        </section>
+      )}
     </div>
   );
 }
