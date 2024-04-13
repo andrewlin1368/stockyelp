@@ -17,7 +17,6 @@ function App() {
   return (
     <BrowserRouter>
       <Navbarcomponent></Navbarcomponent>
-
       <Routes>
         <Route path="/" element={<Stocks></Stocks>}></Route>
         <Route path="*" element={<Navigate to="/" />}></Route>

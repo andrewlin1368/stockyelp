@@ -65,3 +65,10 @@
 #admincode {
   background-color: rgb(231, 231, 231);
 }
+
+.contact_button {
+  position: fixed;
+  top: 90vh;
+  left: 10px;
+  z-index: 2;
+}

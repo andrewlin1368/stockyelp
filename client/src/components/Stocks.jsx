@@ -275,6 +275,13 @@ export default function Stocks() {
     "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029327/ci_guupvl.png",
     "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029327/mi_gh7ydg.png",
     "https://res.cloudinary.com/day4sl0qg/image/upload/v1713029428/aia_durrzi.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713039990/comcast-.eps-logo-vector_xxphd3.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713039990/samsung-logo-preview_spc4t5.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713039990/steam-logo_tlge7r.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713039993/target-stores-vector-logo_nesox3.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713039993/tiktok-logo-768x768_ioc2s2.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713040188/gamestop-logo-768x768_lpktoi.png",
+    "https://res.cloudinary.com/day4sl0qg/image/upload/v1713040188/openai-logo_brandlogos.net_1xac8_gew0fq.png",
   ];
 
   return (
