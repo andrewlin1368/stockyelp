@@ -132,10 +132,5 @@ export default function Register() {
         </div>
       </div>
     </section>
-    // <div className="login_register_form">
-    //   <h1 className="mt-5">Register</h1>
-
-    //   <Toaster />
-    // </div>
   );
 }

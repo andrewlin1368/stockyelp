@@ -51,5 +51,7 @@ create table downvote(
 create table message(
     message_id serial primary key,
     message_email varchar(500) not null,
-    message_message varchar(500) not null
+    message_message varchar(500) not null,
+    message_isdeleted boolean default false not null,
+    message_date timestamp default now() not null
 );
