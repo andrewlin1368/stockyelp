@@ -72,17 +72,14 @@ export default function Footer() {
           </button>
         </Modal.Footer>
       </Modal>
-      <div className="contact_button">
+      <div className="container">
         <button
-          type="submit"
+          className="btn btn-dark mb-2"
           data-mdb-button-init
-          className="btn btn-primary btn-block mb-4 button-87"
           onClick={handleShow}
         >
           Contact Me
         </button>
-      </div>
-      <div className="container">
         <a
           className="btn btn-link btn-floating btn-lg text-body m-1"
           href="https://www.linkedin.com/in/andrewlin1368/"
