@@ -2,9 +2,11 @@ import { Input, initMDB } from "mdb-ui-kit";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
+import { useContactMutation } from "../api/userApi";
 
 export default function Footer() {
   initMDB({ Input });
+  const [contactMe] = useContactMutation();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState({ email: "", message: "" });
 
@@ -17,19 +19,27 @@ export default function Footer() {
     setShow(false);
     setMessage({ email: "", message: "" });
   };
-  const handleCloseSend = () => {
+  const handleCloseSend = async () => {
     if (!message.email.length || !message.message.length) {
       toast.error("All fields are required!", { position: "top-right" });
-    } else if (message.message.length > 50) {
+    } else if (message.message.length > 500) {
       toast.error("Message must be less than 500 characters!", {
         position: "top-right",
       });
     } else {
-      toast.success("Message sent!", {
-        position: "top-right",
-      });
-      setShow(false);
-      setMessage({ email: "", message: "" });
+      const result = await contactMe(message);
+      console.log(result);
+      if (result.error) {
+        toast.error("Something went wrong! Try again later!", {
+          position: "top-right",
+        });
+      } else {
+        toast.success("Message sent!", {
+          position: "top-right",
+        });
+        setShow(false);
+        setMessage({ email: "", message: "" });
+      }
     }
   };
 

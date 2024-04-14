@@ -39,7 +39,11 @@ export default function Register() {
   };
 
   return (
-    <section className="mt-5" style={{ paddingBottom: "95px" }}>
+    <section style={{ paddingBottom: "95px" }}>
+      <div className="note note-info mb-5">
+        <strong>Note:</strong> Admin accounts has addtional features! Use code:
+        8773934448
+      </div>
       <div className="container-fluid h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-md-9 col-lg-6 col-xl-5">

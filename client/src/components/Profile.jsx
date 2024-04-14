@@ -206,10 +206,17 @@ export default function Profile() {
                                 </small>
                               </p>
                               {(!comment.isdeleted && (
-                                <p className="mb-0 ">{comment.message}</p>
+                                <p
+                                  className="mb-0"
+                                  style={{ wordBreak: "break-all" }}
+                                >
+                                  {comment.message}
+                                </p>
                               )) || (
-                                <p className="mb-0 ">
-                                  <del>{comment.message}</del>{" "}
+                                <p className="mb-0">
+                                  <del style={{ wordBreak: "break-all" }}>
+                                    {comment.message}
+                                  </del>{" "}
                                   <span
                                     className="removed"
                                     style={{ color: "red" }}

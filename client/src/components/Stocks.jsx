@@ -523,7 +523,12 @@ export default function Stocks() {
                                   </p>
 
                                   {(!comment.isdeleted && (
-                                    <p className="mb-0">{comment.message}</p>
+                                    <p
+                                      className="mb-0"
+                                      style={{ wordBreak: "break-all" }}
+                                    >
+                                      {comment.message}
+                                    </p>
                                   )) || (
                                     <p
                                       className="mb-0"
@@ -577,8 +582,8 @@ export default function Stocks() {
         centerSlidePercentage={25}
       >
         {images.map((URL, index) => (
-          <div className="slide">
-            <img alt="sample_file" src={URL} key={index} />
+          <div className="slide" key={index}>
+            <img alt="sample_file" src={URL} />
           </div>
         ))}
       </Carousel>

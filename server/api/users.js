@@ -6,6 +6,8 @@ const {
   register,
   login,
   updateUser,
+  contactMe,
+  getAllMessage,
 } = require("../../db/index.js");
 
 //get user profile (user info, stocks followed) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE/ USER WILL USE THIS TO SEE OTHER USERS
@@ -73,6 +75,37 @@ userRouter.put("/", verifyToken, async (req, res, next) => {
         password,
       })
     );
+  } catch (error) {
+    next(error);
+  }
+});
+
+//contact me route
+userRouter.post("/contactme", async (req, res, next) => {
+  try {
+    const { email, message } = req.body;
+    if (!email.length || !message.length)
+      return res.status(400).send({ error: "All fields are required!" });
+    if (email.length > 500 || message.length > 500)
+      return res
+        .status(400)
+        .send({ error: "Maximum characters cannot exceed 500!" });
+    const data = await contactMe({ email, message });
+    return data
+      ? res.send({ status: "Success!" })
+      : res.status(400).send({ status: "Fail!" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//fetch all messages
+userRouter.get("/messageAll", verifyToken, async (req, res, next) => {
+  try {
+    if (!req.user)
+      return res.status(400).send({ error: "Invalid credentials!" });
+    const result = await getAllMessage();
+    return res.send(result);
   } catch (error) {
     next(error);
   }

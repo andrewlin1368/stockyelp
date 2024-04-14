@@ -72,3 +72,11 @@ model users {
   profiles  profiles[]
   upvote    upvote[]
 }
+
+model message {
+  message_id        Int      @id @default(autoincrement())
+  message_email     String   @db.VarChar(500)
+  message_message   String   @db.VarChar(500)
+  message_isdeleted Boolean  @default(false)
+  message_date      DateTime @default(now()) @db.Timestamp(6)
+}

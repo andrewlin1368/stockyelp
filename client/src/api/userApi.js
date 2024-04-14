@@ -30,6 +30,16 @@ export const userApi = api.injectEndpoints({
         body: body,
       }),
     }),
+    contact: builder.mutation({
+      query: (body) => ({
+        url: "/users/contactme",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    getMessages: builder.query({
+      query: () => "/users/messageAll",
+    }),
   }),
 });
 
@@ -38,4 +48,6 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useUpdateMutation,
+  useContactMutation,
+  useLazyGetMessagesQuery,
 } = userApi;

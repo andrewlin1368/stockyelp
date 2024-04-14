@@ -275,6 +275,26 @@ const updateUser = async ({ user_id, firstname, lastname, password }) => {
   return user;
 };
 
+const contactMe = async ({ email, message }) => {
+  const data = { message_email: email, message_message: message };
+  const result = await prisma.message.create({
+    data: data,
+  });
+  return !result ? false : true;
+};
+
+const getAllMessage = async () => {
+  const result = await prisma.message.findMany({
+    where: {
+      message_isdeleted: false,
+    },
+    orderBy: {
+      message_date: "desc",
+    },
+  });
+  return { messages: result };
+};
+
 module.exports = {
   prisma,
   getAllStocks,
@@ -292,4 +312,6 @@ module.exports = {
   addStock,
   editStock,
   updateUser,
+  contactMe,
+  getAllMessage,
 };

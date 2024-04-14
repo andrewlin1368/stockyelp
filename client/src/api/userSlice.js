@@ -56,6 +56,7 @@ const userSlice = createSlice({
       ? JSON.parse(window.sessionStorage.getItem("USER")).token
       : null,
     error: null,
+    messages: [],
   },
   reducers: {
     logoutUser: (state) => {
@@ -147,6 +148,12 @@ const userSlice = createSlice({
     builder.addMatcher(
       stocksApi.endpoints.removecomment.matchFulfilled,
       updateComments
+    );
+    builder.addMatcher(
+      userApi.endpoints.getMessages.matchFulfilled,
+      (state, { payload }) => {
+        state.messages = payload.messages;
+      }
     );
   },
 });
