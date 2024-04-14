@@ -5,7 +5,6 @@ import { logoutUser } from "../api/userSlice";
 import { Collapse, Ripple, initMDB } from "mdb-ui-kit";
 import { Modal } from "react-bootstrap";
 import { useLazyGetMessagesQuery } from "../api/userApi";
-import toast, { Toaster } from "react-hot-toast";
 
 function Navbarcomponent() {
   initMDB({ Collapse, Ripple });
@@ -184,7 +183,6 @@ function Navbarcomponent() {
             )}
           </div>
         </div>
-        <Toaster />
       </nav>
     </>
   );
