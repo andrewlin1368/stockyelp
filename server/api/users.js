@@ -8,6 +8,7 @@ const {
   updateUser,
   contactMe,
   getAllMessage,
+  deleteMessage,
 } = require("../../db/index.js");
 
 //get user profile (user info, stocks followed) CAN BE IGNORED LOGIN/REGISTER WILL RETURN PROFILE/ USER WILL USE THIS TO SEE OTHER USERS
@@ -104,7 +105,21 @@ userRouter.get("/messageAll", verifyToken, async (req, res, next) => {
   try {
     if (!req.user)
       return res.status(400).send({ error: "Invalid credentials!" });
-    const result = await getAllMessage();
+
+    const result = await getAllMessage(req.user.user_id);
+    return res.send(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//delete message
+userRouter.put("/deleteMessage", verifyToken, async (req, res, next) => {
+  try {
+    if (!req.user)
+      return res.status(400).send({ error: "Invalid credentials!" });
+    const { message_id } = req.body;
+    const result = await deleteMessage(Number(message_id), req.user.user_id);
     return res.send(result);
   } catch (error) {
     next(error);

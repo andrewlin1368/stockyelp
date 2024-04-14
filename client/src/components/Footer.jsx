@@ -28,7 +28,6 @@ export default function Footer() {
       });
     } else {
       const result = await contactMe(message);
-      console.log(result);
       if (result.error) {
         toast.error("Something went wrong! Try again later!", {
           position: "top-right",

@@ -283,7 +283,11 @@ const contactMe = async ({ email, message }) => {
   return !result ? false : true;
 };
 
-const getAllMessage = async () => {
+const getAllMessage = async (id) => {
+  const admin = await prisma.users.findFirst({
+    where: { user_id: id },
+  });
+  if (!admin.isadmin) return { error: "Invalid credentials!" };
   const result = await prisma.message.findMany({
     where: {
       message_isdeleted: false,
@@ -293,6 +297,22 @@ const getAllMessage = async () => {
     },
   });
   return { messages: result };
+};
+
+const deleteMessage = async (message_id, id) => {
+  const admin = await prisma.users.findFirst({
+    where: { user_id: id },
+  });
+  if (!admin.isadmin) return { error: "Invalid credentials!" };
+  const result = await prisma.message.update({
+    where: {
+      message_id,
+    },
+    data: {
+      message_isdeleted: true,
+    },
+  });
+  return { message_id: result.message_id };
 };
 
 module.exports = {
@@ -314,4 +334,5 @@ module.exports = {
   updateUser,
   contactMe,
   getAllMessage,
+  deleteMessage,
 };

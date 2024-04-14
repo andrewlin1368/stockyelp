@@ -40,6 +40,13 @@ export const userApi = api.injectEndpoints({
     getMessages: builder.query({
       query: () => "/users/messageAll",
     }),
+    deleteMessage: builder.mutation({
+      query: (message_id) => ({
+        url: "/users/deleteMessage",
+        method: "PUT",
+        body: { message_id },
+      }),
+    }),
   }),
 });
 
@@ -50,4 +57,5 @@ export const {
   useUpdateMutation,
   useContactMutation,
   useLazyGetMessagesQuery,
+  useDeleteMessageMutation,
 } = userApi;

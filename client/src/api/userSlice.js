@@ -155,6 +155,14 @@ const userSlice = createSlice({
         state.messages = payload.messages;
       }
     );
+    builder.addMatcher(
+      userApi.endpoints.deleteMessage.matchFulfilled,
+      (state, { payload }) => {
+        state.messages = state.messages.filter(
+          (message) => message.message_id != payload.message_id
+        );
+      }
+    );
   },
 });
 

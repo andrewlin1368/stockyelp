@@ -4,12 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../api/userSlice";
 import { Collapse, Ripple, initMDB } from "mdb-ui-kit";
 import { Modal } from "react-bootstrap";
-import { useLazyGetMessagesQuery } from "../api/userApi";
+import {
+  useLazyGetMessagesQuery,
+  useDeleteMessageMutation,
+} from "../api/userApi";
 
 function Navbarcomponent() {
   initMDB({ Collapse, Ripple });
   const { token, user, messages } = useSelector((state) => state.user);
   const [getMessages] = useLazyGetMessagesQuery();
+  const [deleteMessage] = useDeleteMessageMutation();
 
   const [show, setShow] = useState(false);
 
@@ -17,6 +21,9 @@ function Navbarcomponent() {
   const handleShow = () => {
     getMessages();
     setShow(true);
+  };
+  const deleteMessageInbox = async (e) => {
+    await deleteMessage(e.target.id);
   };
 
   const navigate = useNavigate();
@@ -31,12 +38,12 @@ function Navbarcomponent() {
     <>
       <Modal show={show} onHide={handleClose} centered size="xl">
         <Modal.Header closeButton>
-          <Modal.Title>Messages</Modal.Title>
+          <Modal.Title>Inbox</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
             {!messages.length ? (
-              <p>No messages...</p>
+              <p>No new messages...</p>
             ) : (
               <div className="table-wrapper-scroll-y my-custom-scrollbar">
                 <table className="table table-bordered table-striped">
@@ -58,6 +65,7 @@ function Navbarcomponent() {
                                       <i
                                         className="bi bi-trash-fill"
                                         id={message.message_id}
+                                        onClick={deleteMessageInbox}
                                       ></i>
                                     </Link>
                                   </span>
@@ -164,7 +172,7 @@ function Navbarcomponent() {
                         className="btn btn-light px-3 me-2"
                         onClick={handleShow}
                       >
-                        Messages
+                        Inbox
                       </button>
                     </div>
                   </>
